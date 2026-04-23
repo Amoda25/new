@@ -1,0 +1,570 @@
+/* ── ResourceDetailsPage.css ── Magazine Cover Layout ── */
+
+.rd-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f0f6ff;
+}
+
+/* ─── Loading / Error ─── */
+.rd-state-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  gap: 20px;
+  color: #6b8db5;
+}
+
+.rd-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid #dde8f8;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: rd-spin 0.75s linear infinite;
+}
+
+@keyframes rd-spin {
+  to { transform: rotate(360deg); }
+}
+
+.rd-ghost-btn {
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: 1.5px solid #dde8f8;
+  background: #fff;
+  color: #2563eb;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ─── Full-width cover image ─── */
+.rd-cover {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  margin-top: -70px; /* eat the navbar offset like other pages */
+  overflow: hidden;
+}
+
+.rd-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  filter: blur(3px);
+  transform: scale(1.05); /* prevents white edges from blur */
+}
+
+/* dark gradient overlay — heavier at bottom for text legibility */
+.rd-cover-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(2, 11, 26, 0.35) 0%,
+      rgba(2, 11, 26, 0.2) 40%,
+      rgba(2, 11, 26, 0.75) 100%
+    );
+}
+
+/* ── nav bar inside hero ── */
+.rd-cover-nav {
+  position: absolute;
+  top: 90px; /* below navbar */
+  left: 0; right: 0;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+}
+
+.rd-nav-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.rd-nav-back:hover {
+  background: rgba(255,255,255,0.22);
+}
+
+.rd-nav-tag {
+  padding: 6px 16px;
+  border-radius: 100px;
+  border: 1px solid;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── hero bottom-left text ── */
+.rd-cover-content {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rd-cover-type {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  width: fit-content;
+}
+
+.rd-cover-title {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  margin: 0;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.rd-cover-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+/* ── floating status pill ── */
+.rd-float-status {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
+
+.rd-float-active {
+  background: rgba(5, 150, 105, 0.18);
+  border: 1px solid rgba(110, 231, 183, 0.5);
+  color: #6ee7b7;
+}
+
+.rd-float-inactive {
+  background: rgba(220, 38, 38, 0.18);
+  border: 1px solid rgba(252, 165, 165, 0.5);
+  color: #fca5a5;
+}
+
+.rd-float-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.rd-float-active .rd-float-dot {
+  animation: rd-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes rd-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(110,231,183,0.4); }
+  50%       { box-shadow: 0 0 0 5px rgba(110,231,183,0); }
+}
+
+/* ─── Page body ─── */
+.rd-body {
+  max-width: 1100px;
+  margin: -32px auto 0; /* slight overlap with cover */
+  padding: 0 24px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Quick stats bar ─── */
+.rd-stats-bar {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #dde8f8;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 20px rgba(60,100,180,0.1);
+}
+
+.rd-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.rd-stat-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #6b8db5;
+}
+
+.rd-stat-val {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #1e3a5f;
+}
+
+.rd-stat-div {
+  width: 1px;
+  height: 36px;
+  background: #dde8f8;
+  margin: 0 24px;
+  flex-shrink: 0;
+}
+
+.rd-stat-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.rd-s-active { color: #059669; }
+.rd-s-inactive { color: #dc2626; }
+
+.rd-dot-sm {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.rd-s-active .rd-dot-sm {
+  animation: rd-pulse 2.5s ease-in-out infinite;
+}
+
+/* ─── Two-column grid ─── */
+.rd-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ─── About card ─── */
+.rd-about-card {
+  background: #ffffff;
+  border: 1px solid #dde8f8;
+  border-radius: 16px;
+  padding: 28px 28px 28px 32px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(60,100,180,0.06);
+}
+
+.rd-about-stripe {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+  border-radius: 16px 0 0 16px;
+}
+
+.rd-about-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin-bottom: 12px;
+  letter-spacing: -0.2px;
+}
+
+.rd-about-desc {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: #4b5563;
+}
+
+/* ─── Detail grid (2×2) ─── */
+.rd-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.rd-detail-box {
+  background: #ffffff;
+  border: 1px solid #dde8f8;
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(60,100,180,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.rd-detail-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(60,100,180,0.1);
+}
+
+.rd-detail-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rd-detail-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #6b8db5;
+}
+
+.rd-detail-val {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e3a5f;
+}
+
+/* ─── Sidebar ─── */
+.rd-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 24px;
+}
+
+/* Capacity card */
+.rd-capacity-card {
+  background: #ffffff;
+  border: 1px solid #dde8f8;
+  border-top: 4px solid; /* color set inline */
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(60,100,180,0.06);
+}
+
+.rd-capacity-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b8db5;
+  margin-bottom: 8px;
+}
+
+.rd-capacity-num {
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -2px;
+  margin-bottom: 4px;
+}
+
+.rd-capacity-sub {
+  font-size: 0.8rem;
+  color: #6b8db5;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.rd-cap-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: #f0f6ff;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.rd-cap-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.8s ease;
+}
+
+/* Info card */
+.rd-info-card {
+  background: #ffffff;
+  border: 1px solid #dde8f8;
+  border-radius: 16px;
+  padding: 20px 22px;
+  box-shadow: 0 2px 10px rgba(60,100,180,0.06);
+}
+
+.rd-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.rd-info-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b8db5;
+}
+
+.rd-info-mono {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: #1e3a5f;
+  font-weight: 600;
+}
+
+.rd-info-badge {
+  display: inline-flex;
+  padding: 3px 12px;
+  border-radius: 100px;
+  border: 1px solid;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.rd-info-hr {
+  height: 1px;
+  background: #e8f0fc;
+  margin: 10px 0;
+}
+
+/* Action stack */
+.rd-action-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rd-btn-primary {
+  display: block;
+  width: 100%;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+.rd-btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.rd-btn-secondary {
+  display: block;
+  width: 100%;
+  padding: 12px 18px;
+  border: 1.5px solid;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.rd-btn-secondary:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .rd-grid {
+    grid-template-columns: 1fr;
+  }
+  .rd-sidebar {
+    position: static;
+  }
+  .rd-cover {
+    height: 400px;
+  }
+}
+
+@media (max-width: 640px) {
+  .rd-cover {
+    height: 340px;
+  }
+  .rd-cover-nav {
+    padding: 0 20px;
+    top: 80px;
+  }
+  .rd-cover-content {
+    left: 20px;
+    bottom: 30px;
+  }
+  .rd-float-status {
+    bottom: 30px;
+    right: 20px;
+  }
+  .rd-body {
+    padding: 0 16px 60px;
+  }
+  .rd-stats-bar {
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 18px 20px;
+  }
+  .rd-stat-div {
+    display: none;
+  }
+  .rd-stat-item {
+    flex: 0 0 45%;
+  }
+  .rd-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .rd-cover-title {
+    font-size: 1.7rem;
+  }
+}

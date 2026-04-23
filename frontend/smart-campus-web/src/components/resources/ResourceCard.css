@@ -1,0 +1,184 @@
+/* ── ResourceCard.css ── Clean University Theme (Light Cards) ── */
+
+.resource-card {
+  background: #ffffff;
+  border: 1px solid #dde8f8;
+  border-radius: 16px;
+  padding: 24px 22px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 12px rgba(60, 100, 180, 0.07);
+}
+
+/* colored top accent line */
+.resource-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+  border-radius: 16px 16px 0 0;
+}
+
+.resource-card:hover {
+  border-color: #93c5fd;
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 32px rgba(59, 130, 246, 0.14),
+    0 2px 8px rgba(59, 130, 246, 0.08);
+}
+
+/* ── Type badges ── */
+.resource-card-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.resource-card-type::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.type-lab {
+  background: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  color: #059669;
+}
+.type-lab::before {
+  background: #059669;
+}
+
+.type-room {
+  background: #eff6ff;
+  border: 1px solid #93c5fd;
+  color: #2563eb;
+}
+.type-room::before {
+  background: #2563eb;
+}
+
+.type-equip {
+  background: #f5f3ff;
+  border: 1px solid #c4b5fd;
+  color: #7c3aed;
+}
+.type-equip::before {
+  background: #7c3aed;
+}
+
+/* ── Title ── */
+.resource-card h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin-bottom: 14px;
+  letter-spacing: -0.2px;
+}
+
+/* ── Detail rows ── */
+.resource-card p {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 7px;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #374151;
+}
+
+.resource-card p strong {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b8db5;
+  min-width: 72px;
+  padding-top: 1px;
+  flex-shrink: 0;
+}
+
+/* ── Divider ── */
+.resource-card-divider {
+  height: 1px;
+  background: #e8f0fc;
+  margin: 14px 0 12px;
+}
+
+/* ── Status ── */
+.status-active,
+.status-inactive {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.status-active::before,
+.status-inactive::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-active {
+  color: #059669;
+}
+.status-active::before {
+  background: #059669;
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+
+.status-inactive {
+  color: #dc2626;
+}
+.status-inactive::before {
+  background: #dc2626;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.35); }
+  50%       { box-shadow: 0 0 0 4px rgba(5, 150, 105, 0); }
+}
+
+/* ── View Details button ── */
+.resource-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 18px;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 10px;
+  background: #f0f7ff;
+  color: #2563eb;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.resource-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.22);
+  transform: translateY(-1px);
+}

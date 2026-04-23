@@ -1,0 +1,371 @@
+/* ── MyBookingsPage.css ── Clean University Blue Theme ── */
+
+.soft-page {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0565ec 0%, #e4e5f5 60%, #01071a 100%);
+  color: #cde4ff;
+}
+
+/* ─── Hero ─── */
+.hero-section {
+  position: relative;
+  min-height: 620px;
+  width: 100%;
+  background:
+    linear-gradient(180deg, rgba(2,11,26,0.52) 0%, rgba(1, 2, 11, 0.88) 100%),
+    url("../../assets/education-caps.jpg");
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  margin-top: -70px;
+  padding: 140px 24px 220px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 0%, rgba(0,100,255,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(0,180,255,0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.hero-text {
+  text-align: center;
+  color: white;
+  margin-top: 80px;
+}
+
+/* badge above the title */
+.hero-text::before {
+  content: "● Resource Booking System";
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0,120,255,0.12);
+  border: 1px solid rgba(0,140,255,0.28);
+  border-radius: 100px;
+  padding: 6px 18px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7dc8ff;
+  margin-bottom: 22px;
+}
+
+.hero-text h1 {
+  font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+  line-height: 1.08;
+  margin-bottom: 18px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: #ffffff;
+}
+
+.hero-text p {
+  max-width: 640px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(180,220,255,0.75);
+}
+
+/* ─── Stats panel ─── */
+.stats-panel {
+  width: min(100%, 860px);
+  margin: 70px auto 0;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  overflow: hidden;
+}
+
+.stat-box {
+  padding: 30px 24px;
+  text-align: center;
+}
+
+.stat-box h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.stat-box p {
+  color: rgba(180,210,255,0.65);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* ─── Catalogue shell ─── */
+.catalogue-shell {
+  width: 100%;
+  max-width: 1100px;
+  margin: -100px auto 0;
+  position: relative;
+  z-index: 2;
+  padding: 0 24px 80px;
+}
+
+.catalogue-header {
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px);
+  border-radius: 20px 20px 0 0;
+  padding: 36px 36px 22px;
+  border: 1px solid rgba(200,215,240,0.8);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.catalogue-header h2 {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin-bottom: 6px;
+}
+
+.catalogue-header p {
+  color: #6b8db5;
+  font-size: 0.92rem;
+}
+
+.booking-content {
+  background: rgba(255,255,255,0.97);
+  border-radius: 0 0 20px 20px;
+  padding: 24px 36px;
+  border: 1px solid rgba(200,215,240,0.8);
+  border-top: none;
+  min-height: 200px;
+}
+
+/* ─── Local Messaging ─── */
+.local-error-message {
+  margin: 20px 36px 0;
+  padding: 16px 24px;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #b91c1c;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.local-error-message button:hover {
+  background: #991b1b;
+}
+
+.success-message {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 16px;
+  color: #6b8db5;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Create Booking Button ─── */
+.create-ticket-btn {
+  padding: 12px 24px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.create-ticket-btn:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+/* ─── Table Styles ─── */
+.booking-table-container {
+  overflow-x: auto;
+}
+
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.booking-table th {
+  text-align: left;
+  padding: 16px;
+  color: #4b5563;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.booking-table td {
+  padding: 16px;
+  color: #1f2937;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+}
+
+.resource-name {
+  font-weight: 600;
+  color: #1e3a5f;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-badge.confirmed { background: #dcfce7; color: #166534; }
+.status-badge.pending { background: #fef3c7; color: #92400e; }
+
+/* ─── Form Overlay ─── */
+.booking-form-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.booking-form-card {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 550px;
+  padding: 32px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  color: #000000;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.form-header h2 {
+  font-size: 24px;
+  color: #1e3a5f;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #000000;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.cancel-btn {
+  flex: 1;
+  padding: 12px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-btn {
+  flex: 2;
+  padding: 12px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .stats-panel { grid-template-columns: 1fr; }
+  .catalogue-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+}

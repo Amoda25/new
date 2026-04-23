@@ -1,0 +1,24 @@
+# Maven / Java build files
+target/
+*.class
+*.jar
+*.war
+
+# Mac OS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Node modules
+node_modules/
+
+# Environment files
+.env
+
+# Local Spring profile
+backend/smart-campus-api/src/main/resources/application-local.properties
+target/

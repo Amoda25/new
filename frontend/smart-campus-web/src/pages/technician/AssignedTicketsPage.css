@@ -1,0 +1,162 @@
+/* PAGE */
+.tech-page {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0565ec 0%, #e4e5f5 60%, #01071a 100%);
+}
+
+/* HERO */
+.tech-hero {
+  position: relative;
+  min-height: 520px;
+  width: 100%;
+
+  background:
+    linear-gradient(180deg, rgba(2,11,26,0.5), rgba(1,2,11,0.9)),
+    url("../../assets/technician2.avif");
+
+  background-size: cover;
+  background-position: center;
+  margin-top: -70px;
+
+  display: flex;
+  justify-content: center;
+  padding: 140px 20px 180px;
+}
+
+.tech-hero-content {
+  text-align: center;
+  color: white;
+}
+
+.tech-hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.tech-hero p {
+  color: rgba(200,220,255,0.8);
+}
+
+/* STATS */
+.tech-stats {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.tech-stat {
+  text-align: center;
+}
+
+.tech-stat h2 {
+  font-size: 2rem;
+  color: white;
+}
+
+.tech-stat p {
+  font-size: 0.8rem;
+  color: rgba(200,220,255,0.7);
+}
+
+/* CONTENT */
+.tech-container {
+  max-width: 1100px;
+  margin: -120px auto 0;
+  padding: 0 20px 60px;
+}
+
+/* HEADER */
+.tech-header {
+  background: white;
+  padding: 24px;
+  border-radius: 20px 20px 0 0;
+}
+
+.tech-header h2 {
+  margin-bottom: 5px;
+}
+
+/* GRID */
+.tech-grid {
+  background: #f0f6ff;
+  padding: 20px;
+  border-radius: 0 0 20px 20px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+/* CARD */
+.tech-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.tech-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.tech-desc {
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.tech-meta {
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+/* BUTTONS */
+.tech-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.tech-actions button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.tech-view {
+  background: #1d4ed8;
+  color: white;
+}
+
+.tech-delete {
+  background: #dc2626;
+  color: white;
+}
+
+/* STATUS */
+.status {
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status.open {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status.resolved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}

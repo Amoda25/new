@@ -18,7 +18,7 @@ import com.smartcampus.security.roles.Role;
 import com.smartcampus.user.model.User;
 import com.smartcampus.user.repository.UserRepository;
 
-import jakarta.persistence.EntityNotFoundException;
+// Removed jakarta.persistence.EntityNotFoundException
 
 @Service
 @Transactional
@@ -113,7 +113,7 @@ public class BookingService {
      */
     public BookingResponseDTO getUserBookingById(String bookingId, String userId) {
         Booking booking = bookingRepository.findByIdAndUserId(bookingId, userId)
-            .orElseThrow(() -> new EntityNotFoundException("Booking not found or not owned by user"));
+            .orElseThrow(() -> new RuntimeException("Booking not found or not owned by user"));
         return BookingResponseDTO.fromEntity(booking);
     }
     
@@ -122,7 +122,7 @@ public class BookingService {
      */
     public BookingResponseDTO cancelBooking(String bookingId, String userId) {
         Booking booking = bookingRepository.findByIdAndUserId(bookingId, userId)
-            .orElseThrow(() -> new EntityNotFoundException("Booking not found or not owned by user"));
+            .orElseThrow(() -> new RuntimeException("Booking not found or not owned by user"));
         
         if (booking.getStatus() == BookingStatus.CANCELLED) {
             throw new IllegalStateException("Booking is already cancelled");
@@ -171,7 +171,7 @@ public class BookingService {
      */
     public BookingResponseDTO approveBooking(String bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
-            .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+            .orElseThrow(() -> new RuntimeException("Booking not found"));
         
         if (booking.getStatus() != BookingStatus.PENDING) {
             throw new IllegalStateException("Only pending bookings can be approved");
@@ -206,7 +206,7 @@ public class BookingService {
      */
     public BookingResponseDTO rejectBooking(String bookingId, String reason) {
         Booking booking = bookingRepository.findById(bookingId)
-            .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+            .orElseThrow(() -> new RuntimeException("Booking not found"));
         
         if (booking.getStatus() != BookingStatus.PENDING) {
             throw new IllegalStateException("Only pending bookings can be rejected");
@@ -233,7 +233,7 @@ public class BookingService {
      */
     public BookingResponseDTO getBookingById(String bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
-            .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+            .orElseThrow(() -> new RuntimeException("Booking not found"));
         return BookingResponseDTO.fromEntity(booking);
     }
 
@@ -242,7 +242,7 @@ public class BookingService {
      */
     public void deleteBooking(String bookingId) {
         if (!bookingRepository.existsById(bookingId)) {
-            throw new EntityNotFoundException("Booking not found");
+            throw new RuntimeException("Booking not found");
         }
         bookingRepository.deleteById(bookingId);
     }

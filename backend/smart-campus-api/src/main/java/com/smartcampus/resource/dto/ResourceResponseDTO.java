@@ -9,12 +9,13 @@ public class ResourceResponseDTO {
     private Integer capacity;
     private String status;
     private String description;
+    private String imageUrl;
 
     public ResourceResponseDTO() {
     }
 
     public ResourceResponseDTO(String id, String name, String type, String location,
-                               Integer capacity, String status, String description) {
+                               Integer capacity, String status, String description, String imageUrl) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -22,6 +23,7 @@ public class ResourceResponseDTO {
         this.capacity = capacity;
         this.status = status;
         this.description = description;
+        this.imageUrl = imageUrl;
     }
 
     public String getId() {
@@ -52,6 +54,10 @@ public class ResourceResponseDTO {
         return description;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -78,5 +84,9 @@ public class ResourceResponseDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

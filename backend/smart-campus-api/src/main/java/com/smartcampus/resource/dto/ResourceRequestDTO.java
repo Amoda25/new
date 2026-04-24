@@ -24,6 +24,8 @@ public class ResourceRequestDTO {
 
     private String description;
 
+    private String imageUrl;
+
     public ResourceRequestDTO() {
     }
 
@@ -51,6 +53,10 @@ public class ResourceRequestDTO {
         return description;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -73,5 +79,9 @@ public class ResourceRequestDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

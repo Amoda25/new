@@ -42,6 +42,7 @@ public class ResourceService {
         resource.setCapacity(requestDTO.getCapacity());
         resource.setStatus(requestDTO.getStatus() != null ? requestDTO.getStatus() : "ACTIVE");
         resource.setDescription(requestDTO.getDescription());
+        resource.setImageUrl(requestDTO.getImageUrl());
 
         Resource savedResource = resourceRepository.save(resource);
 
@@ -58,6 +59,7 @@ public class ResourceService {
         existingResource.setCapacity(requestDTO.getCapacity());
         existingResource.setStatus(requestDTO.getStatus() != null ? requestDTO.getStatus() : existingResource.getStatus());
         existingResource.setDescription(requestDTO.getDescription());
+        existingResource.setImageUrl(requestDTO.getImageUrl());
 
         Resource updatedResource = resourceRepository.save(existingResource);
 
@@ -79,7 +81,8 @@ public class ResourceService {
                 resource.getLocation(),
                 resource.getCapacity(),
                 resource.getStatus(),
-                resource.getDescription()
+                resource.getDescription(),
+                resource.getImageUrl()
         );
     }
 }

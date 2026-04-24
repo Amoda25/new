@@ -20,6 +20,7 @@ export default function ManageResourcesPage() {
     capacity: "",
     status: "ACTIVE",
     description: "",
+    imageUrl: "",
   });
 
   const loadResources = async () => {
@@ -64,6 +65,7 @@ export default function ManageResourcesPage() {
       capacity: "",
       status: "ACTIVE",
       description: "",
+      imageUrl: "",
     });
     setEditingId(null);
   };
@@ -100,12 +102,24 @@ export default function ManageResourcesPage() {
       capacity: resource.capacity ?? "",
       status: resource.status || "ACTIVE",
       description: resource.description || "",
+      imageUrl: resource.imageUrl || "",
     });
 
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm((prev) => ({ ...prev, imageUrl: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -201,6 +215,19 @@ export default function ManageResourcesPage() {
             onChange={handleChange}
           />
 
+          <div className="manage-image-upload">
+            <label htmlFor="resource-image">Upload Image:</label>
+            <input
+              type="file"
+              id="resource-image"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+            {form.imageUrl && (
+              <img src={form.imageUrl} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px', borderRadius: '8px' }} />
+            )}
+          </div>
+
           <div className="manage-form-actions">
             <button type="submit" className="manage-primary-btn">
               {editingId ? "Update Resource" : "Add Resource"}
@@ -236,6 +263,12 @@ export default function ManageResourcesPage() {
                 <div className="manage-card-badge">
                   {resource.type || "RESOURCE"}
                 </div>
+
+                {resource.imageUrl && (
+                  <div className="manage-card-image">
+                    <img src={resource.imageUrl} alt={resource.name} style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px', marginBottom: '10px' }} />
+                  </div>
+                )}
 
                 <h3>{resource.name}</h3>
 

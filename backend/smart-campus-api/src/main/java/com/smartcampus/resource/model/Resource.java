@@ -16,6 +16,7 @@ public class Resource {
     private Integer capacity;
     private String status = "ACTIVE";
     private String description;
+    private String imageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -58,6 +59,10 @@ public class Resource {
         return description;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -92,6 +97,10 @@ public class Resource {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {

@@ -14,8 +14,14 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer 
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell
 } from "recharts";
+
 import './BookingApprovalsPage.css';
 
 const BookingApprovalsPage = () => {
@@ -36,16 +42,6 @@ const BookingApprovalsPage = () => {
     const [rejectionReason, setRejectionReason] = useState("");
     const [showRejectModal, setShowRejectModal] = useState(false);
 
-    // Sample data for the chart
-    const bookingChartData = [
-        { day: "Mon", count: 4 },
-        { day: "Tue", count: 7 },
-        { day: "Wed", count: 5 },
-        { day: "Thu", count: 9 },
-        { day: "Fri", count: 12 },
-        { day: "Sat", count: 6 },
-        { day: "Sun", count: 3 },
-    ];
 
     const loadData = async () => {
         try {
@@ -68,7 +64,63 @@ const BookingApprovalsPage = () => {
         loadData();
     }, []);
 
+    const getResourceName = (id) => {
+        const res = resources.find(r => r.id === id);
+        return res ? res.name : `Resource #${id}`;
+    };
+
+    // Processing data for charts
+    const chartData = useMemo(() => {
+        if (!bookings.length) return { monthly: [], resources: [], peakDays: [] };
+
+        // 1. Monthly Stats
+        const monthlyMap = {};
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        
+        // Initialize last 6 months
+        const now = new Date();
+        for (let i = 5; i >= 0; i--) {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            monthlyMap[months[d.getMonth()]] = 0;
+        }
+
+        // 2. Resource Usage
+        const resourceMap = {};
+        
+        // 3. Peak Days
+        const dayMap = { "Mon": 0, "Tue": 0, "Wed": 0, "Thu": 0, "Fri": 0, "Sat": 0, "Sun": 0 };
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        bookings.forEach(b => {
+            const date = new Date(b.startTime);
+            
+            // Monthly
+            const m = months[date.getMonth()];
+            if (monthlyMap[m] !== undefined) monthlyMap[m]++;
+
+            // Resource
+            const resName = getResourceName(b.resourceId);
+            resourceMap[resName] = (resourceMap[resName] || 0) + 1;
+
+            // Day
+            const day = dayNames[date.getDay()];
+            dayMap[day]++;
+        });
+
+        return {
+            monthly: Object.entries(monthlyMap).map(([name, count]) => ({ name, count })),
+            resources: Object.entries(resourceMap)
+                .map(([name, value]) => ({ name, value }))
+                .sort((a, b) => b.value - a.value)
+                .slice(0, 5), // Top 5
+            peakDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(name => ({ name, count: dayMap[name] }))
+        };
+    }, [bookings, resources]);
+
+    const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+
     const stats = useMemo(() => {
+
         return {
             total: bookings.length,
             pending: bookings.filter(b => b.status === "PENDING").length,
@@ -77,10 +129,6 @@ const BookingApprovalsPage = () => {
         };
     }, [bookings]);
 
-    const getResourceName = (id) => {
-        const res = resources.find(r => r.id === id);
-        return res ? res.name : `Resource #${id}`;
-    };
 
     const handleApprove = async (id) => {
         try {
@@ -251,51 +299,87 @@ const BookingApprovalsPage = () => {
                         </div>
 
                         <section className="booking-chart-section">
-                            <div className="chart-card">
+                            <div className="chart-card full-width">
                                 <div className="chart-header">
-                                    <h3>Weekly Activity Analysis</h3>
-                                    <p>Number of resource bookings processed per day</p>
+                                    <h3>Monthly Booking Volume</h3>
+                                    <p>Total bookings recorded over the last 6 months</p>
                                 </div>
                                 <div className="chart-container">
-                                    <ResponsiveContainer width="100%" height={350}>
-                                        <BarChart data={bookingChartData}>
+                                    <ResponsiveContainer width="100%" height={300}>
+                                        <AreaChart data={chartData.monthly}>
                                             <defs>
-                                                <linearGradient id="bookingGradient" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                                                    <stop offset="95%" stopColor="#2563eb" stopOpacity={1}/>
+                                                <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1}/>
+                                                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
                                                 </linearGradient>
                                             </defs>
-                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                                            <XAxis 
-                                                dataKey="day" 
-                                                axisLine={false} 
-                                                tickLine={false} 
-                                                tick={{ fill: '#6b8db5', fontSize: 12 }} 
-                                            />
-                                            <YAxis 
-                                                axisLine={false} 
-                                                tickLine={false} 
-                                                tick={{ fill: '#6b8db5', fontSize: 12 }} 
-                                            />
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} />
+                                            <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} />
                                             <Tooltip 
-                                                cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
-                                                contentStyle={{ 
-                                                    borderRadius: '12px', 
-                                                    border: 'none', 
-                                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' 
-                                                }}
+                                                contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'}}
                                             />
-                                            <Bar 
-                                                dataKey="count" 
-                                                fill="url(#bookingGradient)" 
-                                                radius={[6, 6, 0, 0]} 
-                                                barSize={45}
-                                            />
-                                        </BarChart>
+                                            <Area type="monotone" dataKey="count" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
+                                        </AreaChart>
                                     </ResponsiveContainer>
                                 </div>
                             </div>
+
+                            <div className="charts-flex-row">
+                                <div className="chart-card">
+                                    <div className="chart-header">
+                                        <h3>Most Used Resources</h3>
+                                        <p>Top 5 campus facilities by booking count</p>
+                                    </div>
+                                    <div className="chart-container">
+                                        <ResponsiveContainer width="100%" height={250}>
+                                            <PieChart>
+                                                <Pie
+                                                    data={chartData.resources}
+                                                    innerRadius={60}
+                                                    outerRadius={80}
+                                                    paddingAngle={5}
+                                                    dataKey="value"
+                                                >
+                                                    {chartData.resources.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                                    ))}
+                                                </Pie>
+                                                <Tooltip />
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                        <div className="pie-legend">
+                                            {chartData.resources.map((r, i) => (
+                                                <div key={i} className="legend-item">
+                                                    <span className="legend-dot" style={{background: COLORS[i % COLORS.length]}}></span>
+                                                    <span className="legend-name">{r.name}</span>
+                                                    <span className="legend-val">{r.value}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="chart-card">
+                                    <div className="chart-header">
+                                        <h3>Peak Usage Days</h3>
+                                        <p>Density of bookings across the week</p>
+                                    </div>
+                                    <div className="chart-container">
+                                        <ResponsiveContainer width="100%" height={250}>
+                                            <BarChart data={chartData.peakDays}>
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} />
+                                                <YAxis hide />
+                                                <Tooltip cursor={{fill: '#f8fafc'}} />
+                                                <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={30} />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+                            </div>
                         </section>
+
                     </div>
                 ) : activeView === 'CALENDAR' ? (
                     <div className="calendar-view-container animate-fade-in">

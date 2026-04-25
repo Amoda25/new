@@ -617,11 +617,28 @@
 
 /* Chart Section */
 .booking-chart-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.charts-flex-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.chart-card {
   background: white;
-  padding: 32px;
-  border-radius: 24px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.chart-card.full-width {
+  width: 100%;
 }
 
 .chart-header {
@@ -629,17 +646,48 @@
 }
 
 .chart-header h3 {
-  font-size: 1.25rem;
-  color: #0f172a;
   margin: 0;
+  font-size: 1.1rem;
+  color: #1e293b;
   font-weight: 700;
 }
 
 .chart-header p {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
   color: #64748b;
-  font-size: 0.9rem;
-  margin-top: 4px;
 }
+
+.pie-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-name {
+  color: #64748b;
+  flex: 1;
+}
+
+.legend-val {
+  font-weight: 700;
+  color: #1e293b;
+}
+
 
 /* Modal Styles */
 .rejection-modal-overlay {

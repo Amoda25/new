@@ -152,20 +152,7 @@ const BookingApprovalsPage = () => {
                         </button>
                     </div>
 
-                    {activeView === 'LIST' && (
-                        <div className="nav-group animate-fade-in">
-                            <span className="group-label">Filter Status</span>
-                            {["ALL", "PENDING", "APPROVED", "REJECTED"].map(s => (
-                                <button 
-                                    key={s} 
-                                    className={`sidebar-nav-btn ${filterStatus === s ? 'active' : ''}`}
-                                    onClick={() => setFilterStatus(s)}
-                                >
-                                    <span className="dot" /> {s}
-                                </button>
-                            ))}
-                        </div>
-                    )}
+
 
                     <div className="nav-group">
                         <span className="group-label">Quick Stats</span>
@@ -271,6 +258,21 @@ const BookingApprovalsPage = () => {
                     </div>
                 ) : (
                     <section className="manage-shell animate-fade-in">
+                        <div className="status-filter-bar">
+                            {["ALL", "PENDING", "APPROVED", "REJECTED"].map(s => (
+                                <button 
+                                    key={s} 
+                                    className={`filter-tab ${filterStatus === s ? 'active' : ''}`}
+                                    onClick={() => setFilterStatus(s)}
+                                >
+                                    {s}
+                                    <span className="tab-count">
+                                        {s === "ALL" ? stats.total : stats[s.toLowerCase()]}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+
                         {loading ? (
                             <div className="manage-message">Loading booking database...</div>
                         ) : error ? (

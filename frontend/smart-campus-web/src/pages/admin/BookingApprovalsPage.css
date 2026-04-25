@@ -446,29 +446,138 @@
 
 .manage-card-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-top: auto;
+  flex-wrap: wrap;
 }
 
-.admin-approve-btn, .admin-reject-btn, .admin-delete-btn {
-  flex: 1;
-  padding: 10px;
+.admin-view-btn, .admin-approve-btn, .admin-reject-btn, .admin-delete-btn {
+  padding: 10px 14px;
   border-radius: 10px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
-.admin-approve-btn { background: #3b82f6; color: white; }
+.admin-view-btn { background: #f1f5f9; color: #475569; flex: 1.2; }
+.admin-view-btn:hover { background: #e2e8f0; color: #1e293b; }
+
+.admin-approve-btn { background: #3b82f6; color: white; flex: 1; }
 .admin-approve-btn:hover { background: #2563eb; }
 
-.admin-reject-btn { background: #f1f5f9; color: #475569; }
-.admin-reject-btn:hover { background: #e2e8f0; color: #1e293b; }
+.admin-reject-btn { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; flex: 1; }
+.admin-reject-btn:hover { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
 
-.admin-delete-btn { background: #fee2e2; color: #991b1b; flex: 0.5; }
-.admin-delete-btn:hover { background: #fecaca; }
+.admin-delete-btn { background: #fff1f2; color: #e11d48; flex: 0.8; }
+.admin-delete-btn:hover { background: #ffe4e6; }
+
+/* Details Modal Specifics */
+.details-modal {
+  max-width: 550px;
+}
+
+.modal-header-with-badge {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.modal-header-with-badge h3 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.modal-scroll-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-bottom: 24px;
+}
+
+.detail-item label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.detail-item p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.purpose-text {
+  font-size: 1.25rem !important;
+  line-height: 1.4;
+  color: #0f172a !important;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #f1f5f9;
+}
+
+.time-box {
+  background: #f0f7ff;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #dbeafe;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.time-box div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time-box span {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.time-box strong {
+  font-size: 1rem;
+  color: #2563eb;
+}
+
+.rejection-box {
+  background: #fff1f2;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #fee2e2;
+}
+
+.rejection-box p {
+  color: #be123c !important;
+  font-size: 1rem !important;
+}
+
+.full-width {
+  width: 100%;
+}
 
 /* Chart Section */
 .booking-chart-section {

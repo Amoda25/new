@@ -28,6 +28,8 @@ const BookingApprovalsPage = () => {
     const [activeView, setActiveView] = useState("OVERVIEW"); 
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
+    const [viewBooking, setViewBooking] = useState(null);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
     
     // Rejection Modal State
     const [selectedBookingId, setSelectedBookingId] = useState(null);
@@ -477,20 +479,27 @@ const BookingApprovalsPage = () => {
                                         <div className="manage-card-divider" />
 
                                         <div className="manage-card-actions">
-                                            {booking.status === "PENDING" && (
-                                                <>
-                                                    <button className="admin-approve-btn" onClick={() => handleApprove(booking.id)}>
-                                                        Approve
-                                                    </button>
-                                                    <button className="admin-reject-btn" onClick={() => openRejectModal(booking.id)}>
-                                                        Reject
-                                                    </button>
-                                                </>
+                                            <button className="admin-view-btn" onClick={() => { setViewBooking(booking); setShowDetailsModal(true); }}>
+                                                View Details
+                                            </button>
+                                            
+                                            {booking.status !== "APPROVED" && (
+                                                <button className="admin-approve-btn" onClick={() => handleApprove(booking.id)}>
+                                                    Approve
+                                                </button>
                                             )}
+                                            
+                                            {booking.status !== "REJECTED" && (
+                                                <button className="admin-reject-btn" onClick={() => openRejectModal(booking.id)}>
+                                                    Reject
+                                                </button>
+                                            )}
+
                                             <button className="admin-delete-btn" onClick={() => handleDelete(booking.id)}>
-                                                Delete Forever
+                                                Delete
                                             </button>
                                         </div>
+
                                     </div>
                                 ))}
                             </div>
@@ -524,7 +533,75 @@ const BookingApprovalsPage = () => {
                     </div>
                 </div>
             )}
+
+            {/* Booking Details Modal */}
+            {showDetailsModal && viewBooking && (
+                <div className="rejection-modal-overlay">
+                    <div className="rejection-modal details-modal">
+                        <div className="modal-header-with-badge">
+                            <h3>Booking Details</h3>
+                            <span className={`manage-card-badge ${viewBooking.status.toLowerCase()}`}>
+                                {viewBooking.status}
+                            </span>
+                        </div>
+                        
+                        <div className="modal-scroll-content">
+                            <div className="detail-item">
+                                <label>Purpose</label>
+                                <p className="purpose-text">{viewBooking.purpose}</p>
+                            </div>
+
+                            <div className="detail-grid">
+                                <div className="detail-item">
+                                    <label>Resource</label>
+                                    <p>{getResourceName(viewBooking.resourceId)}</p>
+                                </div>
+                                <div className="detail-item">
+                                    <label>Facility #</label>
+                                    <p>#{viewBooking.resourceId}</p>
+                                </div>
+                                <div className="detail-item">
+                                    <label>Attendees</label>
+                                    <p>{viewBooking.attendees} persons</p>
+                                </div>
+                                <div className="detail-item">
+                                    <label>Booking ID</label>
+                                    <p>#{viewBooking.id}</p>
+                                </div>
+                            </div>
+
+                            <div className="detail-item">
+                                <label>Schedule</label>
+                                <div className="time-box">
+                                    <div>
+                                        <span>Start:</span>
+                                        <strong>{formatDate(viewBooking.startTime)}</strong>
+                                    </div>
+                                    <div>
+                                        <span>End:</span>
+                                        <strong>{formatDate(viewBooking.endTime)}</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {viewBooking.rejectionReason && (
+                                <div className="detail-item rejection-box">
+                                    <label>Rejection Reason</label>
+                                    <p>{viewBooking.rejectionReason}</p>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="modal-actions">
+                            <button className="modal-cancel full-width" onClick={() => setShowDetailsModal(false)}>
+                                Close Window
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
+
     );
 };
 

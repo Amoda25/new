@@ -334,32 +334,60 @@ const BookingApprovalsPage = () => {
                             {selectedDate ? (
                                 <>
                                     <div className="details-header">
-                                        <h3>Bookings for {selectedDate.toLocaleDateString()}</h3>
-                                        <span className="booking-count">{getBookingsForDate(selectedDate).length} requests</span>
+                                        <h3>Date: {selectedDate.toLocaleDateString()}</h3>
                                     </div>
-                                    <div className="details-list">
-                                        {getBookingsForDate(selectedDate).length > 0 ? (
-                                            getBookingsForDate(selectedDate).map(b => (
-                                                <div key={b.id} className="mini-booking-card">
-                                                    <div className="mini-card-header">
-                                                        <span className={`status-tag ${b.status.toLowerCase()}`}>{b.status}</span>
-                                                        <span className="time-tag">{new Date(b.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                                                    </div>
-                                                    <p className="mini-purpose">{b.purpose}</p>
-                                                    <p className="mini-resource">{getResourceName(b.resourceId)}</p>
+
+                                    <div className="details-tabs">
+                                        <div className="availability-summary">
+                                            <div className="avail-section">
+                                                <h4><span className="dot available" /> Available Facilities</h4>
+                                                <div className="resource-chips">
+                                                    {resources.filter(r => !getBookingsForDate(selectedDate).some(b => b.resourceId === r.id && b.status === "APPROVED")).map(r => (
+                                                        <span key={r.id} className="resource-chip available">{r.name}</span>
+                                                    ))}
                                                 </div>
-                                            ))
-                                        ) : (
-                                            <div className="no-bookings-msg">No bookings scheduled for this date.</div>
-                                        )}
+                                            </div>
+                                            <div className="avail-section">
+                                                <h4><span className="dot unavailable" /> Booked Facilities</h4>
+                                                <div className="resource-chips">
+                                                    {resources.filter(r => getBookingsForDate(selectedDate).some(b => b.resourceId === r.id && b.status === "APPROVED")).map(r => (
+                                                        <span key={r.id} className="resource-chip unavailable">{r.name}</span>
+                                                    ))}
+                                                    {resources.filter(r => getBookingsForDate(selectedDate).some(b => b.resourceId === r.id && b.status === "APPROVED")).length === 0 && (
+                                                        <span className="no-data">None</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bookings-section">
+                                            <h4><span className="dot requests" /> Booking Requests ({getBookingsForDate(selectedDate).length})</h4>
+                                            <div className="details-list">
+                                                {getBookingsForDate(selectedDate).length > 0 ? (
+                                                    getBookingsForDate(selectedDate).map(b => (
+                                                        <div key={b.id} className="mini-booking-card">
+                                                            <div className="mini-card-header">
+                                                                <span className={`status-tag ${b.status.toLowerCase()}`}>{b.status}</span>
+                                                                <span className="time-tag">{new Date(b.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                                            </div>
+                                                            <p className="mini-purpose">{b.purpose}</p>
+                                                            <p className="mini-resource">{getResourceName(b.resourceId)}</p>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div className="no-bookings-msg">No booking requests for this date.</div>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
                                 </>
                             ) : (
                                 <div className="select-date-prompt">
-                                    <p>Select a date to view detailed booking requests</p>
+                                    <p>Select a date to view facility availability and requests</p>
                                 </div>
                             )}
                         </div>
+
                     </div>
                 ) : (
                     <section className="manage-shell animate-fade-in">

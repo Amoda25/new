@@ -186,58 +186,92 @@ export default function ManageResourcesPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="manage-resource-form">
-          <input
-            name="name"
-            placeholder="Resource name"
-            value={form.name}
-            onChange={handleChange}
-            required
-          />
+          <div className="manage-form-row">
+            <div className="manage-form-group">
+              <label>Resource Name</label>
+              <input
+                name="name"
+                placeholder="e.g. Main Auditorium"
+                value={form.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <select name="type" value={form.type} onChange={handleChange} required>
-            <option value="">Select type</option>
-            <option value="ROOM">ROOM</option>
-            <option value="LAB">LAB</option>
-            <option value="EQUIPMENT">EQUIPMENT</option>
-          </select>
+            <div className="manage-form-group">
+              <label>Resource Type</label>
+              <select name="type" value={form.type} onChange={handleChange} required>
+                <option value="">Select type</option>
+                <option value="ROOM">ROOM</option>
+                <option value="LAB">LAB</option>
+                <option value="EQUIPMENT">EQUIPMENT</option>
+              </select>
+            </div>
+          </div>
 
-          <input
-            name="location"
-            placeholder="Location"
-            value={form.location}
-            onChange={handleChange}
-            required
-          />
+          <div className="manage-form-row">
+            <div className="manage-form-group">
+              <label>Location</label>
+              <input
+                name="location"
+                placeholder="e.g. Block A, 1st Floor"
+                value={form.location}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <input
-            name="capacity"
-            placeholder="Capacity"
-            value={form.capacity}
-            onChange={handleChange}
-          />
+            <div className="manage-form-group">
+              <label>Capacity</label>
+              <input
+                name="capacity"
+                placeholder="e.g. 50"
+                type="number"
+                value={form.capacity}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
 
-          <select name="status" value={form.status} onChange={handleChange} required>
-            <option value="ACTIVE">ACTIVE</option>
-            <option value="OUT_OF_SERVICE">OUT_OF_SERVICE</option>
-          </select>
+          <div className="manage-form-row">
+            <div className="manage-form-group">
+              <label>Status</label>
+              <select name="status" value={form.status} onChange={handleChange} required>
+                <option value="ACTIVE">Active</option>
+                <option value="OUT_OF_SERVICE">Out of Service</option>
+              </select>
+            </div>
 
-          <input
-            name="description"
-            placeholder="Description"
-            value={form.description}
-            onChange={handleChange}
-          />
+            <div className="manage-form-group">
+              <label>Description</label>
+              <input
+                name="description"
+                placeholder="Add some details about the resource"
+                value={form.description}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
 
-          <div className="manage-image-upload">
-            <label htmlFor="resource-image">Upload Image:</label>
-            <input
-              type="file"
-              id="resource-image"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
+          <div className="manage-form-group full-width">
+            <label htmlFor="resource-image">Resource Image</label>
+            <div className="manage-image-upload-wrapper">
+              <input
+                type="file"
+                id="resource-image"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="file-input"
+              />
+              <div className="upload-placeholder">
+                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                 <span>Click or drag image here to upload</span>
+              </div>
+            </div>
             {form.imageUrl && (
-              <img src={form.imageUrl} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px', borderRadius: '8px' }} />
+              <div className="image-preview-container">
+                <img src={form.imageUrl} alt="Preview" className="image-preview" />
+              </div>
             )}
           </div>
 

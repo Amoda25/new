@@ -36,6 +36,7 @@ export default function ManageResourcesPage() {
     status: "ACTIVE",
     description: "",
     imageUrl: "",
+    fileName: "",
   });
 
   const loadResources = async () => {
@@ -92,6 +93,7 @@ export default function ManageResourcesPage() {
       status: "ACTIVE",
       description: "",
       imageUrl: "",
+      fileName: "",
     });
     setEditingId(null);
   };
@@ -140,6 +142,7 @@ export default function ManageResourcesPage() {
       status: resource.status || "ACTIVE",
       description: resource.description || "",
       imageUrl: resource.imageUrl || "",
+      fileName: resource.imageUrl ? "Existing Image" : "",
     });
     setActiveView("MANAGE");
     window.scrollTo({
@@ -153,7 +156,11 @@ export default function ManageResourcesPage() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setForm((prev) => ({ ...prev, imageUrl: reader.result }));
+        setForm((prev) => ({ 
+          ...prev, 
+          imageUrl: reader.result,
+          fileName: file.name
+        }));
       };
       reader.readAsDataURL(file);
     }
@@ -402,16 +409,24 @@ export default function ManageResourcesPage() {
                       onChange={handleImageChange}
                       className="file-input"
                     />
-                    <div className="upload-placeholder">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                      <span>Drag and drop or click to upload</span>
-                    </div>
+                    {form.imageUrl ? (
+                      <div className="image-inside-preview">
+                        <div className="preview-content">
+                          <img src={form.imageUrl} alt="Preview" />
+                          {form.fileName && <span className="file-name-badge">{form.fileName}</span>}
+                        </div>
+                        <div className="change-image-overlay">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                          <span>Change Image</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="upload-placeholder">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        <span>Drag and drop or click to upload</span>
+                      </div>
+                    )}
                   </div>
-                  {form.imageUrl && (
-                    <div className="image-preview-container">
-                      <img src={form.imageUrl} alt="Preview" className="image-preview" />
-                    </div>
-                  )}
                 </div>
 
                 <div className="manage-form-actions">

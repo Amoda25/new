@@ -26,7 +26,7 @@ export default function ManageResourcesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-  const [activeView, setActiveView] = useState("OVERVIEW"); // OVERVIEW or MANAGE
+  const [activeView, setActiveView] = useState("OVERVIEW"); // OVERVIEW, MANAGE, or LIST
 
   const [form, setForm] = useState({
     name: "",
@@ -38,6 +38,9 @@ export default function ManageResourcesPage() {
     imageUrl: "",
     fileName: "",
   });
+
+  const [formErrors, setFormErrors] = useState({});
+
 
   const loadResources = async () => {
     try {
@@ -78,11 +81,21 @@ export default function ManageResourcesPage() {
   }, [stats]);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+    // Clear error for this field when user starts typing
+    if (formErrors[name]) {
+      setFormErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
+
 
   const resetForm = () => {
     setForm({
@@ -96,13 +109,51 @@ export default function ManageResourcesPage() {
       fileName: "",
     });
     setEditingId(null);
+    setFormErrors({});
   };
+
 
   const [submitting, setSubmitting] = useState(false);
 
+  const validateForm = () => {
+    const errors = {};
+    if (!form.name.trim()) {
+      errors.name = "Resource name is required";
+    } else if (form.name.trim().length < 3) {
+      errors.name = "Name must be at least 3 characters";
+    }
+
+    if (!form.type) {
+      errors.type = "Please select a resource type";
+    }
+
+    if (!form.location.trim()) {
+      errors.location = "Location is required";
+    }
+
+    if (form.capacity !== "" && (isNaN(form.capacity) || Number(form.capacity) <= 0)) {
+      errors.capacity = "Capacity must be a positive number";
+    }
+
+    if (!form.status) {
+      errors.status = "Status is required";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      setError("Please fix the errors in the form.");
+      return;
+    }
+
     setSubmitting(true);
+    setError("");
+
 
     const payload = {
       ...form,
@@ -120,6 +171,7 @@ export default function ManageResourcesPage() {
 
       resetForm();
       loadResources();
+      setActiveView("LIST"); // Go to list after adding
       
       setTimeout(() => {
         setSuccessMsg("");
@@ -187,6 +239,15 @@ export default function ManageResourcesPage() {
         </div>
       )}
 
+      {error && !loading && (
+        <div className="error-toast">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+          {error}
+          <button className="close-toast" onClick={() => setError("")}>×</button>
+        </div>
+      )}
+
+
       {/* Sidebar Navigation */}
       <aside className="admin-sidebar">
         <div className="sidebar-brand">
@@ -204,9 +265,15 @@ export default function ManageResourcesPage() {
             </button>
             <button 
               className={`sidebar-nav-btn ${activeView === 'MANAGE' ? 'active' : ''}`}
-              onClick={() => setActiveView('MANAGE')}
+              onClick={() => { resetForm(); setActiveView('MANAGE'); }}
             >
               <span className="dot" /> Add Resource
+            </button>
+            <button 
+              className={`sidebar-nav-btn ${activeView === 'LIST' ? 'active' : ''}`}
+              onClick={() => setActiveView('LIST')}
+            >
+              <span className="dot" /> Maintain Resources
             </button>
           </div>
 
@@ -214,16 +281,12 @@ export default function ManageResourcesPage() {
             <span className="group-label">Quick Stats</span>
             <div className="mini-stat">
               <span className="stat-num">{stats.total}</span>
-              <span className="stat-txt">Total items</span>
-            </div>
-            <div className="mini-stat">
-              <span className="stat-num">{stats.active}</span>
-              <span className="stat-txt">Active now</span>
+              <span className="stat-txt">Items</span>
             </div>
           </div>
 
           <div className="sidebar-footer">
-            <Link to="/admin/dashboard" className="back-link">← Back to Dashboard</Link>
+            <Link to="/admin/dashboard" className="back-link">← Back</Link>
           </div>
         </nav>
       </aside>
@@ -232,12 +295,20 @@ export default function ManageResourcesPage() {
       <main className="admin-main-content">
         <header className="content-header">
           <div className="header-text">
-            <h1>{activeView === 'OVERVIEW' ? 'Resources Overview' : 'Add Resource'}</h1>
-            <p>{activeView === 'OVERVIEW' ? 'Real-time metrics of campus facilities.' : 'Create, update and organize resource inventory.'}</p>
+            <h1>
+              {activeView === 'OVERVIEW' ? 'Resources Overview' : 
+               activeView === 'MANAGE' ? (editingId ? 'Edit Resource' : 'Add New Resource') : 
+               'Maintain Resources'}
+            </h1>
+            <p>
+              {activeView === 'OVERVIEW' ? 'Real-time metrics of campus facilities.' : 
+               activeView === 'MANAGE' ? 'Create or update resource details.' : 
+               'Review and manage all registered campus resources.'}
+            </p>
           </div>
         </header>
 
-        {activeView === 'OVERVIEW' ? (
+        {activeView === 'OVERVIEW' && (
           <div className="overview-container animate-fade-in">
             <div className="overview-stats-grid">
               <div className="overview-stat-card">
@@ -301,7 +372,9 @@ export default function ManageResourcesPage() {
               </div>
             </section>
           </div>
-        ) : (
+        )}
+
+        {activeView === 'MANAGE' && (
           <div className="manage-shell animate-fade-in">
             <section className="form-section-card">
               <div className="section-header">
@@ -321,23 +394,32 @@ export default function ManageResourcesPage() {
                       placeholder="e.g. Main Auditorium"
                       value={form.name}
                       onChange={handleChange}
-                      required
+                      className={formErrors.name ? "input-error" : ""}
                     />
+                    {formErrors.name && <span className="error-text">{formErrors.name}</span>}
                   </div>
+
 
                   <div className="manage-form-group">
                     <label>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
                       Resource Type
                     </label>
-                    <select name="type" value={form.type} onChange={handleChange} required>
+                    <select 
+                      name="type" 
+                      value={form.type} 
+                      onChange={handleChange}
+                      className={formErrors.type ? "input-error" : ""}
+                    >
                       <option value="">Select type</option>
                       <option value="ROOM">ROOM</option>
                       <option value="LAB">LAB</option>
                       <option value="LECTURE_HALL">LECTURE HALL</option>
                       <option value="EQUIPMENT">EQUIPMENT</option>
                     </select>
+                    {formErrors.type && <span className="error-text">{formErrors.type}</span>}
                   </div>
+
                 </div>
 
                 <div className="manage-form-row">
@@ -351,9 +433,11 @@ export default function ManageResourcesPage() {
                       placeholder="e.g. Block A, 1st Floor"
                       value={form.location}
                       onChange={handleChange}
-                      required
+                      className={formErrors.location ? "input-error" : ""}
                     />
+                    {formErrors.location && <span className="error-text">{formErrors.location}</span>}
                   </div>
+
 
                   <div className="manage-form-group">
                     <label>
@@ -366,8 +450,11 @@ export default function ManageResourcesPage() {
                       type="number"
                       value={form.capacity}
                       onChange={handleChange}
+                      className={formErrors.capacity ? "input-error" : ""}
                     />
+                    {formErrors.capacity && <span className="error-text">{formErrors.capacity}</span>}
                   </div>
+
                 </div>
 
                 <div className="manage-form-row">
@@ -448,18 +535,17 @@ export default function ManageResourcesPage() {
                 </div>
               </form>
             </section>
+          </div>
+        )}
 
-            <div className="manage-list-header">
-              <h2>Existing Resources</h2>
-              <p>Review and manage all registered campus resources.</p>
-            </div>
-
+        {activeView === 'LIST' && (
+          <div className="manage-shell animate-fade-in">
             {loading ? (
               <div className="manage-message">Loading inventory...</div>
             ) : error ? (
               <div className="manage-message">{error}</div>
             ) : resources.length === 0 ? (
-              <div className="manage-message">No resources found in the database.</div>
+              <div className="manage-message">No resources found.</div>
             ) : (
               <div className="manage-resource-grid">
                 {resources.map((resource) => (
@@ -523,4 +609,5 @@ export default function ManageResourcesPage() {
       </main>
     </div>
   );
-}
+}
+

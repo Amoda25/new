@@ -36,6 +36,7 @@ export default function ManageResourcesPage() {
     status: "ACTIVE",
     description: "",
     imageUrl: "",
+    fileName: "",
   });
 
   const loadResources = async () => {
@@ -92,6 +93,7 @@ export default function ManageResourcesPage() {
       status: "ACTIVE",
       description: "",
       imageUrl: "",
+      fileName: "",
     });
     setEditingId(null);
   };
@@ -140,6 +142,7 @@ export default function ManageResourcesPage() {
       status: resource.status || "ACTIVE",
       description: resource.description || "",
       imageUrl: resource.imageUrl || "",
+      fileName: resource.imageUrl ? "Existing Image" : "",
     });
     setActiveView("MANAGE");
     window.scrollTo({
@@ -153,7 +156,11 @@ export default function ManageResourcesPage() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setForm((prev) => ({ ...prev, imageUrl: reader.result }));
+        setForm((prev) => ({ 
+          ...prev, 
+          imageUrl: reader.result,
+          fileName: file.name
+        }));
       };
       reader.readAsDataURL(file);
     }
@@ -305,7 +312,10 @@ export default function ManageResourcesPage() {
               <form onSubmit={handleSubmit} className="manage-resource-form">
                 <div className="manage-form-row">
                   <div className="manage-form-group">
-                    <label>Resource Name</label>
+                    <label>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                      Resource Name
+                    </label>
                     <input
                       name="name"
                       placeholder="e.g. Main Auditorium"
@@ -316,7 +326,10 @@ export default function ManageResourcesPage() {
                   </div>
 
                   <div className="manage-form-group">
-                    <label>Resource Type</label>
+                    <label>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                      Resource Type
+                    </label>
                     <select name="type" value={form.type} onChange={handleChange} required>
                       <option value="">Select type</option>
                       <option value="ROOM">ROOM</option>
@@ -329,7 +342,10 @@ export default function ManageResourcesPage() {
 
                 <div className="manage-form-row">
                   <div className="manage-form-group">
-                    <label>Location</label>
+                    <label>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                      Location
+                    </label>
                     <input
                       name="location"
                       placeholder="e.g. Block A, 1st Floor"
@@ -340,7 +356,10 @@ export default function ManageResourcesPage() {
                   </div>
 
                   <div className="manage-form-group">
-                    <label>Capacity</label>
+                    <label>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                      Capacity
+                    </label>
                     <input
                       name="capacity"
                       placeholder="e.g. 50"
@@ -353,7 +372,10 @@ export default function ManageResourcesPage() {
 
                 <div className="manage-form-row">
                   <div className="manage-form-group">
-                    <label>Status</label>
+                    <label>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      Status
+                    </label>
                     <select name="status" value={form.status} onChange={handleChange} required>
                       <option value="ACTIVE">Active</option>
                       <option value="OUT_OF_SERVICE">Out of Service</option>
@@ -361,7 +383,10 @@ export default function ManageResourcesPage() {
                   </div>
 
                   <div className="manage-form-group">
-                    <label>Description</label>
+                    <label>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                      Description
+                    </label>
                     <input
                       name="description"
                       placeholder="Add some details about the resource"
@@ -372,7 +397,10 @@ export default function ManageResourcesPage() {
                 </div>
 
                 <div className="manage-form-group full-width">
-                  <label htmlFor="resource-image">Resource Image</label>
+                  <label htmlFor="resource-image">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    Resource Image
+                  </label>
                   <div className="manage-image-upload-wrapper">
                     <input
                       type="file"
@@ -381,21 +409,30 @@ export default function ManageResourcesPage() {
                       onChange={handleImageChange}
                       className="file-input"
                     />
-                    <div className="upload-placeholder">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                      <span>Click to upload resource image</span>
-                    </div>
+                    {form.imageUrl ? (
+                      <div className="image-inside-preview">
+                        <div className="preview-content">
+                          <img src={form.imageUrl} alt="Preview" />
+                          {form.fileName && <span className="file-name-badge">{form.fileName}</span>}
+                        </div>
+                        <div className="change-image-overlay">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                          <span>Change Image</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="upload-placeholder">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        <span>Drag and drop or click to upload</span>
+                      </div>
+                    )}
                   </div>
-                  {form.imageUrl && (
-                    <div className="image-preview-container">
-                      <img src={form.imageUrl} alt="Preview" className="image-preview" />
-                    </div>
-                  )}
                 </div>
 
                 <div className="manage-form-actions">
                   <button type="submit" className="manage-primary-btn" disabled={submitting}>
-                    {submitting ? "Saving..." : (editingId ? "Update Resource" : "Add Resource")}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    {submitting ? "Saving..." : (editingId ? "Update Resource" : "Create Resource")}
                   </button>
 
                   {editingId && (
@@ -427,40 +464,40 @@ export default function ManageResourcesPage() {
               <div className="manage-resource-grid">
                 {resources.map((resource) => (
                   <div key={resource.id} className="manage-resource-card">
-                    <div className="card-header-top">
-                      <div className={`manage-card-badge ${resource.status.toLowerCase() === 'active' ? 'approved' : 'rejected'}`}>
+                    <div className="manage-card-image">
+                      {resource.imageUrl ? (
+                        <img src={resource.imageUrl} alt={resource.name} />
+                      ) : (
+                        <div className="placeholder-image" style={{ width: '100%', height: '100%', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        </div>
+                      )}
+                      <div className="manage-card-badge">
                         {resource.type || "RESOURCE"}
                       </div>
-                      <span className="resource-id-tag">ID: {resource.id}</span>
                     </div>
 
-                    {resource.imageUrl && (
-                      <div className="manage-card-image">
-                        <img src={resource.imageUrl} alt={resource.name} />
+                    <div className="card-content">
+                      <h3 className="resource-name-title">{resource.name}</h3>
+
+                      <div className="info-row">
+                        <span className="info-label">Location</span>
+                        <span className="info-value">{resource.location}</span>
                       </div>
-                    )}
 
-                    <h3 className="resource-name-title">{resource.name}</h3>
+                      <div className="info-row">
+                        <span className="info-label">Capacity</span>
+                        <span className="info-value">{resource.capacity ?? "N/A"}</span>
+                      </div>
 
-                    <div className="info-row">
-                      <span className="info-label">Location</span>
-                      <span className="info-value">{resource.location}</span>
+                      <div className="info-row">
+                        <span className="info-label">Status</span>
+                        <div className={`status-indicator ${resource.status.toLowerCase()}`}>
+                          <span className="dot" style={{ width: 8, height: 8, borderRadius: '50%', background: 'currentColor' }}></span>
+                          {resource.status}
+                        </div>
+                      </div>
                     </div>
-
-                    <div className="info-row">
-                      <span className="info-label">Capacity</span>
-                      <span className="info-value">{resource.capacity ?? "N/A"}</span>
-                    </div>
-
-                    <div className="info-row">
-                      <span className="info-label">Status</span>
-                      <span className="info-value">
-                        <span className={`status-dot ${resource.status.toLowerCase()}`}></span>
-                        {resource.status}
-                      </span>
-                    </div>
-
-                    <div className="manage-card-divider" />
 
                     <div className="manage-card-actions">
                       <button

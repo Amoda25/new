@@ -89,7 +89,7 @@ export const deleteUserTicket = async (ticketId) => {
 
 export const getTechnicians = async () => {
   const response = await fetch(
-    "http://localhost:8080/api/admin/tickets/technicians",
+    "http://localhost:8081/api/admin/tickets/technicians",
     {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),

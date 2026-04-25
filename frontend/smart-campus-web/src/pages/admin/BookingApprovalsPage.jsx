@@ -155,7 +155,7 @@ const BookingApprovalsPage = () => {
                     {activeView === 'LIST' && (
                         <div className="nav-group animate-fade-in">
                             <span className="group-label">Filter Status</span>
-                            {["PENDING", "APPROVED", "REJECTED", "ALL"].map(s => (
+                            {["ALL", "PENDING", "APPROVED", "REJECTED"].map(s => (
                                 <button 
                                     key={s} 
                                     className={`sidebar-nav-btn ${filterStatus === s ? 'active' : ''}`}
@@ -194,7 +194,6 @@ const BookingApprovalsPage = () => {
                 <header className="content-header">
                     <div className="header-text">
                         <h1>{activeView === 'OVERVIEW' ? 'Dashboard Overview' : 'Booking Requests'}</h1>
-                        <p>{activeView === 'OVERVIEW' ? 'Performance metrics and booking trends.' : 'Manage and review campus resource allocations.'}</p>
                     </div>
                 </header>
 

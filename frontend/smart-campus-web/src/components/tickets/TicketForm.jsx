@@ -1,5 +1,5 @@
 
-import { createTicket,getResources} from "../../services/ticketService";
+import { createTicket } from "../../services/ticketService";
 import "./TicketForm.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -8,7 +8,7 @@ function TicketForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
-  const [resourceId, setResourceId] = useState("");
+
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
   const [contactName, setContactName] = useState("");
@@ -18,33 +18,47 @@ function TicketForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [resources, setResources] = useState([]);
 
-  useEffect(() => {
-    const fetchResources = async () => {
-      try {
-        const data = await getResources();
-        setResources(data);
-      } catch (error) {
-        console.error("Failed to load resources:", error);
-      }
-    };
+  const [errors, setErrors] = useState({});
 
-    fetchResources();
-  }, []);
+  const validate = (name, value) => {
+    let error = "";
+    if (!value || (typeof value === "string" && !value.trim())) {
+      error = "This field is required";
+    }
+    setErrors((prev) => ({ ...prev, [name]: error }));
+    return error;
+  };
+
+
   
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-
-    if (selectedFiles.length > 3) {
+    
+    if (images.length + selectedFiles.length > 3) {
       setErrorMessage("You can upload a maximum of 3 images.");
-      setImages([]);
       return;
     }
 
+    const newImages = selectedFiles.map(file => ({
+      file,
+      preview: URL.createObjectURL(file)
+    }));
+
     setErrorMessage("");
-    setImages(selectedFiles);
+    setImages(prev => [...prev, ...newImages]);
+    
+    // Reset input value so same file can be selected again if removed
+    e.target.value = "";
+  };
+
+  const removeImage = (index) => {
+    const imageToRemove = images[index];
+    if (imageToRemove.preview) {
+      URL.revokeObjectURL(imageToRemove.preview);
+    }
+    setImages(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -53,18 +67,30 @@ function TicketForm() {
     setSuccessMessage("");
     setErrorMessage("");
 
-    if (!title.trim()) {
-      setErrorMessage("Title is required.");
-      return;
-    }
+    const fieldsToValidate = {
+      title,
+      category,
+      priority,
+      location,
+      description,
+      contactName,
+      contactDetails
+    };
 
-    if (!description.trim()) {
-      setErrorMessage("Description is required.");
-      return;
-    }
+    let hasErrors = false;
+    const newErrors = {};
+    Object.keys(fieldsToValidate).forEach(key => {
+      const val = fieldsToValidate[key];
+      if (!val || (typeof val === 'string' && !val.trim())) {
+        newErrors[key] = "This field is required";
+        hasErrors = true;
+      }
+    });
 
-    if (!priority) {
-      setErrorMessage("Priority is required.");
+    if (hasErrors) {
+      setErrors(newErrors);
+      setErrorMessage("Please fill in all required fields.");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
@@ -80,12 +106,10 @@ function TicketForm() {
       formData.append("contactName", contactName);
       formData.append("contactDetails", contactDetails);
 
-      if (resourceId) {
-        formData.append("resourceId", resourceId);
-      }
 
-      images.forEach((image) => {
-        formData.append("images", image);
+
+      images.forEach((imgObj) => {
+        formData.append("images", imgObj.file);
       });
 
       await createTicket(formData);
@@ -94,7 +118,6 @@ function TicketForm() {
       setTitle("");
       setDescription("");
       setPriority("");
-      setResourceId("");
       setImages([]);
       setTimeout(() => {
         navigate("/user/tickets");
@@ -124,9 +147,14 @@ function TicketForm() {
                 type="text"
                 placeholder="Example: Projector not working in Lab 03"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  validate("title", e.target.value);
+                }}
+                className={errors.title ? "input-error" : ""}
                 required
               />
+              {errors.title && <span className="field-error">{errors.title}</span>}
             </div>
 
             <div className="form-row">
@@ -134,7 +162,11 @@ function TicketForm() {
                 <label>Category *</label>
                 <select
                   value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    validate("category", e.target.value);
+                  }}
+                  className={errors.category ? "input-error" : ""}
                   required
                 >
                   <option value="">Select category</option>
@@ -144,13 +176,18 @@ function TicketForm() {
                   <option value="PLUMBING">Plumbing</option>
                   <option value="OTHER">Other</option>
                 </select>
+                {errors.category && <span className="field-error">{errors.category}</span>}
               </div>
 
               <div className="field">
                 <label>Priority *</label>
                 <select
                   value={priority}
-                  onChange={(e) => setPriority(e.target.value)}
+                  onChange={(e) => {
+                    setPriority(e.target.value);
+                    validate("priority", e.target.value);
+                  }}
+                  className={errors.priority ? "input-error" : ""}
                   required
                 >
                   <option value="">Select priority</option>
@@ -158,36 +195,24 @@ function TicketForm() {
                   <option value="MEDIUM">Medium</option>
                   <option value="HIGH">High</option>
                 </select>
+                {errors.priority && <span className="field-error">{errors.priority}</span>}
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="field">
-                <label>Resource *</label>
-                <select
-                  value={resourceId}
-                  onChange={(e) => setResourceId(e.target.value)}
-                  required
-                >
-                  <option value="">Select resource</option>
-                  {resources.map((res) => (
-                    <option key={res.id} value={res.id}>
-                      {res.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="field">
-                <label>Location *</label>
-                <input
-                  type="text"
-                  placeholder="Example: B401 / Lab 03"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  required
-                />
-              </div>
+            <div className="field">
+              <label>Location *</label>
+              <input
+                type="text"
+                placeholder="Example: B401 / Lab 03"
+                value={location}
+                onChange={(e) => {
+                  setLocation(e.target.value);
+                  validate("location", e.target.value);
+                }}
+                className={errors.location ? "input-error" : ""}
+                required
+              />
+              {errors.location && <span className="field-error">{errors.location}</span>}
             </div>
 
             <div className="field">
@@ -195,10 +220,15 @@ function TicketForm() {
               <textarea
                 placeholder="Describe the issue clearly. Example: Projector turns on, but the display is blank."
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                  validate("description", e.target.value);
+                }}
+                className={errors.description ? "input-error" : ""}
                 rows="5"
                 required
               />
+              {errors.description && <span className="field-error">{errors.description}</span>}
             </div>
 
             <div className="form-row">
@@ -208,9 +238,14 @@ function TicketForm() {
                   type="text"
                   placeholder="Example: Samindi Wijekoon"
                   value={contactName}
-                  onChange={(e) => setContactName(e.target.value)}
+                  onChange={(e) => {
+                    setContactName(e.target.value);
+                    validate("contactName", e.target.value);
+                  }}
+                  className={errors.contactName ? "input-error" : ""}
                   required
                 />
+                {errors.contactName && <span className="field-error">{errors.contactName}</span>}
               </div>
 
               <div className="field">
@@ -219,9 +254,14 @@ function TicketForm() {
                   type="text"
                   placeholder="Email or phone number"
                   value={contactDetails}
-                  onChange={(e) => setContactDetails(e.target.value)}
+                  onChange={(e) => {
+                    setContactDetails(e.target.value);
+                    validate("contactDetails", e.target.value);
+                  }}
+                  className={errors.contactDetails ? "input-error" : ""}
                   required
                 />
+                {errors.contactDetails && <span className="field-error">{errors.contactDetails}</span>}
               </div>
             </div>
 
@@ -241,9 +281,22 @@ function TicketForm() {
                 </div>
               </div>
               {images.length > 0 && (
-                <div className="file-list">
+                <div className="image-preview-grid">
                   {images.map((img, i) => (
-                    <div key={i} className="file-item">{img.name}</div>
+                    <div key={i} className="preview-card">
+                      <img src={img.preview} alt={`Preview ${i}`} />
+                      <button 
+                        type="button" 
+                        className="remove-img-btn"
+                        onClick={() => removeImage(i)}
+                        title="Remove image"
+                      >
+                        &times;
+                      </button>
+                      <div className="img-info">
+                        <span>{img.file.name.length > 15 ? img.file.name.substring(0, 12) + '...' : img.file.name}</span>
+                      </div>
+                    </div>
                   ))}
                 </div>
               )}

@@ -19,7 +19,7 @@ function TicketDetailsPage() {
 
    const fetchComments = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/comments/ticket/${id}`, {
+        const res = await fetch(`http://localhost:8081/api/comments/ticket/${id}`, {
           headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`
           }
@@ -99,7 +99,7 @@ function TicketDetailsPage() {
     }
 
     try {
-      await fetch(`http://localhost:8080/api/comments/ticket/${ticket.id}`, {
+      await fetch(`http://localhost:8081/api/comments/ticket/${ticket.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +127,7 @@ function TicketDetailsPage() {
     if (!confirmed) return;
 
     try {
-      await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+      await fetch(`http://localhost:8081/api/comments/${commentId}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`

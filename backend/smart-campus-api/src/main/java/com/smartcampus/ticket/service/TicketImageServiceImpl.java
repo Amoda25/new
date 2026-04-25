@@ -114,7 +114,7 @@ public class TicketImageServiceImpl implements TicketImageService {
             dto.setId(image.getId());
             dto.setTicketId(image.getTicketId());
             dto.setFileName(image.getFileName());
-            dto.setImageUrl("http://localhost:8080/" + image.getFilePath());
+            dto.setImageUrl("http://localhost:8081/" + image.getFilePath());
             dto.setFileSize(image.getFileSize());
             dto.setUploadedAt(image.getUploadedAt() != null ? image.getUploadedAt().toString() : null);
 
@@ -144,7 +144,7 @@ public class TicketImageServiceImpl implements TicketImageService {
             dto.setId(image.getId());
             dto.setTicketId(image.getTicketId());
             dto.setFileName(image.getFileName());
-            dto.setImageUrl("http://localhost:8080/" + image.getFilePath());
+            dto.setImageUrl("http://localhost:8081/" + image.getFilePath());
             dto.setFileSize(image.getFileSize());
             dto.setUploadedAt(image.getUploadedAt() != null ? image.getUploadedAt().toString() : null);
 
@@ -168,7 +168,7 @@ public class TicketImageServiceImpl implements TicketImageService {
             dto.setId(image.getId());
             dto.setTicketId(image.getTicketId());
             dto.setFileName(image.getFileName());
-            dto.setImageUrl("http://localhost:8080/" + image.getFilePath());
+            dto.setImageUrl("http://localhost:8081/" + image.getFilePath());
             dto.setFileSize(image.getFileSize());
             dto.setUploadedAt(image.getUploadedAt() != null ? image.getUploadedAt().toString() : null);
 

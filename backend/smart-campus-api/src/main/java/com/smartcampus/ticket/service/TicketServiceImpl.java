@@ -55,6 +55,10 @@ public class TicketServiceImpl implements TicketService {
         ticket.setTitle(dto.getTitle());
         ticket.setDescription(dto.getDescription());
         ticket.setPriority(dto.getPriority());
+        ticket.setCategory(dto.getCategory());
+        ticket.setLocation(dto.getLocation());
+        ticket.setContactName(dto.getContactName());
+        ticket.setContactDetails(dto.getContactDetails());
         ticket.setStatus(TicketStatus.OPEN);
         ticket.setCreatedBy(currentUserId);
         ticket.setResourceId(dto.getResourceId());
@@ -309,6 +313,10 @@ public class TicketServiceImpl implements TicketService {
         dto.setCreatedBy(ticket.getCreatedBy());
         dto.setResourceId(ticket.getResourceId());
         dto.setAssignedTo(ticket.getAssignedTo());
+        dto.setCategory(ticket.getCategory());
+        dto.setLocation(ticket.getLocation());
+        dto.setContactName(ticket.getContactName());
+        dto.setContactDetails(ticket.getContactDetails());
         dto.setResolutionNotes(ticket.getResolutionNotes());
         dto.setCreatedAt(ticket.getCreatedAt());
         dto.setUpdatedAt(ticket.getUpdatedAt());

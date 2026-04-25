@@ -25,7 +25,7 @@ export default function Chatbot() {
     setInput("");
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:8080/api/chatbot/ask", {
+      const response = await axios.post("http://localhost:8081/api/chatbot/ask", {
         message: userText,
       });
       setMessages((prev) => [...prev, { sender: "bot", text: response.data.reply }]);

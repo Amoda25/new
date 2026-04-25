@@ -25,6 +25,8 @@ const BookingApprovalsPage = () => {
     const [error, setError] = useState("");
     const [filterStatus, setFilterStatus] = useState("PENDING");
     const [activeView, setActiveView] = useState("OVERVIEW"); 
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(null);
     
     // Rejection Modal State
     const [selectedBookingId, setSelectedBookingId] = useState(null);
@@ -122,6 +124,23 @@ const BookingApprovalsPage = () => {
         return bookings.filter(b => b.status === filterStatus);
     }, [bookings, filterStatus]);
 
+    const calendarDays = useMemo(() => {
+        const year = currentMonth.getFullYear();
+        const month = currentMonth.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const firstDay = new Date(year, month, 1).getDay();
+        
+        const days = [];
+        for (let i = 0; i < firstDay; i++) days.push(null);
+        for (let i = 1; i <= daysInMonth; i++) days.push(new Date(year, month, i));
+        return days;
+    }, [currentMonth]);
+
+    const getBookingsForDate = (date) => {
+        if (!date) return [];
+        return bookings.filter(b => new Date(b.startTime).toDateString() === date.toDateString());
+    };
+
     const formatDate = (dateStr) => {
         const date = new Date(dateStr);
         return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -150,6 +169,13 @@ const BookingApprovalsPage = () => {
                         >
                             <span className="dot" /> Booking Requests
                         </button>
+                        <button 
+                            className={`sidebar-nav-btn ${activeView === 'CALENDAR' ? 'active' : ''}`}
+                            onClick={() => setActiveView('CALENDAR')}
+                        >
+                            <span className="dot" /> Calendar View
+                        </button>
+
                     </div>
 
 
@@ -180,7 +206,10 @@ const BookingApprovalsPage = () => {
             <main className="admin-main-content">
                 <header className="content-header">
                     <div className="header-text">
-                        <h1>{activeView === 'OVERVIEW' ? 'Dashboard Overview' : 'Booking Requests'}</h1>
+                        <h1>
+                            {activeView === 'OVERVIEW' ? 'Dashboard Overview' : 
+                             activeView === 'CALENDAR' ? 'Booking Calendar' : 'Booking Requests'}
+                        </h1>
                     </div>
                 </header>
 
@@ -255,6 +284,82 @@ const BookingApprovalsPage = () => {
                                 </div>
                             </div>
                         </section>
+                    </div>
+                ) : activeView === 'CALENDAR' ? (
+                    <div className="calendar-view-container animate-fade-in">
+                        <div className="calendar-wrapper">
+                            <div className="calendar-header-nav">
+                                <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}>
+                                    &larr; Prev
+                                </button>
+                                <h2>{currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</h2>
+                                <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}>
+                                    Next &rarr;
+                                </button>
+                            </div>
+
+                            <div className="calendar-grid">
+                                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
+                                    <div key={d} className="calendar-weekday">{d}</div>
+                                ))}
+                                {calendarDays.map((date, i) => {
+                                    if (!date) return <div key={`empty-${i}`} className="calendar-day empty" />;
+                                    
+                                    const dayBookings = getBookingsForDate(date);
+                                    const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
+                                    const isToday = date.toDateString() === new Date().toDateString();
+
+                                    return (
+                                        <div 
+                                            key={date.toISOString()} 
+                                            className={`calendar-day ${isSelected ? 'selected' : ''} ${isToday ? 'today' : ''}`}
+                                            onClick={() => setSelectedDate(date)}
+                                        >
+                                            <span className="day-number">{date.getDate()}</span>
+                                            {dayBookings.length > 0 && (
+                                                <div className="day-indicators">
+                                                    {dayBookings.slice(0, 3).map((b, idx) => (
+                                                        <span key={idx} className={`indicator-dot ${b.status.toLowerCase()}`} />
+                                                    ))}
+                                                    {dayBookings.length > 3 && <span className="more-indicator">+{dayBookings.length - 3}</span>}
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        <div className="selected-date-details">
+                            {selectedDate ? (
+                                <>
+                                    <div className="details-header">
+                                        <h3>Bookings for {selectedDate.toLocaleDateString()}</h3>
+                                        <span className="booking-count">{getBookingsForDate(selectedDate).length} requests</span>
+                                    </div>
+                                    <div className="details-list">
+                                        {getBookingsForDate(selectedDate).length > 0 ? (
+                                            getBookingsForDate(selectedDate).map(b => (
+                                                <div key={b.id} className="mini-booking-card">
+                                                    <div className="mini-card-header">
+                                                        <span className={`status-tag ${b.status.toLowerCase()}`}>{b.status}</span>
+                                                        <span className="time-tag">{new Date(b.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                                    </div>
+                                                    <p className="mini-purpose">{b.purpose}</p>
+                                                    <p className="mini-resource">{getResourceName(b.resourceId)}</p>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="no-bookings-msg">No bookings scheduled for this date.</div>
+                                        )}
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="select-date-prompt">
+                                    <p>Select a date to view detailed booking requests</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ) : (
                     <section className="manage-shell animate-fade-in">

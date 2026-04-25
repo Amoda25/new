@@ -96,8 +96,11 @@ export default function ManageResourcesPage() {
     setEditingId(null);
   };
 
+  const [submitting, setSubmitting] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
 
     const payload = {
       ...form,
@@ -122,6 +125,8 @@ export default function ManageResourcesPage() {
     } catch (error) {
       console.error("Failed to save resource", error);
       setError("Failed to save resource");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -389,8 +394,8 @@ export default function ManageResourcesPage() {
                 </div>
 
                 <div className="manage-form-actions">
-                  <button type="submit" className="manage-primary-btn">
-                    {editingId ? "Update Resource" : "Add Resource"}
+                  <button type="submit" className="manage-primary-btn" disabled={submitting}>
+                    {submitting ? "Saving..." : (editingId ? "Update Resource" : "Add Resource")}
                   </button>
 
                   {editingId && (
@@ -398,6 +403,7 @@ export default function ManageResourcesPage() {
                       type="button"
                       className="manage-secondary-btn"
                       onClick={resetForm}
+                      disabled={submitting}
                     >
                       Cancel
                     </button>

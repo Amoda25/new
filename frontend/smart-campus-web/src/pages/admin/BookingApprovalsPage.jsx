@@ -155,7 +155,7 @@ const BookingApprovalsPage = () => {
                     {activeView === 'LIST' && (
                         <div className="nav-group animate-fade-in">
                             <span className="group-label">Filter Status</span>
-                            {["PENDING", "APPROVED", "REJECTED", "ALL"].map(s => (
+                            {["ALL", "PENDING", "APPROVED", "REJECTED"].map(s => (
                                 <button 
                                     key={s} 
                                     className={`sidebar-nav-btn ${filterStatus === s ? 'active' : ''}`}

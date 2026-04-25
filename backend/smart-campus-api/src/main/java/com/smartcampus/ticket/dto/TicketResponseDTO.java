@@ -13,6 +13,10 @@ public class TicketResponseDTO {
     private String createdBy;
     private String resourceId;
     private String assignedTo;
+    private String category;
+    private String location;
+    private String contactName;
+    private String contactDetails;
     private String resolutionNotes;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -42,7 +46,16 @@ public class TicketResponseDTO {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 
+    public String getCategory() { return category; }
+    public String getLocation() { return location; }
+    public String getContactName() { return contactName; }
+    public String getContactDetails() { return contactDetails; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+
+    public void setCategory(String category) { this.category = category; }
+    public void setLocation(String location) { this.location = location; }
+    public void setContactName(String contactName) { this.contactName = contactName; }
+    public void setContactDetails(String contactDetails) { this.contactDetails = contactDetails; }
 
     public List<String> getImages() { return images; }
 

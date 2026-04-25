@@ -5,6 +5,10 @@ public class TicketCreateDTO {
     private String description;
     private String priority;
     private String resourceId;
+    private String category;
+    private String location;
+    private String contactName;
+    private String contactDetails;
 
     public TicketCreateDTO() {
     }
@@ -25,6 +29,22 @@ public class TicketCreateDTO {
         return resourceId;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public String getContactDetails() {
+        return contactDetails;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -39,5 +59,21 @@ public class TicketCreateDTO {
 
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public void setContactDetails(String contactDetails) {
+        this.contactDetails = contactDetails;
     }
 }

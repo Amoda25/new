@@ -47,8 +47,9 @@ export default function ManageResourcesPage() {
     const active = resources.filter((r) => r.status === "ACTIVE").length;
     const rooms = resources.filter((r) => r.type === "ROOM").length;
     const labs = resources.filter((r) => r.type === "LAB").length;
+    const halls = resources.filter((r) => r.type === "LECTURE_HALL").length;
 
-    return { total, active, rooms, labs };
+    return { total, active, rooms, labs, halls };
   }, [resources]);
 
   const handleChange = (e) => {
@@ -169,8 +170,8 @@ export default function ManageResourcesPage() {
               <p>Active Resources</p>
             </div>
             <div className="manage-stat-box">
-              <h2>{stats.rooms + stats.labs}+</h2>
-              <p>Rooms & Labs</p>
+              <h2>{stats.rooms + stats.labs + stats.halls}+</h2>
+              <p>Rooms, Labs & Halls</p>
             </div>
           </div>
         </div>
@@ -204,6 +205,7 @@ export default function ManageResourcesPage() {
                 <option value="">Select type</option>
                 <option value="ROOM">ROOM</option>
                 <option value="LAB">LAB</option>
+                <option value="LECTURE_HALL">LECTURE HALL</option>
                 <option value="EQUIPMENT">EQUIPMENT</option>
               </select>
             </div>

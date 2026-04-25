@@ -85,7 +85,9 @@ export default function ResourceDetailsPage() {
 
   const cfg = TYPE_CONFIG[resource.type] ?? DEFAULT_CONFIG;
   const isActive = resource.status === "ACTIVE";
-  const imgSrc = imgError ? cfg.imageFallback : cfg.image;
+  
+  const baseImg = resource.imageUrl ? resource.imageUrl : cfg.image;
+  const imgSrc = imgError ? cfg.imageFallback : baseImg;
 
   return (
     <div

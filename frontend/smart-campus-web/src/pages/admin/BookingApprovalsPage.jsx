@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   adminGetAllBookings, 
   adminApproveBooking, 
@@ -126,158 +127,170 @@ const BookingApprovalsPage = () => {
     };
 
     return (
-        <div className="manage-soft-page">
-            <section className="manage-hero-section">
-                <div className="manage-hero-content">
-                    <div className="manage-hero-text">
-                        <h1>Booking Requests</h1>
-                        <p>Review and manage resource allocation requests across the campus.</p>
-                    </div>
-
-                    <div className="manage-stats-panel">
-                        <div className="manage-stat-box">
-                            <h2>{stats.pending}</h2>
-                            <p>Pending Review</p>
+        <div className="admin-booking-dashboard">
+            {/* Sidebar Navigation */}
+            <aside className="admin-sidebar">
+                <div className="sidebar-brand">
+                    <h2>Admin Panel</h2>
+                    <p>Booking Management</p>
+                </div>
+                <nav className="sidebar-nav">
+                    <div className="nav-group">
+                        <span className="group-label">Quick Stats</span>
+                        <div className="mini-stat">
+                            <span className="stat-num">{stats.pending}</span>
+                            <span className="stat-txt">Pending</span>
                         </div>
-                        <div className="manage-stat-box">
-                            <h2>{stats.approved}</h2>
-                            <p>Approved</p>
+                        <div className="mini-stat">
+                            <span className="stat-num">{stats.approved}</span>
+                            <span className="stat-txt">Approved</span>
                         </div>
-                        <div className="manage-stat-box">
-                            <h2>{stats.rejected}</h2>
-                            <p>Rejected</p>
-                        </div>
-                        <div className="manage-stat-box">
-                            <h2>{stats.total}</h2>
-                            <p>Total History</p>
+                        <div className="mini-stat">
+                            <span className="stat-num">{stats.rejected}</span>
+                            <span className="stat-txt">Rejected</span>
                         </div>
                     </div>
 
-                    <div className="status-nav">
+                    <div className="nav-group">
+                        <span className="group-label">Filter Status</span>
                         {["PENDING", "APPROVED", "REJECTED", "ALL"].map(s => (
                             <button 
                                 key={s} 
-                                className={`nav-btn ${filterStatus === s ? 'active' : ''}`}
+                                className={`sidebar-nav-btn ${filterStatus === s ? 'active' : ''}`}
                                 onClick={() => setFilterStatus(s)}
                             >
-                                {s}
+                                <span className="dot" /> {s}
                             </button>
                         ))}
                     </div>
-                </div>
-            </section>
 
-            <section className="manage-shell">
-                {loading ? (
-                    <div className="manage-message">Loading booking database...</div>
-                ) : error ? (
-                    <div className="manage-message">{error}</div>
-                ) : filteredBookings.length === 0 ? (
-                    <div className="manage-message">No bookings found matching "{filterStatus}" status.</div>
-                ) : (
-                    <div className="manage-resource-grid">
-                        {filteredBookings.map(booking => (
-                            <div key={booking.id} className="manage-resource-card">
-                                <div className="card-header-top">
-                                    <div className={`manage-card-badge ${booking.status.toLowerCase()}`}>
-                                        {booking.status}
+                    <div className="sidebar-footer">
+                        <Link to="/admin" className="back-link">← Back to Dashboard</Link>
+                    </div>
+                </nav>
+            </aside>
+
+            {/* Main Content Area */}
+            <main className="admin-main-content">
+                <header className="content-header">
+                    <div className="header-text">
+                        <h1>Resource Booking Requests</h1>
+                        <p>Manage and review campus resource allocations.</p>
+                    </div>
+                </header>
+
+                <section className="manage-shell">
+                    {loading ? (
+                        <div className="manage-message">Loading booking database...</div>
+                    ) : error ? (
+                        <div className="manage-message">{error}</div>
+                    ) : filteredBookings.length === 0 ? (
+                        <div className="manage-message">No bookings found matching "{filterStatus}" status.</div>
+                    ) : (
+                        <div className="manage-resource-grid">
+                            {filteredBookings.map(booking => (
+                                <div key={booking.id} className="manage-resource-card">
+                                    <div className="card-header-top">
+                                        <div className={`manage-card-badge ${booking.status.toLowerCase()}`}>
+                                            {booking.status}
+                                        </div>
+                                        <span style={{ fontSize: '12px', color: '#6b8db5' }}>#{booking.id}</span>
                                     </div>
-                                    <span style={{ fontSize: '12px', color: '#6b8db5' }}>#{booking.id}</span>
-                                </div>
 
-                                <h3 className="booking-purpose">{booking.purpose}</h3>
+                                    <h3 className="booking-purpose">{booking.purpose}</h3>
 
-                                <div className="info-row">
-                                    <span className="info-label">Resource</span>
-                                    <span className="info-value"><strong>{getResourceName(booking.resourceId)}</strong></span>
-                                </div>
-
-                                <div className="info-row">
-                                    <span className="info-label">Reserved Period</span>
-                                    <span className="info-value">{formatDate(booking.startTime)} - {formatDate(booking.endTime)}</span>
-                                </div>
-
-                                <div className="info-row">
-                                    <span className="info-label">Attendees</span>
-                                    <span className="info-value">{booking.attendees} persons</span>
-                                </div>
-
-                                {booking.rejectionReason && (
-                                    <div className="rejection-reason-box">
-                                        <span className="info-label">Rejection Reason</span>
-                                        <p>{booking.rejectionReason}</p>
+                                    <div className="info-row">
+                                        <span className="info-label">Resource</span>
+                                        <span className="info-value"><strong>{getResourceName(booking.resourceId)}</strong></span>
                                     </div>
-                                )}
 
-                                <div className="manage-card-divider" />
+                                    <div className="info-row">
+                                        <span className="info-label">Reserved Period</span>
+                                        <span className="info-value">{formatDate(booking.startTime)} - {formatDate(booking.endTime)}</span>
+                                    </div>
 
-                                <div className="manage-card-actions">
-                                    {booking.status === "PENDING" && (
-                                        <>
-                                            <button className="admin-approve-btn" onClick={() => handleApprove(booking.id)}>
-                                                Approve
-                                            </button>
-                                            <button className="admin-reject-btn" onClick={() => openRejectModal(booking.id)}>
-                                                Reject
-                                            </button>
-                                        </>
+                                    <div className="info-row">
+                                        <span className="info-label">Attendees</span>
+                                        <span className="info-value">{booking.attendees} persons</span>
+                                    </div>
+
+                                    {booking.rejectionReason && (
+                                        <div className="rejection-reason-box">
+                                            <span className="info-label">Rejection Reason</span>
+                                            <p>{booking.rejectionReason}</p>
+                                        </div>
                                     )}
-                                    <button className="admin-delete-btn" onClick={() => handleDelete(booking.id)}>
-                                        Delete Forever
-                                            </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </section>
 
-            <section className="booking-chart-section">
-                <div className="chart-card">
-                    <div className="chart-header">
-                        <h3>Weekly Activity Analysis</h3>
-                        <p>Number of resource bookings processed per day</p>
+                                    <div className="manage-card-divider" />
+
+                                    <div className="manage-card-actions">
+                                        {booking.status === "PENDING" && (
+                                            <>
+                                                <button className="admin-approve-btn" onClick={() => handleApprove(booking.id)}>
+                                                    Approve
+                                                </button>
+                                                <button className="admin-reject-btn" onClick={() => openRejectModal(booking.id)}>
+                                                    Reject
+                                                </button>
+                                            </>
+                                        )}
+                                        <button className="admin-delete-btn" onClick={() => handleDelete(booking.id)}>
+                                            Delete Forever
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </section>
+
+                <section className="booking-chart-section">
+                    <div className="chart-card">
+                        <div className="chart-header">
+                            <h3>Weekly Activity Analysis</h3>
+                            <p>Number of resource bookings processed per day</p>
+                        </div>
+                        <div className="chart-container">
+                            <ResponsiveContainer width="100%" height={250}>
+                                <BarChart data={bookingChartData}>
+                                    <defs>
+                                        <linearGradient id="bookingGradient" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                                            <stop offset="95%" stopColor="#2563eb" stopOpacity={1}/>
+                                        </linearGradient>
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                                    <XAxis 
+                                        dataKey="day" 
+                                        axisLine={false} 
+                                        tickLine={false} 
+                                        tick={{ fill: '#6b8db5', fontSize: 11 }} 
+                                    />
+                                    <YAxis 
+                                        axisLine={false} 
+                                        tickLine={false} 
+                                        tick={{ fill: '#6b8db5', fontSize: 11 }} 
+                                    />
+                                    <Tooltip 
+                                        cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
+                                        contentStyle={{ 
+                                            borderRadius: '10px', 
+                                            border: 'none', 
+                                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)' 
+                                        }}
+                                    />
+                                    <Bar 
+                                        dataKey="count" 
+                                        fill="url(#bookingGradient)" 
+                                        radius={[4, 4, 0, 0]} 
+                                        barSize={32}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     </div>
-                    <div className="chart-container">
-                        <ResponsiveContainer width="100%" height={250}>
-                            <BarChart data={bookingChartData}>
-                                <defs>
-                                    <linearGradient id="bookingGradient" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                                        <stop offset="95%" stopColor="#2563eb" stopOpacity={1}/>
-                                    </linearGradient>
-                                </defs>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                                <XAxis 
-                                    dataKey="day" 
-                                    axisLine={false} 
-                                    tickLine={false} 
-                                    tick={{ fill: '#6b8db5', fontSize: 11 }} 
-                                />
-                                <YAxis 
-                                    axisLine={false} 
-                                    tickLine={false} 
-                                    tick={{ fill: '#6b8db5', fontSize: 11 }} 
-                                />
-                                <Tooltip 
-                                    cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
-                                    contentStyle={{ 
-                                        borderRadius: '10px', 
-                                        border: 'none', 
-                                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)' 
-                                    }}
-                                />
-                                <Bar 
-                                    dataKey="count" 
-                                    fill="url(#bookingGradient)" 
-                                    radius={[4, 4, 0, 0]} 
-                                    barSize={32}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
-            </section>
+                </section>
+            </main>
 
             {/* Rejection Modal */}
             {showRejectModal && (

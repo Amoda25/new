@@ -24,6 +24,7 @@ const BookingApprovalsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [filterStatus, setFilterStatus] = useState("PENDING");
+    const [searchQuery, setSearchQuery] = useState("");
     const [activeView, setActiveView] = useState("OVERVIEW"); 
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
@@ -120,9 +121,18 @@ const BookingApprovalsPage = () => {
     };
 
     const filteredBookings = useMemo(() => {
-        if (filterStatus === "ALL") return bookings;
-        return bookings.filter(b => b.status === filterStatus);
-    }, [bookings, filterStatus]);
+        return bookings.filter(b => {
+            const matchesStatus = filterStatus === "ALL" || b.status === filterStatus;
+            const resName = getResourceName(b.resourceId).toLowerCase();
+            const matchesSearch = 
+                b.purpose.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                resName.includes(searchQuery.toLowerCase()) ||
+                b.id.toString().includes(searchQuery) ||
+                b.resourceId.toString().includes(searchQuery);
+            return matchesStatus && matchesSearch;
+
+        });
+    }, [bookings, filterStatus, searchQuery, resources]);
 
     const calendarDays = useMemo(() => {
         const year = currentMonth.getFullYear();
@@ -391,20 +401,37 @@ const BookingApprovalsPage = () => {
                     </div>
                 ) : (
                     <section className="manage-shell animate-fade-in">
-                        <div className="status-filter-bar">
-                            {["ALL", "PENDING", "APPROVED", "REJECTED"].map(s => (
-                                <button 
-                                    key={s} 
-                                    className={`filter-tab ${filterStatus === s ? 'active' : ''}`}
-                                    onClick={() => setFilterStatus(s)}
-                                >
-                                    {s}
-                                    <span className="tab-count">
-                                        {s === "ALL" ? stats.total : stats[s.toLowerCase()]}
-                                    </span>
-                                </button>
-                            ))}
+                        <div className="search-filter-wrapper">
+                            <div className="status-filter-bar">
+                                {["ALL", "PENDING", "APPROVED", "REJECTED"].map(s => (
+                                    <button 
+                                        key={s} 
+                                        className={`filter-tab ${filterStatus === s ? 'active' : ''}`}
+                                        onClick={() => setFilterStatus(s)}
+                                    >
+                                        {s}
+                                        <span className="tab-count">
+                                            {s === "ALL" ? stats.total : stats[s.toLowerCase()]}
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="search-bar-container">
+                                <span className="search-icon">🔍</span>
+                                <input 
+                                    type="text" 
+                                    placeholder="Search by purpose, facility number, or ID..." 
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+
+                                {searchQuery && (
+                                    <button className="clear-search" onClick={() => setSearchQuery("")}>×</button>
+                                )}
+                            </div>
                         </div>
+
 
                         {loading ? (
                             <div className="manage-message">Loading booking database...</div>

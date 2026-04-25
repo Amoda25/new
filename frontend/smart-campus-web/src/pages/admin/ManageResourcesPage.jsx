@@ -12,6 +12,7 @@ export default function ManageResourcesPage() {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const [form, setForm] = useState({
     name: "",
@@ -81,12 +82,18 @@ export default function ManageResourcesPage() {
     try {
       if (editingId) {
         await updateResource(editingId, payload);
+        setSuccessMsg("Resource updated successfully!");
       } else {
         await createResource(payload);
+        setSuccessMsg("Resource added successfully!");
       }
 
       resetForm();
       loadResources();
+      
+      setTimeout(() => {
+        setSuccessMsg("");
+      }, 3000);
     } catch (error) {
       console.error("Failed to save resource", error);
       setError("Failed to save resource");
@@ -134,6 +141,12 @@ export default function ManageResourcesPage() {
 
   return (
     <div className="manage-soft-page">
+      {successMsg && (
+        <div style={{ position: 'fixed', top: '20px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#4caf50', color: 'white', padding: '15px 30px', borderRadius: '8px', zIndex: 9999, boxShadow: '0 4px 6px rgba(0,0,0,0.1)', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          {successMsg}
+        </div>
+      )}
       <section className="manage-hero-section">
         <div className="manage-hero-overlay" />
 

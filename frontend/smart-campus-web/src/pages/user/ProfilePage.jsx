@@ -201,7 +201,7 @@ const ProfilePage = () => {
                                     <>
                                         <div className="form-field">
                                             <label>Student Registration Number / ID</label>
-                                            <input type="text" name="studentId" value={profile.studentId || ""} onChange={handleChange} placeholder="e.g. IT23605152" />
+                                            <input type="text" name="studentId" value={profile.studentId || ""} onChange={handleChange} placeholder="e.g. ITxxxxxxx" />
                                         </div>
                                         <div className="form-field">
                                             <label>Degree Program / Major</label>

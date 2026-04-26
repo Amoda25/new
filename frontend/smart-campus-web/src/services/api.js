@@ -28,7 +28,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       // 401: Unauthorized (Token expired or missing)
-      if (error.response.status === 401) {
+      if (error.response.status === 401 && !error.config.url.includes('/login')) {
         localStorage.removeItem("token");
         window.location.href = "/login";
       }

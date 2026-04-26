@@ -29,7 +29,7 @@ const BookingApprovalsPage = () => {
     const [resources, setResources] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [filterStatus, setFilterStatus] = useState("PENDING");
+    const [filterStatus, setFilterStatus] = useState("ALL");
     const [searchQuery, setSearchQuery] = useState("");
     const [activeView, setActiveView] = useState("OVERVIEW"); 
     const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -176,10 +176,10 @@ const BookingApprovalsPage = () => {
             const matchesStatus = filterStatus === "ALL" || b.status === filterStatus;
             const resName = getResourceName(b.resourceId).toLowerCase();
             const matchesSearch = 
-                b.purpose.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (b.purpose || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
                 resName.includes(searchQuery.toLowerCase()) ||
-                b.id.toString().includes(searchQuery) ||
-                b.resourceId.toString().includes(searchQuery);
+                (b.id || "").toString().includes(searchQuery) ||
+                (b.resourceId || "").toString().includes(searchQuery);
             return matchesStatus && matchesSearch;
 
         });
@@ -241,21 +241,7 @@ const BookingApprovalsPage = () => {
 
 
 
-                    <div className="nav-group">
-                        <span className="group-label">Quick Stats</span>
-                        <div className="mini-stat">
-                            <span className="stat-num">{stats.pending}</span>
-                            <span className="stat-txt">Pending</span>
-                        </div>
-                        <div className="mini-stat">
-                            <span className="stat-num">{stats.approved}</span>
-                            <span className="stat-txt">Approved</span>
-                        </div>
-                        <div className="mini-stat">
-                            <span className="stat-num">{stats.rejected}</span>
-                            <span className="stat-txt">Rejected</span>
-                        </div>
-                    </div>
+
 
                     <div className="sidebar-footer">
                         <Link to="/admin" className="back-link">← Back to Dashboard</Link>
@@ -506,6 +492,20 @@ const BookingApprovalsPage = () => {
                 ) : (
                     <section className="manage-shell animate-fade-in">
                         <div className="search-filter-wrapper">
+                            <div className="search-bar-container">
+                                <span className="search-icon">🔍</span>
+                                <input 
+                                    type="text" 
+                                    placeholder="Search by purpose, facility number, or ID..." 
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+
+                                {searchQuery && (
+                                    <button className="clear-search" onClick={() => setSearchQuery("")}>×</button>
+                                )}
+                            </div>
+
                             <div className="status-filter-bar">
                                 {["ALL", "PENDING", "APPROVED", "REJECTED"].map(s => (
                                     <button 
@@ -519,20 +519,6 @@ const BookingApprovalsPage = () => {
                                         </span>
                                     </button>
                                 ))}
-                            </div>
-
-                            <div className="search-bar-container">
-                                <span className="search-icon">🔍</span>
-                                <input 
-                                    type="text" 
-                                    placeholder="Search by purpose, facility number, or ID..." 
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-
-                                {searchQuery && (
-                                    <button className="clear-search" onClick={() => setSearchQuery("")}>×</button>
-                                )}
                             </div>
                         </div>
 
@@ -548,7 +534,7 @@ const BookingApprovalsPage = () => {
                                 {filteredBookings.map(booking => (
                                     <div key={booking.id} className="manage-resource-card">
                                         <div className="card-header-top">
-                                            <div className={`manage-card-badge ${booking.status.toLowerCase()}`}>
+                                            <div className={`booking-card-badge ${booking.status.toLowerCase()}`}>
                                                 {booking.status}
                                             </div>
                                             <span style={{ fontSize: '12px', color: '#6b8db5' }}>#{booking.id}</span>
@@ -651,7 +637,7 @@ const BookingApprovalsPage = () => {
                     <div className="rejection-modal details-modal">
                         <div className="modal-header-with-badge">
                             <h3>Booking Details</h3>
-                            <span className={`manage-card-badge ${viewBooking.status.toLowerCase()}`}>
+                            <span className={`booking-card-badge ${viewBooking.status.toLowerCase()}`}>
                                 {viewBooking.status}
                             </span>
                         </div>

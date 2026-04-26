@@ -3,9 +3,11 @@ package com.smartcampus.user.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.smartcampus.user.dto.ProfileDTO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.lang.NonNull;
 
 import com.smartcampus.security.roles.Role;
 import com.smartcampus.user.model.User;
@@ -22,12 +24,10 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ Your feature (KEEP THIS)
     public List<User> getAllTechnicians() {
         return userRepository.findByRole(Role.TECHNICIAN);
     }
 
-    // ✅ Existing system logic (KEEP THIS)
     @Transactional(readOnly = true)
     public User authenticate(String email, String rawPassword) {
         User user = userRepository.findByEmail(email)
@@ -48,17 +48,85 @@ public class UserService {
             throw new RuntimeException("Email already in use");
         }
 
-        // Single query: if no admin exists yet, first user becomes admin
         if (user.getRole() == null) {
             boolean adminExists = userRepository.existsByRole(Role.ADMIN);
             user.setRole(adminExists ? Role.USER : Role.ADMIN);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setCreatedAt(java.time.LocalDateTime.now());
         return userRepository.save(user);
     }
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    // Unified Profile Methods
+    @Transactional(readOnly = true)
+    public ProfileDTO getProfileByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return mapToDTO(user);
+    }
+
+    @Transactional
+    public ProfileDTO updateProfileByEmail(String email, ProfileDTO dto) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (dto.getName() != null) user.setName(dto.getName());
+        if (dto.getPassword() != null && !dto.getPassword().trim().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
+        // Update unified fields
+        user.setFullLegalName(dto.getFullLegalName());
+        user.setDateOfBirth(dto.getDateOfBirth());
+        user.setProfilePictureUrl(dto.getProfilePictureUrl());
+        user.setIdNumber(dto.getStudentId() != null ? dto.getStudentId() : dto.getLecturerId());
+        user.setDegreeProgram(dto.getDegreeProgram());
+        user.setCurrentYearSemester(dto.getCurrentYearSemester());
+        user.setModuleName(dto.getModuleName());
+        user.setModuleId(dto.getModuleId());
+        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setCurrentResidentialAddress(dto.getCurrentResidentialAddress());
+        user.setPermanentHomeAddress(dto.getPermanentHomeAddress());
+
+        return mapToDTO(userRepository.save(user));
+    }
+
+    @Transactional
+    public void deleteAccountByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.deleteById(user.getId());
+    }
+
+    private ProfileDTO mapToDTO(User user) {
+        ProfileDTO dto = new ProfileDTO();
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setName(user.getName());
+        dto.setFullLegalName(user.getFullLegalName());
+        dto.setDateOfBirth(user.getDateOfBirth());
+        dto.setProfilePictureUrl(user.getProfilePictureUrl());
+        
+        // Map idNumber back to appropriate DTO fields
+        if (user.getRole() == Role.LECTURER) {
+            dto.setLecturerId(user.getIdNumber());
+        } else {
+            dto.setStudentId(user.getIdNumber());
+        }
+        
+        dto.setDegreeProgram(user.getDegreeProgram());
+        dto.setCurrentYearSemester(user.getCurrentYearSemester());
+        dto.setModuleName(user.getModuleName());
+        dto.setModuleId(user.getModuleId());
+        dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setCurrentResidentialAddress(user.getCurrentResidentialAddress());
+        dto.setPermanentHomeAddress(user.getPermanentHomeAddress());
+        
+        return dto;
     }
 }

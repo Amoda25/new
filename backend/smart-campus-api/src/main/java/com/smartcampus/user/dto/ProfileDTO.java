@@ -2,7 +2,7 @@ package com.smartcampus.user.dto;
 
 import java.time.LocalDate;
 
-public class UserProfileDTO {
+public class ProfileDTO {
     private String id;
     private String email; // From User model
     private String name;  // From User model
@@ -24,7 +24,7 @@ public class UserProfileDTO {
     private String permanentHomeAddress;
     private String password;
 
-    public UserProfileDTO() {}
+    public ProfileDTO() {}
 
     // Getters and Setters
     public String getId() { return id; }

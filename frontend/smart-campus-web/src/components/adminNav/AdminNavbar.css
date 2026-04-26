@@ -58,12 +58,66 @@
   pointer-events: none;
 }
 
-.admin-navbar-brand a {
-  color: #e8f4ff;
-  text-decoration: none;
+/* Brand */
+.admin-navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 1.15rem;
   font-weight: 800;
+  color: #e8f4ff;
   letter-spacing: -0.3px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.admin-navbar-brand-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 100, 255, 0.32),
+    rgba(0, 60, 200, 0.48)
+  );
+  border: 1px solid rgba(0, 140, 255, 0.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-navbar-brand-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.brand-word-campus {
+  background: linear-gradient(90deg, #7dc8ff, #00d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00d4b0;
+  box-shadow: 0 0 6px #00d4b0;
+  flex-shrink: 0;
+  animation: nav-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes nav-pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 6px #00d4b0;
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 12px #00d4b0;
+  }
 }
 
 .admin-navbar-links {

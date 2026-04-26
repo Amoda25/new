@@ -139,6 +139,11 @@ export default function ManageResourcesPage() {
       errors.status = "Status is required";
     }
 
+    // Preserve image error if it exists from handleImageChange
+    if (formErrors.image) {
+      errors.image = formErrors.image;
+    }
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -206,6 +211,28 @@ export default function ManageResourcesPage() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        setFormErrors((prev) => ({
+          ...prev,
+          image: "Please upload a valid image file (JPG, PNG, etc.)"
+        }));
+        // Reset image in form
+        setForm(prev => ({
+          ...prev,
+          imageUrl: "",
+          fileName: ""
+        }));
+        return;
+      }
+
+      // Clear previous image error
+      setFormErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors.image;
+        return newErrors;
+      });
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setForm((prev) => ({ 
@@ -505,7 +532,7 @@ export default function ManageResourcesPage() {
                       id="resource-image"
                       accept="image/*"
                       onChange={handleImageChange}
-                      className="file-input"
+                      className={`file-input ${formErrors.image ? "input-error" : ""}`}
                     />
                     {form.imageUrl ? (
                       <div className="image-inside-preview">
@@ -519,12 +546,13 @@ export default function ManageResourcesPage() {
                         </div>
                       </div>
                     ) : (
-                      <div className="upload-placeholder">
+                      <div className={`upload-placeholder ${formErrors.image ? "error-border" : ""}`}>
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                         <span>Drag and drop or click to upload</span>
                       </div>
                     )}
                   </div>
+                  {formErrors.image && <span className="error-text" style={{ marginTop: '8px', display: 'block' }}>{formErrors.image}</span>}
                 </div>
 
                 <div className="manage-form-actions">

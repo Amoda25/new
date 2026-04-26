@@ -272,3 +272,22 @@
   .stats-panel { grid-template-columns: 1fr; }
   .catalogue-header { flex-direction: column; gap: 16px; align-items: flex-start; }
 }
+
+.delete-booking-btn {
+  background: none;
+  border: none;
+  color: #ef4444; /* Normal Red */
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-booking-btn:hover {
+  background: #fee2e2;
+  color: #b91c1c; /* Darker Red on hover */
+  transform: scale(1.1);
+}

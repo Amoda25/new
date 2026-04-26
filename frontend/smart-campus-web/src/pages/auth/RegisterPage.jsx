@@ -43,8 +43,11 @@ const RegisterPage = () => {
     if (!formData.password) {
       newErrors.password = "Password is required";
       isValid = false;
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else if (formData.password.length < 16 || formData.password.length > 20) {
+      newErrors.password = "Password must be between 16 and 20 characters";
+      isValid = false;
+    } else if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(formData.password)) {
+      newErrors.password = "Password must include letters, numbers, and symbols";
       isValid = false;
     }
 
@@ -53,9 +56,15 @@ const RegisterPage = () => {
       isValid = false;
     }
 
-    if (!formData.role) {
-      newErrors.role = "Please select a role";
-      isValid = false;
+    if (formData.role === "USER" || formData.role === "LECTURER") {
+      if (!formData.idNumber?.trim()) {
+        newErrors.idNumber = "ID Number is required";
+        isValid = false;
+      }
+      if (!formData.department?.trim()) {
+        newErrors.department = "Department/Faculty is required";
+        isValid = false;
+      }
     }
 
     setErrors(newErrors);
@@ -194,6 +203,7 @@ const RegisterPage = () => {
                 )}
               </button>
             </div>
+            <p className="password-hint">16-20 chars, letters, numbers & symbols</p>
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
 
@@ -253,31 +263,39 @@ const RegisterPage = () => {
           </div>
 
 
-          <div className="form-group">
-            <label htmlFor="idNumber">ID Number / Index No</label>
-            <input
-              type="text"
-              id="idNumber"
-              name="idNumber"
-              placeholder="e.g. SE/2019/001"
-              value={formData.idNumber}
-              onChange={handleChange}
-              disabled={isLoading}
-            />
-          </div>
+          {(formData.role === "USER" || formData.role === "LECTURER") && (
+            <>
+              <div className="form-group">
+                <label htmlFor="idNumber">ID Number / Index No</label>
+                <input
+                  type="text"
+                  id="idNumber"
+                  name="idNumber"
+                  placeholder={formData.role === "USER" ? "e.g. ITxxxxxxx" : "e.g. LECT/xxxx"}
+                  value={formData.idNumber}
+                  onChange={handleChange}
+                  className={errors.idNumber ? "error" : ""}
+                  disabled={isLoading}
+                />
+                {errors.idNumber && <span className="error-message">{errors.idNumber}</span>}
+              </div>
 
-          <div className="form-group">
-            <label htmlFor="department">Department / Faculty</label>
-            <input
-              type="text"
-              id="department"
-              name="department"
-              placeholder="e.g. Computing & Information Systems"
-              value={formData.department}
-              onChange={handleChange}
-              disabled={isLoading}
-            />
-          </div>
+              <div className="form-group">
+                <label htmlFor="department">Department / Faculty</label>
+                <input
+                  type="text"
+                  id="department"
+                  name="department"
+                  placeholder="e.g. Computing & Information Systems"
+                  value={formData.department}
+                  onChange={handleChange}
+                  className={errors.department ? "error" : ""}
+                  disabled={isLoading}
+                />
+                {errors.department && <span className="error-message">{errors.department}</span>}
+              </div>
+            </>
+          )}
 
 
           <button type="submit" className="register-button" disabled={isLoading}>

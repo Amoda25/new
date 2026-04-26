@@ -11,13 +11,16 @@
 }
 
 .profile-page-container {
-    padding: 40px 20px;
-    min-height: calc(100vh - 80px);
+    padding: 120px 20px 40px; /* Increased top padding for navbar */
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    background: radial-gradient(circle at top right, rgba(0, 140, 255, 0.05), transparent 400px),
-                radial-gradient(circle at bottom left, rgba(129, 140, 248, 0.05), transparent 400px);
+    background-color: var(--profile-bg);
+    background-image: 
+        radial-gradient(circle at top right, rgba(0, 140, 255, 0.1), transparent 600px),
+        radial-gradient(circle at bottom left, rgba(129, 140, 248, 0.1), transparent 600px);
+    position: relative;
 }
 
 .profile-glass-card {

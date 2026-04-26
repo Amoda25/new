@@ -246,6 +246,13 @@
   font-weight: 600;
 }
 
+.password-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  opacity: 0.8;
+}
+
 .form-group input.error {
   border-color: #ef4444;
   background: rgba(239, 68, 68, 0.05);

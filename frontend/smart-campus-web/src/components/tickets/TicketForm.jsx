@@ -185,7 +185,7 @@ function TicketForm() {
                   <option value="">Select Resource</option>
                   {resources.map((res) => (
                     <option key={res.id} value={res.id}>
-                      {res.name} ({res.id})
+                      {res.name}
                     </option>
                   ))}
                 </select>

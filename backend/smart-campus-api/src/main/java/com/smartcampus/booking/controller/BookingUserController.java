@@ -1,8 +1,8 @@
 package com.smartcampus.booking.controller;
 
-import com.smartcampus.booking.dto.BookingCreateDTO;
-import com.smartcampus.booking.dto.BookingResponseDTO;
+import com.smartcampus.booking.dto.*;
 import com.smartcampus.booking.service.BookingService;
+
 import com.smartcampus.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
@@ -19,12 +19,10 @@ import java.util.List;
 public class BookingUserController {
     
     private final BookingService bookingService;
-    private final UserRepository userRepository;
-    
-    public BookingUserController(BookingService bookingService, UserRepository userRepository) {
+    public BookingUserController(BookingService bookingService) {
         this.bookingService = bookingService;
-        this.userRepository = userRepository;
     }
+
     
     @PostConstruct
     public void init() {

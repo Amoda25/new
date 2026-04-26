@@ -15,7 +15,7 @@ public class User {
     private String email;
     private String name;
     private String password;
-    private com.smartcampus.security.roles.Role role;
+    private Role role;
 
     private String googleId;
     private String specialization;
@@ -60,8 +60,8 @@ public class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public com.smartcampus.security.roles.Role getRole() { return role; }
-    public void setRole(com.smartcampus.security.roles.Role role) { this.role = role; }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 
     public String getGoogleId() { return googleId; }
     public void setGoogleId(String googleId) { this.googleId = googleId; }

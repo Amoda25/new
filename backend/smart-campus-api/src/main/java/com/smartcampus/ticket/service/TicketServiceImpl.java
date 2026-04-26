@@ -1,5 +1,8 @@
 package com.smartcampus.ticket.service;
 
+import org.springframework.lang.NonNull;
+
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -103,7 +106,7 @@ public class TicketServiceImpl implements TicketService {
         return responseList;
     }
     @Override
-    public TicketResponseDTO getTicketById(String ticketId, String currentUserId) {
+    public TicketResponseDTO getTicketById(@NonNull String ticketId, String currentUserId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
@@ -127,7 +130,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void assignTechnician(String ticketId, String technicianId) {
+    public void assignTechnician(@NonNull String ticketId, String technicianId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
@@ -159,7 +162,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void updateTicketStatus(String ticketId, String status, String technicianId) {
+    public void updateTicketStatus(@NonNull String ticketId, String status, String technicianId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
@@ -282,7 +285,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void updateResolution(String ticketId, String resolutionNotes, String technicianId) {
+    public void updateResolution(@NonNull String ticketId, String resolutionNotes, String technicianId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
@@ -310,7 +313,7 @@ public class TicketServiceImpl implements TicketService {
 
 
     @Override
-    public void deleteTicket(String ticketId) {
+    public void deleteTicket(@NonNull String ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
@@ -338,7 +341,7 @@ public class TicketServiceImpl implements TicketService {
 
 
     @Override
-    public void deleteTicketForTechnician(String ticketId, String technicianId) {
+    public void deleteTicketForTechnician(@NonNull String ticketId, String technicianId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
@@ -374,7 +377,7 @@ public class TicketServiceImpl implements TicketService {
 
 
     @Override
-    public void deleteTicketForUser(String ticketId, String userId) {
+    public void deleteTicketForUser(@NonNull String ticketId, String userId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));

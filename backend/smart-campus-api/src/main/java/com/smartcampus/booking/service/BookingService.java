@@ -1,5 +1,8 @@
 package com.smartcampus.booking.service;
 
+import org.springframework.lang.NonNull;
+
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -175,7 +178,7 @@ public class BookingService {
     /**
      * Approve a booking
      */
-    public BookingResponseDTO approveBooking(String bookingId) {
+    public BookingResponseDTO approveBooking(@NonNull String bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
             .orElseThrow(() -> new RuntimeException("Booking not found"));
         
@@ -211,7 +214,7 @@ public class BookingService {
     /**
      * Reject a booking with a reason
      */
-    public BookingResponseDTO rejectBooking(String bookingId, String reason) {
+    public BookingResponseDTO rejectBooking(@NonNull String bookingId, String reason) {
         Booking booking = bookingRepository.findById(bookingId)
             .orElseThrow(() -> new RuntimeException("Booking not found"));
         
@@ -239,7 +242,7 @@ public class BookingService {
     /**
      * Get a single booking by ID (admin)
      */
-    public BookingResponseDTO getBookingById(String bookingId) {
+    public BookingResponseDTO getBookingById(@NonNull String bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
             .orElseThrow(() -> new RuntimeException("Booking not found"));
         return convertToResponseDTO(booking);
@@ -249,7 +252,7 @@ public class BookingService {
     /**
      * Delete a booking (admin)
      */
-    public void deleteBooking(String bookingId) {
+    public void deleteBooking(@NonNull String bookingId) {
         if (!bookingRepository.existsById(bookingId)) {
             throw new RuntimeException("Booking not found");
         }

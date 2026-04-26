@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smartcampus.notification.dto.NotificationDTO;
-import com.smartcampus.notification.model.Notification;
+
 import com.smartcampus.notification.service.NotificationService;
 
 @RestController 

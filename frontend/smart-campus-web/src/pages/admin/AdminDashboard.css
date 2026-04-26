@@ -97,7 +97,7 @@
 
 .stat-value {
   font-size: 3rem;
-  fontWeight: 800;
+  font-weight: 800;
   color: #0f172a;
   margin: 10px 0 20px;
   line-height: 1;
@@ -143,10 +143,10 @@
   padding: 18px;
   background: #ffffff;
   border-radius: 16px;
-  textAlign: center;
+  text-align: center;
   text-decoration: none;
   color: #334155;
-  fontWeight: 700;
+  font-weight: 700;
   border: 1px solid #e2e8f0;
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(0,0,0,0.02);

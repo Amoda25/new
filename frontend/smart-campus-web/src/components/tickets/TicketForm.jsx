@@ -1,5 +1,6 @@
 
 import { createTicket } from "../../services/ticketService";
+import { getAllResources } from "../../services/resourceService";
 import "./TicketForm.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -9,7 +10,9 @@ function TicketForm() {
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
 
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("RESOURCE_ISSUE");
+  const [resourceId, setResourceId] = useState("");
+  const [resources, setResources] = useState([]);
   const [location, setLocation] = useState("");
   const [contactName, setContactName] = useState("");
   const [contactDetails, setContactDetails] = useState("");
@@ -30,8 +33,17 @@ function TicketForm() {
     return error;
   };
 
-
-  
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const data = await getAllResources();
+        setResources(data);
+      } catch (err) {
+        console.error("Failed to fetch resources:", err);
+      }
+    };
+    fetchResources();
+  }, []);
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -69,7 +81,7 @@ function TicketForm() {
 
     const fieldsToValidate = {
       title,
-      category,
+      resourceId,
       priority,
       location,
       description,
@@ -101,6 +113,7 @@ function TicketForm() {
       formData.append("title", title);
       formData.append("description", description);
       formData.append("priority", priority);
+      formData.append("resourceId", resourceId);
       formData.append("category", category);
       formData.append("location", location);
       formData.append("contactName", contactName);
@@ -159,24 +172,24 @@ function TicketForm() {
 
             <div className="form-row">
               <div className="field">
-                <label>Category *</label>
+                <label>Resource *</label>
                 <select
-                  value={category}
+                  value={resourceId}
                   onChange={(e) => {
-                    setCategory(e.target.value);
-                    validate("category", e.target.value);
+                    setResourceId(e.target.value);
+                    validate("resourceId", e.target.value);
                   }}
-                  className={errors.category ? "input-error" : ""}
+                  className={errors.resourceId ? "input-error" : ""}
                   required
                 >
-                  <option value="">Select category</option>
-                  <option value="MAINTENANCE">Maintenance</option>
-                  <option value="IT_SUPPORT">IT Support</option>
-                  <option value="ELECTRICAL">Electrical</option>
-                  <option value="PLUMBING">Plumbing</option>
-                  <option value="OTHER">Other</option>
+                  <option value="">Select Resource</option>
+                  {resources.map((res) => (
+                    <option key={res.id} value={res.id}>
+                      {res.name} ({res.id})
+                    </option>
+                  ))}
                 </select>
-                {errors.category && <span className="field-error">{errors.category}</span>}
+                {errors.resourceId && <span className="field-error">{errors.resourceId}</span>}
               </div>
 
               <div className="field">

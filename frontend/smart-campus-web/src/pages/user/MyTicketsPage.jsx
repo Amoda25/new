@@ -7,6 +7,7 @@ function MyTicketsPage() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [filter, setFilter] = useState("ALL");
 
   const navigate = useNavigate();
 
@@ -18,7 +19,6 @@ function MyTicketsPage() {
     try {
       setLoading(true);
       setErrorMessage("");
-
       const data = await getUserTickets();
       setTickets(data);
     } catch (error) {
@@ -39,127 +39,155 @@ function MyTicketsPage() {
 
     try {
       setErrorMessage("");
-
       await deleteUserTicket(ticketId);
-
       setTickets((prev) => prev.filter((t) => t.id !== ticketId));
     } catch (error) {
       console.error(error);
-
-      if (error.response?.data?.message) {
-        setErrorMessage(error.response.data.message);
-      } else if (error.response?.data?.error) {
-        setErrorMessage(error.response.data.error);
-      } else {
-        setErrorMessage("Failed to delete ticket.");
-      }
+      setErrorMessage(error.response?.data?.message || error.response?.data?.error || "Failed to delete ticket.");
     }
   };
 
-  const total = tickets.length;
-  const resolved = tickets.filter(t => t.status === "RESOLVED").length;
-  const pending = total - resolved;
+  const stats = {
+    total: tickets.length,
+    pending: tickets.filter(t => t.status === "OPEN" || t.status === "IN_PROGRESS").length,
+    resolved: tickets.filter(t => t.status === "RESOLVED").length
+  };
 
-return (
-    <div className="soft-page">
+  const filteredTickets = tickets.filter(ticket => {
+    if (filter === "ALL") return true;
+    return ticket.status === filter;
+  });
 
-      {/* HERO */}
-      <section className="user-hero">
-        <div className="hero-content">
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Yesterday";
+    return `${diffDays} days ago`;
+  };
 
-          <div className="hero-text">
-            <h1>My Tickets</h1>
-            <p>Track and manage all your submitted support tickets.</p>
+  return (
+    <div className="my-tickets-container">
+      {/* Hero Section */}
+      <div className="tickets-hero">
+        <div className="hero-badge">SMART CAMPUS PLATFORM</div>
+        <h1>MY TICKETS</h1>
+        <p>Track and manage all your submitted support tickets.</p>
+      </div>
+
+      <div className="dashboard-content">
+        {/* Main Dashboard Card */}
+        <div className="dashboard-main-card">
+          <div className="card-header">
+            <button className="create-btn" onClick={() => navigate("/user/tickets/create")}>
+              + Create Ticket
+            </button>
           </div>
 
-          <div className="stats-panel">
-            <div className="stat-box">
-              <h2>{tickets.length}+</h2>
-              <p>Total Tickets</p>
-            </div>
-
-            <div className="stat-box">
-              <h2>{pending}</h2>
-              <p>Pending</p>
-            </div>
-
-            <div className="stat-box">
-              <h2>{tickets.filter(t => t.status === "RESOLVED").length}</h2>
-              <p>Resolved</p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* CONTENT */}
-      <section className="catalogue-shell">
-
-        <div className="catalogue-header ticket-header">
-          <div>
-            <h2>Your Tickets</h2>
-            <p>View, track and manage your tickets.</p>
-          </div>
-
-          <button
-            className="create-ticket-btn"
-            onClick={() => navigate("/user/tickets/create")}
-          >
-            + Create Ticket
-          </button>
-        </div>
-
-        {loading && <div className="catalogue-message">Loading tickets...</div>}
-
-        {errorMessage && (
-          <div className="catalogue-message">{errorMessage}</div>
-        )}
-
-        {!loading && !errorMessage && tickets.length === 0 && (
-          <div className="catalogue-message">
-            No tickets found.
-          </div>
-        )}
-
-        {!loading && !errorMessage && tickets.length > 0 && (
-          <div className="catalogue-grid">
-
-            {tickets.map((ticket) => (
-              <div key={ticket.id} className="ticket-card">
-
-                <div className="ticket-top">
-                  <h3>{ticket.title}</h3>
-                  <span className={`status ${ticket.status.toLowerCase()}`}>
-                    {ticket.status}
-                  </span>
-                </div>
-
-                <p className="ticket-desc">{ticket.description}</p>
-
-                <div className="ticket-meta">
-                  <span><strong>Priority:</strong> {ticket.priority}</span>
-                  <span><strong>ID:</strong> {ticket.id}</span>
-                </div>
-
-                <div className="ticket-actions">
-                  <button onClick={() => handleViewTicket(ticket.id)}>
-                    View →
-                  </button>
-
-                  <button
-                    className="delete"
-                    onClick={() => handleDeleteTicket(ticket.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-
+          {/* Stats Cards */}
+          <div className="stats-grid">
+            <div className="stat-card">
+              <div className="stat-icon total">📊</div>
+              <div className="stat-info">
+                <span className="stat-value">{stats.total}</span>
+                <span className="stat-label">TOTAL TICKETS</span>
               </div>
-            ))}
-
+            </div>
+            <div className="stat-card">
+              <div className="stat-icon pending">⌛</div>
+              <div className="stat-info">
+                <span className="stat-value">{stats.pending}</span>
+                <span className="stat-label">PENDING TICKETS</span>
+              </div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-icon resolved">✅</div>
+              <div className="stat-info">
+                <span className="stat-value">{stats.resolved}</span>
+                <span className="stat-label">RESOLVED TICKETS</span>
+              </div>
+            </div>
           </div>
-        )}
-      </section>
+
+          {/* Filter Section */}
+          <div className="filter-section">
+            {["ALL", "OPEN", "IN_PROGRESS", "RESOLVED"].map((status) => (
+              <button
+                key={status}
+                className={`filter-btn ${filter === status ? "active" : ""}`}
+                onClick={() => setFilter(status)}
+              >
+                {status === "ALL" ? "All" : status.charAt(0) + status.slice(1).toLowerCase().replace("_", " ")}
+              </button>
+            ))}
+          </div>
+
+          {/* Ticket Cards Grid */}
+          {loading ? (
+            <div className="loading-state">Loading tickets...</div>
+          ) : errorMessage ? (
+            <div className="error-state">{errorMessage}</div>
+          ) : filteredTickets.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon">📭</div>
+              <p>No tickets found</p>
+            </div>
+          ) : (
+            <div className="tickets-grid">
+              {filteredTickets.map((ticket) => (
+                <div key={ticket.id} className="ticket-card-premium">
+                  <div className="ticket-card-header">
+                    <h3 className="ticket-title">📌 {ticket.title}</h3>
+                    <span className={`status-badge ${ticket.status.toLowerCase()}`}>
+                      {ticket.status.replace("_", " ")}
+                    </span>
+                  </div>
+
+                  <p className="ticket-description">{ticket.description}</p>
+
+                  <div className="ticket-info-list">
+                    <div className="info-row">
+                      <span className="info-icon">📍</span>
+                      <span className="info-label">Location:</span>
+                      <span className="info-text">{ticket.location || "Lab 03"}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-icon">⚡</span>
+                      <span className="info-label">Priority:</span>
+                      <span className={`priority-badge ${ticket.priority.toLowerCase()}`}>
+                        {ticket.priority}
+                      </span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-icon">🆔</span>
+                      <span className="info-label">Ticket ID:</span>
+                      <span className="info-text">#{ticket.id}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-icon">🗓️</span>
+                      <span className="info-label">Created:</span>
+                      <span className="info-text">{formatDate(ticket.createdAt)}</span>
+                    </div>
+                  </div>
+
+                  <div className="ticket-actions-premium">
+                    <button className="view-details-btn" onClick={() => handleViewTicket(ticket.id)}>
+                      View Details
+                    </button>
+                    <button className="delete-ticket-btn" onClick={() => handleDeleteTicket(ticket.id)}>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

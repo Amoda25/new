@@ -478,6 +478,43 @@
   gap: 10px;
 }
 
+.rd-btn-booking {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 12px;
+  background: #3b82f6; /* Default Blue */
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+}
+
+.rd-btn-booking:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.rd-unavailable-msg {
+  padding: 14px;
+  background: #fff1f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  color: #be123c;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+}
+
 .rd-btn-primary {
   display: block;
   width: 100%;

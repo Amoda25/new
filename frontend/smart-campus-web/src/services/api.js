@@ -29,9 +29,14 @@ api.interceptors.response.use(
     if (error.response) {
       // 401: Unauthorized (Token expired or missing)
       if (error.response.status === 401) {
-        localStorage.removeItem("token");
-        window.location.href = "/login";
+        // Do not redirect if the request was to the login endpoint itself
+        if (error.config && !error.config.url.includes('/api/auth/login')) {
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+        }
       }
+
+
       
       // 403: Forbidden (Role mismatch)
       if (error.response.status === 403) {

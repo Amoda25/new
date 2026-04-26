@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { createBooking } from '../../services/bookingService';
+import './BookingForm.css';
 
 const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
   const [formData, setFormData] = useState({
-    resourceId: '',
+    resourceId: resources.length === 1 ? resources[0].id : '',
     startDate: '',
     startTime: '',
     endDate: '',

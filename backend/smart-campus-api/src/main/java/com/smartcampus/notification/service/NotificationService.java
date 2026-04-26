@@ -3,7 +3,7 @@ package com.smartcampus.notification.service;
 import java.util.List;
 
 import com.smartcampus.notification.dto.NotificationDTO;
-import com.smartcampus.notification.model.Notification;
+
 import com.smartcampus.notification.model.NotificationType;
 
 public interface NotificationService {

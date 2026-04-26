@@ -60,30 +60,21 @@ const ProfilePage = () => {
         setMessage({ type: "", text: "" });
 
         try {
-            console.log("DEBUG: Starting profile update. Profile:", profile);
             let currentProfile = { ...profile };
 
             // Upload image if selected
             if (selectedFile) {
-                console.log("DEBUG: Selected file detected. Uploading...", selectedFile.name);
                 const uploadedUrl = await uploadProfilePicture(selectedFile);
-                console.log("DEBUG: Upload success. URL:", uploadedUrl);
                 currentProfile.profilePictureUrl = uploadedUrl;
             }
 
-            console.log("DEBUG: Updating user profile record...");
             const updatedData = await updateUserProfile(currentProfile);
-            console.log("DEBUG: Profile record updated successfully.");
             setProfile(updatedData);
             setSelectedFile(null); // Clear selected file after success
             setMessage({ type: "success", text: "Profile updated successfully!" });
             setTimeout(() => setMessage({ type: "", text: "" }), 5000);
         } catch (err) {
-            console.error("DEBUG: Profile update error caught:", err);
-            if (err.response) {
-                console.error("DEBUG: Error response status:", err.response.status);
-                console.error("DEBUG: Error response data:", err.response.data);
-            }
+            console.error("Profile update error caught:", err);
             setMessage({ type: "error", text: "Failed to save profile changes." });
         } finally {
             setSaving(false);
@@ -102,6 +93,13 @@ const ProfilePage = () => {
         }
     };
 
+    const getImageUrl = (path) => {
+        if (!path) return null;
+        if (path.startsWith("http")) return path;
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
+        return `${baseUrl}${path}`;
+    };
+
     if (loading) return <div className="profile-container"><div className="loading-skeleton"></div></div>;
 
     return (
@@ -111,7 +109,7 @@ const ProfilePage = () => {
                     <div className="header-left">
                         <div className="avatar-wrapper">
                             <img 
-                                src={previewUrl || profile.profilePictureUrl || "https://ui-avatars.com/api/?name=" + (profile.fullLegalName || "User") + "&background=00d4ff&color=fff"} 
+                                src={previewUrl || getImageUrl(profile.profilePictureUrl) || "https://ui-avatars.com/api/?name=" + (profile.fullLegalName || "User") + "&background=00d4ff&color=fff"} 
                                 alt="Profile" 
                                 className="profile-avatar"
                             />

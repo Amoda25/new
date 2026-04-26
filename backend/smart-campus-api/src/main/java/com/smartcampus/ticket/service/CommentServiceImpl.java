@@ -84,6 +84,7 @@ public class CommentServiceImpl implements CommentService {
                 .collect(Collectors.toList());
     }
 
+    @SuppressWarnings("null")
     private CommentResponseDTO mapToResponseDTO(Comment comment) {
         CommentResponseDTO responseDTO = new CommentResponseDTO();
         responseDTO.setId(comment.getId());
@@ -92,7 +93,6 @@ public class CommentServiceImpl implements CommentService {
         responseDTO.setMessage(comment.getMessage());
         responseDTO.setCreatedAt(comment.getCreatedAt());
 
-        @SuppressWarnings("null")
         String userId = comment.getUserId();
         if (userId != null) {
             userRepository.findById(userId).ifPresent(user -> {

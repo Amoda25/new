@@ -46,6 +46,12 @@ export default function TechnicianNavbar() {
         >
           Assigned Tickets
         </Link>
+        <Link
+          className={pathname.startsWith("/technician/profile") ? "active" : ""}
+          to="/technician/profile"
+        >
+          Profile
+        </Link>
         <NotificationBell />
         <button className="logout-btn" onClick={handleLogout} style={{ background: 'transparent', border: 'none', color: '#ff4d4f', cursor: 'pointer', fontWeight: 'bold', marginLeft: '1rem' }}>
           Logout

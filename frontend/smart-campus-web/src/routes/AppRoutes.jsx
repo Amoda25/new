@@ -89,6 +89,7 @@ export default function AppRoutes() {
         <Route path="tickets" element={<AssignedTicketsPage />} />
         <Route path="tickets/create" element={<CreateTicketPage />} />
         <Route path="tickets/:id" element={<TechnicianTicketDetailsPage />} />
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
 
       {/* Admin */}
@@ -105,6 +106,7 @@ export default function AppRoutes() {
         <Route path="bookings" element={<BookingApprovalsPage />} />
         <Route path="tickets" element={<AdminTicketsPage />} />
         <Route path="tickets/:id" element={<AdminTicketDetailsPage />} />
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
 
       {/* Fallback */}

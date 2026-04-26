@@ -63,6 +63,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 
                 // Be very explicit about the profile endpoint
+                .requestMatchers("/api/user/profile/image").permitAll()
                 .requestMatchers("/api/user/profile/**").authenticated()
                 .requestMatchers("/api/user/profile").authenticated()
                 

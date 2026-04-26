@@ -27,9 +27,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         
         String authHeader = request.getHeader("Authorization");
+        String contentType = request.getContentType();
         String path = request.getRequestURI();
         
-        System.out.println("DEBUG: JwtFilter processing path: " + path);
+        System.out.println("DEBUG: JwtFilter path: " + path + " | Content-Type: " + contentType);
+        System.out.println("DEBUG: Auth Header: " + (authHeader != null ? "Present" : "MISSING"));
         
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);

@@ -1,7 +1,7 @@
 package com.smartcampus.user.controller;
 
-import com.smartcampus.user.dto.UserProfileDTO;
-import com.smartcampus.user.service.UserProfileService;
+import com.smartcampus.user.dto.ProfileDTO;
+import com.smartcampus.user.service.UserService;
 import com.smartcampus.common.service.FileStorageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,32 +9,30 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/user/profile")
-public class UserProfileController {
+public class ProfileController {
 
-    private final UserProfileService userProfileService;
+    private final UserService userService;
     private final FileStorageService fileStorageService;
 
-    public UserProfileController(UserProfileService userProfileService, FileStorageService fileStorageService) {
-        this.userProfileService = userProfileService;
+    public ProfileController(UserService userService, FileStorageService fileStorageService) {
+        this.userService = userService;
         this.fileStorageService = fileStorageService;
     }
 
     @GetMapping
-    @SuppressWarnings("null")
-    public ResponseEntity<UserProfileDTO> getProfile(org.springframework.security.core.Authentication authentication) {
+    public ResponseEntity<ProfileDTO> getProfile(org.springframework.security.core.Authentication authentication) {
         if (authentication == null) {
             return ResponseEntity.status(401).build();
         }
-        return ResponseEntity.ok(userProfileService.getProfile(authentication.getName()));
+        return ResponseEntity.ok(userService.getProfileByEmail(authentication.getName()));
     }
 
     @PutMapping
-    @SuppressWarnings("null")
-    public ResponseEntity<UserProfileDTO> updateProfile(org.springframework.security.core.Authentication authentication, @RequestBody UserProfileDTO dto) {
+    public ResponseEntity<ProfileDTO> updateProfile(org.springframework.security.core.Authentication authentication, @RequestBody ProfileDTO dto) {
         if (authentication == null) {
             return ResponseEntity.status(401).build();
         }
-        return ResponseEntity.ok(userProfileService.updateProfile(authentication.getName(), dto));
+        return ResponseEntity.ok(userService.updateProfileByEmail(authentication.getName(), dto));
     }
 
     @PostMapping("/image")
@@ -47,12 +45,11 @@ public class UserProfileController {
     }
 
     @DeleteMapping
-    @SuppressWarnings("null")
     public ResponseEntity<Void> deleteAccount(org.springframework.security.core.Authentication authentication) {
         if (authentication == null) {
             return ResponseEntity.status(401).build();
         }
-        userProfileService.deleteAccount(authentication.getName());
+        userService.deleteAccountByEmail(authentication.getName());
         return ResponseEntity.noContent().build();
     }
 }

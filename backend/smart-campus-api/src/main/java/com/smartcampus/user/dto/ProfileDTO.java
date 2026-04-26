@@ -1,14 +1,11 @@
-package com.smartcampus.user.model;
+package com.smartcampus.user.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 
-@Document(collection = "user_profiles")
-public class UserProfile {
-
-    @Id
-    private String id; // This will be the same as the User ID
+public class ProfileDTO {
+    private String id;
+    private String email; // From User model
+    private String name;  // From User model
     
     private String fullLegalName;
     private LocalDate dateOfBirth;
@@ -18,7 +15,6 @@ public class UserProfile {
     private String degreeProgram;
     private String currentYearSemester;
     
-    // Lecturer specific fields
     private String moduleName;
     private String moduleId;
     private String lecturerId;
@@ -26,12 +22,19 @@ public class UserProfile {
     private String phoneNumber;
     private String currentResidentialAddress;
     private String permanentHomeAddress;
+    private String password;
 
-    public UserProfile() {}
+    public ProfileDTO() {}
 
     // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
     public String getFullLegalName() { return fullLegalName; }
     public void setFullLegalName(String fullLegalName) { this.fullLegalName = fullLegalName; }
@@ -68,4 +71,7 @@ public class UserProfile {
 
     public String getPermanentHomeAddress() { return permanentHomeAddress; }
     public void setPermanentHomeAddress(String permanentHomeAddress) { this.permanentHomeAddress = permanentHomeAddress; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }

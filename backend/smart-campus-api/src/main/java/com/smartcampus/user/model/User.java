@@ -23,6 +23,8 @@ public class User {
     private String specialization;
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
+    private String idNumber;
+    private String department;
 
 
     public void prePersist() {

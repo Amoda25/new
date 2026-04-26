@@ -176,10 +176,10 @@ const BookingApprovalsPage = () => {
             const matchesStatus = filterStatus === "ALL" || b.status === filterStatus;
             const resName = getResourceName(b.resourceId).toLowerCase();
             const matchesSearch = 
-                b.purpose.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (b.purpose || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
                 resName.includes(searchQuery.toLowerCase()) ||
-                b.id.toString().includes(searchQuery) ||
-                b.resourceId.toString().includes(searchQuery);
+                (b.id || "").toString().includes(searchQuery) ||
+                (b.resourceId || "").toString().includes(searchQuery);
             return matchesStatus && matchesSearch;
 
         });

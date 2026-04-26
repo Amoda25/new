@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAllTicketsForAdmin, deleteAdminTicket } from "../../services/ticketService";
+import { 
+    getAllTicketsForAdmin, 
+    deleteAdminTicket,
+    updateAdminTicketStatus 
+} from "../../services/ticketService";
 import { 
   BarChart, 
   Bar, 
@@ -10,6 +14,7 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from "recharts";
+import TicketDetailsModal from '../../components/tickets/TicketDetailsModal';
 import './AdminTicketsPage.css';
 
 const AdminTicketsPage = () => {
@@ -18,6 +23,8 @@ const AdminTicketsPage = () => {
     const [error, setError] = useState("");
     const [filterStatus, setFilterStatus] = useState("ALL");
     const [activeView, setActiveView] = useState("OVERVIEW"); 
+    const [selectedTicketId, setSelectedTicketId] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const ticketChartData = useMemo(() => {
@@ -61,15 +68,21 @@ const AdminTicketsPage = () => {
         };
     }, [tickets]);
 
-    const handleDeleteTicket = async (ticketId) => {
-        if (window.confirm("Are you sure you want to permanently delete this ticket record?")) {
+    const handleRejectTicket = async (ticketId) => {
+        if (window.confirm("Are you sure you want to reject this ticket? The student will see it as REJECTED.")) {
             try {
-                await deleteAdminTicket(ticketId);
+                await updateAdminTicketStatus(ticketId, "REJECTED");
                 fetchAllTickets();
-            } catch (err) {
-                alert("Deletion failed");
+            } catch (error) {
+                const msg = error.response?.data || error.message || "Unknown error";
+                alert("Failed to reject ticket: " + msg);
             }
         }
+    };
+
+    const handleViewTicket = (ticketId) => {
+        setSelectedTicketId(ticketId);
+        setIsModalOpen(true);
     };
 
     const filteredTickets = useMemo(() => {
@@ -273,9 +286,9 @@ const AdminTicketsPage = () => {
                                                 </td>
                                                 <td>
                                                     <div className="table-actions">
-                                                        <button className="act-view" onClick={() => navigate(`/admin/tickets/${ticket.id}`)}>View</button>
-                                                        <button className="act-assign" onClick={() => navigate(`/admin/tickets/${ticket.id}`)}>Assign</button>
-                                                        <button className="act-reject" onClick={() => handleDeleteTicket(ticket.id)}>Reject</button>
+                                                        <button className="act-view" onClick={() => handleViewTicket(ticket.id)}>View</button>
+                                                        <button className="act-assign" onClick={() => handleViewTicket(ticket.id)}>Assign</button>
+                                                        <button className="act-reject" onClick={() => handleRejectTicket(ticket.id)}>Reject</button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -287,6 +300,15 @@ const AdminTicketsPage = () => {
                     </section>
                 )}
             </main>
+
+            {/* Ticket Details Modal */}
+            {isModalOpen && (
+                <TicketDetailsModal 
+                    ticketId={selectedTicketId} 
+                    onClose={() => setIsModalOpen(false)}
+                    onUpdate={fetchAllTickets}
+                />
+            )}
         </div>
     );
 };

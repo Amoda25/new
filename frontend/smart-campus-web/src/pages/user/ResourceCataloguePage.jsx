@@ -79,8 +79,9 @@ export default function ResourceCataloguePage() {
     const active = resources.filter((r) => r.status === "ACTIVE").length;
     const rooms = resources.filter((r) => r.type === "ROOM").length;
     const labs = resources.filter((r) => r.type === "LAB").length;
+    const halls = resources.filter((r) => r.type === "LECTURE_HALL").length;
 
-    return { total, active, rooms, labs };
+    return { total, active, rooms, labs, halls };
   }, [resources]);
 
   if (loading) {
@@ -117,8 +118,8 @@ export default function ResourceCataloguePage() {
               <p>Active Resources</p>
             </div>
             <div className="stat-box">
-              <h2>{stats.rooms + stats.labs}+</h2>
-              <p>Rooms & Labs</p>
+              <h2>{stats.rooms + stats.labs + stats.halls}+</h2>
+              <p>Rooms, Labs & Halls</p>
             </div>
           </div>
         </div>

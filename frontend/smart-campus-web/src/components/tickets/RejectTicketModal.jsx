@@ -39,7 +39,7 @@ const RejectTicketModal = ({ ticket, onClose, onRejectSuccess }) => {
                     <div className="reject-modal-body">
                         <div className="ticket-info-mini">
                             <p><strong>Ticket:</strong> {ticket.title}</p>
-                            <p><strong>ID:</strong> {ticket.id}</p>
+                            <p><strong>ID:</strong> INC-{ticket.id.slice(-4).toUpperCase()}</p>
                             <p><strong>Student:</strong> {ticket.createdBy}</p>
                         </div>
 

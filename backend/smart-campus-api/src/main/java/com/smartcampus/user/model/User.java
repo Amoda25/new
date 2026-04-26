@@ -20,8 +20,10 @@ public class User {
     private String password;
     private Role role;
     private String googleId;
+    private String specialization;
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
+
 
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
@@ -30,6 +32,14 @@ public class User {
     // Getters
     public String getId() {
         return id;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
     }
 
     public String getEmail() {
@@ -91,5 +101,21 @@ public class User {
 
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }

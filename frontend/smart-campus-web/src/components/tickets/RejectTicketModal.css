@@ -24,11 +24,8 @@
 }
 
 .reject-modal-header {
-    padding: 30px 24px;
-    background: linear-gradient(rgba(153, 27, 27, 0.9), rgba(153, 27, 27, 0.7)), 
-                url("/bookings_resources.png");
-    background-size: cover;
-    background-position: center;
+    padding: 24px;
+    background: #fff5f5;
     border-bottom: 1px solid #fee2e2;
     display: flex;
     justify-content: space-between;
@@ -37,30 +34,23 @@
 
 .reject-modal-header h3 {
     margin: 0;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 800;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    color: #991b1b;
+    font-size: 1.25rem;
+    font-weight: 700;
 }
 
 .close-btn {
-    background: rgba(255, 255, 255, 0.2);
+    background: transparent;
     border: none;
-    font-size: 1.2rem;
-    color: white;
+    font-size: 1.5rem;
+    color: #991b1b;
     cursor: pointer;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
+    opacity: 0.6;
+    transition: opacity 0.2s;
 }
 
 .close-btn:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: rotate(90deg);
+    opacity: 1;
 }
 
 .reject-modal-body {

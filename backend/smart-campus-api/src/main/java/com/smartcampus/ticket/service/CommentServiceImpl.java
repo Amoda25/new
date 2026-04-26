@@ -7,11 +7,15 @@ import org.springframework.stereotype.Service;
 import com.smartcampus.notification.model.NotificationType;
 import com.smartcampus.notification.service.NotificationService;
 import com.smartcampus.ticket.dto.CommentCreateDTO;
+import com.smartcampus.ticket.dto.CommentResponseDTO;
 import com.smartcampus.ticket.dto.CommentUpdateDTO;
 import com.smartcampus.ticket.model.Comment;
 import com.smartcampus.ticket.model.Ticket;
 import com.smartcampus.ticket.repository.CommentRepository;
 import com.smartcampus.ticket.repository.TicketRepository;
+import com.smartcampus.user.model.User;
+import com.smartcampus.user.repository.UserRepository;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -19,17 +23,20 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final TicketRepository ticketRepository;
     private final NotificationService notificationService;
+    private final UserRepository userRepository;
 
     public CommentServiceImpl(CommentRepository commentRepository, 
                             TicketRepository ticketRepository,
-                            NotificationService notificationService) {
+                            NotificationService notificationService,
+                            UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.ticketRepository = ticketRepository;
         this.notificationService = notificationService;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public Comment addComment(String ticketId, CommentCreateDTO dto, String currentUserId) {
+    public CommentResponseDTO addComment(String ticketId, CommentCreateDTO dto, String currentUserId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
@@ -37,12 +44,13 @@ public class CommentServiceImpl implements CommentService {
         comment.setTicketId(ticketId);
         comment.setUserId(currentUserId);
         comment.setMessage(dto.getMessage());
+        comment.onCreate();
 
         Comment savedComment = commentRepository.save(comment);
 
-        // Notify relevant users
+        // ... notification logic ...
         try {
-            // If the commenter is NOT the ticket owner, notify the owner
+            // (keeping existing notification logic)
             if (!ticket.getCreatedBy().equals(currentUserId)) {
                 notificationService.createNotification(
                     ticket.getCreatedBy(),
@@ -51,8 +59,6 @@ public class CommentServiceImpl implements CommentService {
                     ticketId
                 );
             }
-            
-            // If the commenter is the ticket owner, notify the assigned technician (if any)
             if (ticket.getCreatedBy().equals(currentUserId) && ticket.getAssignedTo() != null) {
                 notificationService.createNotification(
                     ticket.getAssignedTo(),
@@ -65,12 +71,31 @@ public class CommentServiceImpl implements CommentService {
             System.err.println("Failed to send comment notification: " + e.getMessage());
         }
 
-        return savedComment;
+        return mapToResponseDTO(savedComment);
     }
 
     @Override
-    public List<Comment> getCommentsByTicketId(String ticketId) {
-        return commentRepository.findByTicketId(ticketId);
+    public List<CommentResponseDTO> getCommentsByTicketId(String ticketId) {
+        List<Comment> comments = commentRepository.findByTicketId(ticketId);
+        return comments.stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    private CommentResponseDTO mapToResponseDTO(Comment comment) {
+        CommentResponseDTO responseDTO = new CommentResponseDTO();
+        responseDTO.setId(comment.getId());
+        responseDTO.setTicketId(comment.getTicketId());
+        responseDTO.setUserId(comment.getUserId());
+        responseDTO.setMessage(comment.getMessage());
+        responseDTO.setCreatedAt(comment.getCreatedAt());
+
+        userRepository.findById(comment.getUserId()).ifPresent(user -> {
+            responseDTO.setUserName(user.getName());
+            responseDTO.setUserRole(user.getRole().name());
+        });
+
+        return responseDTO;
     }
 
     @Override

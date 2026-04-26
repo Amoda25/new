@@ -68,6 +68,16 @@ export const updateTechnicianTicketStatus = async (ticketId, status) => {
   return response.data;
 };
 
+export const getTicketComments = async (ticketId) => {
+  const response = await api.get(`/api/comments/ticket/${ticketId}`);
+  return response.data;
+};
+
+export const addTicketComment = async (ticketId, message) => {
+  const response = await api.post(`/api/comments/ticket/${ticketId}`, { message });
+  return response.data;
+};
+
 export const updateAdminTicketStatus = async (ticketId, status) => {
   const response = await api.put(
     `/api/admin/tickets/${ticketId}/status`,
@@ -80,6 +90,14 @@ export const rejectAdminTicket = async (ticketId, reason) => {
   const response = await api.put(
     `/api/admin/tickets/${ticketId}/reject`,
     { reason }
+  );
+  return response.data;
+};
+
+export const updateAdminResolution = async (ticketId, resolutionNotes) => {
+  const response = await api.put(
+    `/api/admin/tickets/${ticketId}/resolution`,
+    { resolutionNotes }
   );
   return response.data;
 };
@@ -104,16 +122,8 @@ export const deleteUserTicket = async (ticketId) => {
 };
 
 export const getTechnicians = async () => {
-  const response = await fetch(
-    "http://localhost:8081/api/admin/tickets/technicians",
-    {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    }
-  );
-
-  return response.json();
+  const response = await api.get("/api/admin/tickets/technicians");
+  return response.data;
 };
 
 export const getResources = async () => {

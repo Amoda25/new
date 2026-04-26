@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.smartcampus.ticket.dto.TicketAssignDTO;
 import com.smartcampus.ticket.dto.TicketImageResponseDTO;
 import com.smartcampus.ticket.dto.TicketRejectDTO;
+import com.smartcampus.ticket.dto.TicketResolutionDTO;
 import com.smartcampus.ticket.dto.TicketResponseDTO;
 import com.smartcampus.ticket.dto.TicketStatusUpdateDTO;
 import com.smartcampus.ticket.service.TicketImageService;
@@ -82,6 +83,14 @@ public class TicketAdminController {
             @RequestBody TicketRejectDTO dto) {
         ticketService.rejectTicket(id, dto.getReason());
         return ResponseEntity.ok("Ticket rejected successfully by Admin");
+    }
+
+    @PutMapping("/{id}/resolution")
+    public ResponseEntity<String> updateResolution(
+            @PathVariable String id,
+            @RequestBody TicketResolutionDTO dto) {
+        ticketService.updateResolutionAdmin(id, dto.getResolutionNotes());
+        return ResponseEntity.ok("Resolution updated successfully by Admin");
     }
 
     @GetMapping("/{id}/images")

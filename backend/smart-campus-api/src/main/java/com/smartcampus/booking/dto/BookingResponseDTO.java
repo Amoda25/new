@@ -14,8 +14,12 @@ public class BookingResponseDTO {
     private Integer attendees;
     private BookingStatus status;
     private String rejectionReason;
+    private String studentName;
+    private String idNumber;
+    private String department;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
     
     public static BookingResponseDTO fromEntity(Booking booking) {
         BookingResponseDTO dto = new BookingResponseDTO();
@@ -66,4 +70,14 @@ public class BookingResponseDTO {
     
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getStudentName() { return studentName; }
+    public void setStudentName(String studentName) { this.studentName = studentName; }
+
+    public String getIdNumber() { return idNumber; }
+    public void setIdNumber(String idNumber) { this.idNumber = idNumber; }
+
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
 }
+

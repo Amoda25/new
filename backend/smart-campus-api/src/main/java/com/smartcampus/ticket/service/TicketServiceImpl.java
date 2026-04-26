@@ -235,6 +235,51 @@ public class TicketServiceImpl implements TicketService {
             System.err.println("Failed to send rejection notification: " + e.getMessage());
         }
     }
+    
+    @Override
+    public void updateTicketStatusAdmin(String ticketId, String status) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        ticket.setStatus(TicketStatus.valueOf(status.toUpperCase()));
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        ticketRepository.save(ticket);
+
+        try {
+            notificationService.createNotification(
+                ticket.getCreatedBy(),
+                NotificationType.TICKET_STATUS_UPDATED,
+                "Admin updated your ticket status to " + ticket.getStatus(),
+                ticketId
+            );
+        } catch (Exception e) {
+            System.err.println("Failed to send notification: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void rejectTicket(String ticketId, String reason) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        ticket.setStatus(TicketStatus.REJECTED);
+        ticket.setRejectionReason(reason);
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        ticketRepository.save(ticket);
+
+        try {
+            notificationService.createNotification(
+                ticket.getCreatedBy(),
+                NotificationType.TICKET_STATUS_UPDATED,
+                "Your ticket was rejected. Reason: " + reason,
+                ticketId
+            );
+        } catch (Exception e) {
+            System.err.println("Failed to send rejection notification: " + e.getMessage());
+        }
+    }
 
     @Override
     public void updateResolution(String ticketId, String resolutionNotes, String technicianId) {
@@ -244,6 +289,17 @@ public class TicketServiceImpl implements TicketService {
         if (ticket.getAssignedTo() == null || !ticket.getAssignedTo().equals(technicianId)) {
             throw new RuntimeException("This ticket is not assigned to this technician");
         }
+
+        ticket.setResolutionNotes(resolutionNotes);
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        ticketRepository.save(ticket);
+    }
+
+    @Override
+    public void updateResolutionAdmin(String ticketId, String resolutionNotes) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
         ticket.setResolutionNotes(resolutionNotes);
         ticket.setUpdatedAt(LocalDateTime.now());
@@ -354,9 +410,25 @@ public class TicketServiceImpl implements TicketService {
         dto.setDescription(ticket.getDescription());
         dto.setPriority(ticket.getPriority());
         dto.setStatus(ticket.getStatus().name());
-        dto.setCreatedBy(ticket.getCreatedBy());
+        
+        // Resolve creator name
+        if (ticket.getCreatedBy() != null) {
+            Optional<User> creatorOpt = userRepository.findById(ticket.getCreatedBy());
+            dto.setCreatedBy(creatorOpt.map(User::getName).orElse("Unknown Student"));
+        } else {
+            dto.setCreatedBy("System");
+        }
+
         dto.setResourceId(ticket.getResourceId());
-        dto.setAssignedTo(ticket.getAssignedTo());
+        
+        // Resolve technician name if assigned
+        if (ticket.getAssignedTo() != null) {
+            Optional<User> techOpt = userRepository.findById(ticket.getAssignedTo());
+            dto.setAssignedTo(techOpt.map(User::getName).orElse("Unknown Technician"));
+        } else {
+            dto.setAssignedTo(null);
+        }
+
         dto.setCategory(ticket.getCategory());
         dto.setLocation(ticket.getLocation());
         dto.setContactName(ticket.getContactName());

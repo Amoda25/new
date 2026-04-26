@@ -45,6 +45,19 @@ const MyBookingsPage = () => {
         pending: (bookings || []).filter(b => b && b.status === 'PENDING').length
     };
 
+    const handleDelete = async (bookingId) => {
+        if (window.confirm("Are you sure you want to delete this booking?")) {
+            try {
+                const { deleteBooking } = await import('../../services/bookingService');
+                await deleteBooking(bookingId);
+                fetchInitialData(); // Refresh list
+            } catch (error) {
+                console.error("Failed to delete booking:", error);
+                alert("Failed to delete booking. Please try again.");
+            }
+        }
+    };
+
     return (
         <div className="soft-page">
             <section className="hero-section">
@@ -107,7 +120,11 @@ const MyBookingsPage = () => {
                             <p>Loading your bookings...</p>
                         </div>
                     ) : (
-                        <BookingTable bookings={bookings} resources={resources} />
+                        <BookingTable 
+                            bookings={bookings} 
+                            resources={resources} 
+                            onDelete={handleDelete}
+                        />
                     )}
                 </div>
             </section>

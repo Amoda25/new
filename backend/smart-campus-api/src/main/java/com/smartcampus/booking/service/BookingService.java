@@ -143,6 +143,29 @@ public class BookingService {
         return convertToResponseDTO(updated);
 
     }
+
+    /**
+     * Delete a booking (user operation with ownership check)
+     */
+    public void deleteUserBooking(String bookingId, String userId) {
+        Booking booking = bookingRepository.findByIdAndUserId(bookingId, userId)
+            .orElseThrow(() -> new RuntimeException("Booking not found or not owned by user"));
+        
+        bookingRepository.deleteById(booking.getId());
+    }
+
+    /**
+     * Get all active bookings for a specific resource on a given day
+     */
+    public List<BookingResponseDTO> getResourceBookingsForDay(String resourceId, java.time.LocalDate date) {
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
+        
+        return bookingRepository.findResourceBookingsForDay(resourceId, startOfDay, endOfDay)
+            .stream()
+            .map(this::convertToResponseDTO)
+            .collect(Collectors.toList());
+    }
     
     // ========== ADMIN OPERATIONS ==========
     

@@ -69,14 +69,10 @@ public class BookingUserController {
             throw new RuntimeException("User not authenticated");
         }
         
-        String username = userDetails.getUsername();
-        
-        try {
-            return username;
-        } catch (NumberFormatException e) {
-            return userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("User not found"))
-                .getId();
-        }
+        String email = userDetails.getUsername();
+        return userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"))
+            .getId();
     }
+
 }

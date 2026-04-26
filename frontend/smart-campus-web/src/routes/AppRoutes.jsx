@@ -28,6 +28,8 @@ import MyTicketsPage from "../pages/user/MyTicketsPage";
 import TicketDetailsPage from "../pages/user/TicketDetailsPage";
 import ProfilePage from "../pages/user/ProfilePage";
 
+
+
 // Technician pages
 import TechnicianDashboard from "../pages/technician/TechnicianDashboard";
 import AssignedTicketsPage from "../pages/technician/AssignedTicketsPage";
@@ -71,6 +73,8 @@ export default function AppRoutes() {
         <Route path="tickets/:id" element={<TicketDetailsPage />} />
         <Route path="profile" element={<ProfilePage />} />
       </Route>
+
+
 
       {/* Technician */}
       <Route

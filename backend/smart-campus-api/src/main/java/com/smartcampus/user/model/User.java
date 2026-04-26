@@ -24,6 +24,7 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
 
+
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
@@ -100,5 +101,21 @@ public class User {
 
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }

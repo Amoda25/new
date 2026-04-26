@@ -2,7 +2,8 @@ package com.smartcampus.user.controller;
 
 import com.smartcampus.user.dto.ProfileDTO;
 import com.smartcampus.user.service.UserService;
-import com.smartcampus.common.service.FileStorageService;
+
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,9 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProfileController {
 
     private final UserService userService;
-    private final FileStorageService fileStorageService;
+    private final com.smartcampus.common.service.FileStorageService fileStorageService;
 
-    public ProfileController(UserService userService, FileStorageService fileStorageService) {
+    public ProfileController(UserService userService, com.smartcampus.common.service.FileStorageService fileStorageService) {
         this.userService = userService;
         this.fileStorageService = fileStorageService;
     }

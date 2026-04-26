@@ -238,51 +238,7 @@ public class TicketServiceImpl implements TicketService {
             System.err.println("Failed to send rejection notification: " + e.getMessage());
         }
     }
-    
-    @Override
-    public void updateTicketStatusAdmin(String ticketId, String status) {
-        Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        ticket.setStatus(TicketStatus.valueOf(status.toUpperCase()));
-        ticket.setUpdatedAt(LocalDateTime.now());
-
-        ticketRepository.save(ticket);
-
-        try {
-            notificationService.createNotification(
-                ticket.getCreatedBy(),
-                NotificationType.TICKET_STATUS_UPDATED,
-                "Admin updated your ticket status to " + ticket.getStatus(),
-                ticketId
-            );
-        } catch (Exception e) {
-            System.err.println("Failed to send notification: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public void rejectTicket(String ticketId, String reason) {
-        Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket not found"));
-
-        ticket.setStatus(TicketStatus.REJECTED);
-        ticket.setRejectionReason(reason);
-        ticket.setUpdatedAt(LocalDateTime.now());
-
-        ticketRepository.save(ticket);
-
-        try {
-            notificationService.createNotification(
-                ticket.getCreatedBy(),
-                NotificationType.TICKET_STATUS_UPDATED,
-                "Your ticket was rejected. Reason: " + reason,
-                ticketId
-            );
-        } catch (Exception e) {
-            System.err.println("Failed to send rejection notification: " + e.getMessage());
-        }
-    }
 
     @Override
     public void updateResolution(@NonNull String ticketId, String resolutionNotes, String technicianId) {

@@ -84,7 +84,6 @@ public class CommentServiceImpl implements CommentService {
                 .collect(Collectors.toList());
     }
 
-    @SuppressWarnings("null")
     private CommentResponseDTO mapToResponseDTO(Comment comment) {
         CommentResponseDTO responseDTO = new CommentResponseDTO();
         responseDTO.setId(comment.getId());

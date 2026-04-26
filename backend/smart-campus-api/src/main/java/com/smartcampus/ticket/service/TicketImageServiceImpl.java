@@ -1,5 +1,8 @@
 package com.smartcampus.ticket.service;
 
+import org.springframework.lang.NonNull;
+
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -97,7 +100,7 @@ public class TicketImageServiceImpl implements TicketImageService {
 
 
     @Override
-    public List<TicketImageResponseDTO> getImagesByTicketId(String ticketId, String currentUserId) {
+    public List<TicketImageResponseDTO> getImagesByTicketId(@NonNull String ticketId, String currentUserId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
@@ -127,7 +130,7 @@ public class TicketImageServiceImpl implements TicketImageService {
 
 
     @Override
-    public List<TicketImageResponseDTO> getImagesByTicketIdForTechnician(String ticketId, String technicianId) {
+    public List<TicketImageResponseDTO> getImagesByTicketIdForTechnician(@NonNull String ticketId, String technicianId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
@@ -155,7 +158,7 @@ public class TicketImageServiceImpl implements TicketImageService {
     }
 
     @Override
-    public List<TicketImageResponseDTO> getImagesByTicketIdForAdmin(String ticketId) {
+    public List<TicketImageResponseDTO> getImagesByTicketIdForAdmin(@NonNull String ticketId) {
 
         ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));

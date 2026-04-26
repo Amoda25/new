@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin
 public class AuthController {
 
     private final UserService userService;
@@ -50,8 +49,11 @@ public class AuthController {
             user.setName(registerRequest.getName());
             user.setEmail(registerRequest.getEmail());
             user.setPassword(registerRequest.getPassword());
+            user.setIdNumber(registerRequest.getIdNumber());
+            user.setDepartment(registerRequest.getDepartment());
             
             if (registerRequest.getRole() != null && !registerRequest.getRole().isEmpty()) {
+
                 try {
                     user.setRole(com.smartcampus.security.roles.Role.valueOf(registerRequest.getRole().toUpperCase()));
                 } catch (IllegalArgumentException e) {

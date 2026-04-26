@@ -1,6 +1,6 @@
 package com.smartcampus.booking.dto;
 
-import jakarta.validation.constraints.NotBlank;
+
 
 public class BookingDecisionDTO {
     

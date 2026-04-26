@@ -1,5 +1,8 @@
 package com.smartcampus.resource.service;
 
+import org.springframework.lang.NonNull;
+
+
 import com.smartcampus.exception.ResourceNotFoundException;
 import com.smartcampus.resource.dto.ResourceRequestDTO;
 import com.smartcampus.resource.dto.ResourceResponseDTO;
@@ -27,7 +30,7 @@ public class ResourceService {
                 .collect(Collectors.toList());
     }
 
-    public ResourceResponseDTO getResourceById(String id) {
+    public ResourceResponseDTO getResourceById(@NonNull String id) {
         Resource resource = resourceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Resource not found with id: " + id));
 
@@ -49,7 +52,7 @@ public class ResourceService {
         return mapToResponseDTO(savedResource);
     }
 
-    public ResourceResponseDTO updateResource(String id, ResourceRequestDTO requestDTO) {
+    public ResourceResponseDTO updateResource(@NonNull String id, ResourceRequestDTO requestDTO) {
         Resource existingResource = resourceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Resource not found with id: " + id));
 
@@ -66,7 +69,7 @@ public class ResourceService {
         return mapToResponseDTO(updatedResource);
     }
 
-    public void deleteResource(String id) {
+    public void deleteResource(@NonNull String id) {
         Resource existingResource = resourceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Resource not found with id: " + id));
 

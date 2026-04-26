@@ -18,6 +18,7 @@ public class TicketResponseDTO {
     private String contactName;
     private String contactDetails;
     private String resolutionNotes;
+    private String rejectionReason;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -76,6 +77,10 @@ public class TicketResponseDTO {
     public void setAssignedTo(String assignedTo) { this.assignedTo = assignedTo; }
 
     public void setResolutionNotes(String resolutionNotes) { this.resolutionNotes = resolutionNotes; }
+
+    public String getRejectionReason() { return rejectionReason; }
+
+    public void setRejectionReason(String rejectionReason) { this.rejectionReason = rejectionReason; }
 
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 

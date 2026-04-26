@@ -11,7 +11,10 @@ const RegisterPage = () => {
     password: "",
     confirmPassword: "",
     role: "USER",
+    idNumber: "",
+    department: "",
   });
+
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -83,8 +86,11 @@ const RegisterPage = () => {
         name: formData.fullName,
         email: formData.email,
         password: formData.password,
-        role: formData.role
+        role: formData.role,
+        idNumber: formData.idNumber,
+        department: formData.department
       };
+
       
       const response = await register(userData);
       // Backend returns string "User registered successfully"
@@ -239,11 +245,40 @@ const RegisterPage = () => {
               disabled={isLoading}
             >
               <option value="USER">Student</option>
+              <option value="LECTURER">Lecturer</option>
               <option value="TECHNICIAN">Technician</option>
               <option value="ADMIN">Admin</option>
             </select>
             {errors.role && <span className="error-message">{errors.role}</span>}
           </div>
+
+
+          <div className="form-group">
+            <label htmlFor="idNumber">ID Number / Index No</label>
+            <input
+              type="text"
+              id="idNumber"
+              name="idNumber"
+              placeholder="e.g. SE/2019/001"
+              value={formData.idNumber}
+              onChange={handleChange}
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="department">Department / Faculty</label>
+            <input
+              type="text"
+              id="department"
+              name="department"
+              placeholder="e.g. Computing & Information Systems"
+              value={formData.department}
+              onChange={handleChange}
+              disabled={isLoading}
+            />
+          </div>
+
 
           <button type="submit" className="register-button" disabled={isLoading}>
             {isLoading ? "Signing Up..." : "Sign Up"}

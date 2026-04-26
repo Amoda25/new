@@ -1,9 +1,8 @@
 package com.smartcampus.user.controller;
 
 import com.smartcampus.security.jwt.JwtService;
-import com.smartcampus.user.dto.AuthResponse;
-import com.smartcampus.user.dto.LoginRequest;
-import com.smartcampus.user.dto.RegisterRequest;
+
+
 import com.smartcampus.user.model.User;
 import com.smartcampus.user.service.UserService;
 import jakarta.annotation.PostConstruct;
@@ -28,13 +27,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody com.smartcampus.user.dto.LoginRequest loginRequest) {
         System.out.println("AUTH: Login request received for " + loginRequest.getEmail());
         try {
             User user = userService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
             String token = jwtService.generateToken(user);
             System.out.println("AUTH: Login successful for " + loginRequest.getEmail());
-            return ResponseEntity.ok(new AuthResponse(token, user.getRole().name()));
+            return ResponseEntity.ok(new com.smartcampus.user.dto.AuthResponse(token, user.getRole().name()));
         } catch (RuntimeException e) {
             System.err.println("AUTH: Login failed for " + loginRequest.getEmail() + " : " + e.getMessage());
             return ResponseEntity.status(401).body(e.getMessage());
@@ -42,7 +41,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> register(@RequestBody com.smartcampus.user.dto.RegisterRequest registerRequest) {
         System.out.println("AUTH: Register request received for " + registerRequest.getEmail());
         try {
             User user = new User();

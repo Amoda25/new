@@ -29,11 +29,18 @@ api.interceptors.response.use(
     if (error.response) {
       // 401: Unauthorized (Token expired or missing)
       if (error.response.status === 401) {
-        // Do not redirect if the request was to the login endpoint itself
-        if (error.config && !error.config.url.includes('/api/auth/login')) {
+        const url = error.config?.url || '';
+        // Only redirect to login if it's NOT a booking or profile API call
+        // (those can fail for business reasons and shouldn't log the user out)
+        const isBookingEndpoint = url.includes('/api/user/bookings');
+        const isProfileEndpoint = url.includes('/api/user/profile');
+        const isLoginEndpoint = url.includes('/api/auth/login');
+        
+        if (!isLoginEndpoint && !isBookingEndpoint && !isProfileEndpoint) {
           localStorage.removeItem("token");
           window.location.href = "/login";
         }
+        // For booking/profile failures, just let the error bubble up to show to user
       }
 
 

@@ -54,8 +54,11 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
       
     } catch (err) {
       console.error("Booking error:", err);
-      // Backend conflict errors are typically returned in the message field
-      setError(err.response?.data?.message || "Failed to create booking. Please check your inputs or try a different time slot.");
+      const backendMessage = err.response?.data;
+      const msg = typeof backendMessage === 'string' && backendMessage.length > 0
+        ? backendMessage
+        : err.response?.data?.message || "Failed to create booking. Please check your inputs.";
+      setError(msg);
     } finally {
       setIsLoading(false);
     }

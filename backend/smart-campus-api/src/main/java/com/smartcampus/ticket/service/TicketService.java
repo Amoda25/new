@@ -20,6 +20,10 @@ public interface TicketService {
     List<TicketResponseDTO> getAssignedTickets(String technicianId);
 
     void updateTicketStatus(String ticketId, String status, String technicianId);
+    
+    void updateTicketStatusAdmin(String ticketId, String status);
+    
+    void rejectTicket(String ticketId, String reason);
 
     void updateResolution(String ticketId, String resolutionNotes, String technicianId);
 

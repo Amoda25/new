@@ -68,6 +68,22 @@ export const updateTechnicianTicketStatus = async (ticketId, status) => {
   return response.data;
 };
 
+export const updateAdminTicketStatus = async (ticketId, status) => {
+  const response = await api.put(
+    `/api/admin/tickets/${ticketId}/status`,
+    { status }
+  );
+  return response.data;
+};
+
+export const rejectAdminTicket = async (ticketId, reason) => {
+  const response = await api.put(
+    `/api/admin/tickets/${ticketId}/reject`,
+    { reason }
+  );
+  return response.data;
+};
+
 export const deleteAdminTicket = async (ticketId) => {
   const response = await api.delete(`/api/admin/tickets/${ticketId}`);
   return response.data;

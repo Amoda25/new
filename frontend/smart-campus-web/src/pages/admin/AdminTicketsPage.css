@@ -13,8 +13,8 @@
   min-height: 620px;
   width: 100%;
   background:
-    linear-gradient(180deg, rgba(2,11,26,0.52) 0%, rgba(1, 2, 11, 0.88) 100%),
-    url("../../assets/technician.avif");
+    linear-gradient(180deg, rgba(2,11,26,0.65) 0%, rgba(1, 2, 11, 0.9) 100%),
+    url("/bookings_resources.png");
   background-size: cover;
   background-position: center 30%;
   background-repeat: no-repeat;

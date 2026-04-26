@@ -42,7 +42,7 @@ public interface BookingRepository extends MongoRepository<Booking, String> {
         String excludeId
     );
 
-    // Find all active bookings for a resource in a time range (for availability)
+    // Find all active bookings for a resource on a specific day (Simplified for robustness)
     @Query("{ 'resourceId': ?0, 'status': { $in: ['APPROVED', 'PENDING'] }, 'startTime': { $gte: ?1, $lt: ?2 } }")
     List<Booking> findResourceBookingsForDay(String resourceId, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

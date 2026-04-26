@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./HomePage.css";
 
-import sliitImg from "../../assets/sliit.jpg";
+import sliitImg from "../../assets/SLIIT.jpg";
 
 const IMAGES = {
   heroBg:   sliitImg,

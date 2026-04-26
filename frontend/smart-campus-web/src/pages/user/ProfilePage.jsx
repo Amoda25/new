@@ -10,6 +10,9 @@ const ProfilePage = () => {
         studentId: "",
         degreeProgram: "",
         currentYearSemester: "",
+        moduleName: "",
+        moduleId: "",
+        lecturerId: "",
         email: "",
         phoneNumber: "",
         currentResidentialAddress: "",
@@ -21,6 +24,7 @@ const ProfilePage = () => {
     const [message, setMessage] = useState({ type: "", text: "" });
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState("");
+    const [userRole, setUserRole] = useState(localStorage.getItem("role") || "USER");
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -152,42 +156,61 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-                        {/* Academic Details */}
+                        {/* Academic Details - Conditional based on role */}
                         <div className="section-group">
                             <h2>Academic Information</h2>
                             <div className="form-grid">
-                                <div className="form-field">
-                                    <label>Student Registration Number / ID</label>
-                                    <input type="text" name="studentId" value={profile.studentId || ""} onChange={handleChange} placeholder="e.g. IT23605152" />
-                                </div>
-                                <div className="form-field">
-                                    <label>Degree Program / Major</label>
-                                    <select name="degreeProgram" value={profile.degreeProgram || ""} onChange={handleChange}>
-                                        <option value="">Select Degree Program</option>
-                                        <option value="Information Technology">Information Technology</option>
-                                        <option value="Software Engineering">Software Engineering</option>
-                                        <option value="Cyber Security">Cyber Security</option>
-                                        <option value="Data Science">Data Science</option>
-                                        <option value="Artificial Intelligence">Artificial Intelligence</option>
-                                        <option value="Interactive Media">Interactive Media</option>
-                                        <option value="Information Systems Engineering">Information Systems Engineering</option>
-                                        <option value="Computer Systems & Network Engineering">Computer Systems & Network Engineering</option>
-                                    </select>
-                                </div>
-                                <div className="form-field">
-                                    <label>Current Year and Semester</label>
-                                    <select name="currentYearSemester" value={profile.currentYearSemester || ""} onChange={handleChange}>
-                                        <option value="">Select Year & Semester</option>
-                                        <option value="Year 1, Semester 1">Year 1, Semester 1</option>
-                                        <option value="Year 1, Semester 2">Year 1, Semester 2</option>
-                                        <option value="Year 2, Semester 1">Year 2, Semester 1</option>
-                                        <option value="Year 2, Semester 2">Year 2, Semester 2</option>
-                                        <option value="Year 3, Semester 1">Year 3, Semester 1</option>
-                                        <option value="Year 3, Semester 2">Year 3, Semester 2</option>
-                                        <option value="Year 4, Semester 1">Year 4, Semester 1</option>
-                                        <option value="Year 4, Semester 2">Year 4, Semester 2</option>
-                                    </select>
-                                </div>
+                                {userRole === "LECTURER" ? (
+                                    <>
+                                        <div className="form-field">
+                                            <label>Lecture Registration Number / ID</label>
+                                            <input type="text" name="lecturerId" value={profile.lecturerId || ""} onChange={handleChange} placeholder="e.g. LIDxxxxxxxx" />
+                                        </div>
+                                        <div className="form-field">
+                                            <label>Module Name</label>
+                                            <input type="text" name="moduleName" value={profile.moduleName || ""} onChange={handleChange} placeholder="e.g. Software Engineering" />
+                                        </div>
+                                        <div className="form-field">
+                                            <label>Module ID</label>
+                                            <input type="text" name="moduleId" value={profile.moduleId || ""} onChange={handleChange} placeholder="e.g. IT2020" />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="form-field">
+                                            <label>Student Registration Number / ID</label>
+                                            <input type="text" name="studentId" value={profile.studentId || ""} onChange={handleChange} placeholder="e.g. IT23605152" />
+                                        </div>
+                                        <div className="form-field">
+                                            <label>Degree Program / Major</label>
+                                            <select name="degreeProgram" value={profile.degreeProgram || ""} onChange={handleChange}>
+                                                <option value="">Select Degree Program</option>
+                                                <option value="Information Technology">Information Technology</option>
+                                                <option value="Software Engineering">Software Engineering</option>
+                                                <option value="Cyber Security">Cyber Security</option>
+                                                <option value="Data Science">Data Science</option>
+                                                <option value="Artificial Intelligence">Artificial Intelligence</option>
+                                                <option value="Interactive Media">Interactive Media</option>
+                                                <option value="Information Systems Engineering">Information Systems Engineering</option>
+                                                <option value="Computer Systems & Network Engineering">Computer Systems & Network Engineering</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-field">
+                                            <label>Current Year and Semester</label>
+                                            <select name="currentYearSemester" value={profile.currentYearSemester || ""} onChange={handleChange}>
+                                                <option value="">Select Year & Semester</option>
+                                                <option value="Year 1, Semester 1">Year 1, Semester 1</option>
+                                                <option value="Year 1, Semester 2">Year 1, Semester 2</option>
+                                                <option value="Year 2, Semester 1">Year 2, Semester 1</option>
+                                                <option value="Year 2, Semester 2">Year 2, Semester 2</option>
+                                                <option value="Year 3, Semester 1">Year 3, Semester 1</option>
+                                                <option value="Year 3, Semester 2">Year 3, Semester 2</option>
+                                                <option value="Year 4, Semester 1">Year 4, Semester 1</option>
+                                                <option value="Year 4, Semester 2">Year 4, Semester 2</option>
+                                            </select>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
 

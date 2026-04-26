@@ -81,6 +81,11 @@ public class UserProfileService {
         profile.setStudentId(dto.getStudentId());
         profile.setDegreeProgram(dto.getDegreeProgram());
         profile.setCurrentYearSemester(dto.getCurrentYearSemester());
+        
+        // Lecturer fields
+        profile.setModuleName(dto.getModuleName());
+        profile.setModuleId(dto.getModuleId());
+        profile.setLecturerId(dto.getLecturerId());
         profile.setPhoneNumber(dto.getPhoneNumber());
         profile.setCurrentResidentialAddress(dto.getCurrentResidentialAddress());
         profile.setPermanentHomeAddress(dto.getPermanentHomeAddress());
@@ -111,6 +116,12 @@ public class UserProfileService {
         dto.setStudentId(profile.getStudentId());
         dto.setDegreeProgram(profile.getDegreeProgram());
         dto.setCurrentYearSemester(profile.getCurrentYearSemester());
+        
+        // Lecturer fields
+        dto.setModuleName(profile.getModuleName());
+        dto.setModuleId(profile.getModuleId());
+        dto.setLecturerId(profile.getLecturerId());
+        
         dto.setPhoneNumber(profile.getPhoneNumber());
         dto.setCurrentResidentialAddress(profile.getCurrentResidentialAddress());
         dto.setPermanentHomeAddress(profile.getPermanentHomeAddress());

@@ -191,6 +191,28 @@ public class TicketServiceImpl implements TicketService {
         
         
     }
+    
+    @Override
+    public void updateTicketStatusAdmin(String ticketId, String status) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        ticket.setStatus(TicketStatus.valueOf(status.toUpperCase()));
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        ticketRepository.save(ticket);
+
+        try {
+            notificationService.createNotification(
+                ticket.getCreatedBy(),
+                NotificationType.TICKET_STATUS_UPDATED,
+                "Admin updated your ticket status to " + ticket.getStatus(),
+                ticketId
+            );
+        } catch (Exception e) {
+            System.err.println("Failed to send notification: " + e.getMessage());
+        }
+    }
 
     @Override
     public void updateResolution(String ticketId, String resolutionNotes, String technicianId) {
@@ -200,6 +222,17 @@ public class TicketServiceImpl implements TicketService {
         if (ticket.getAssignedTo() == null || !ticket.getAssignedTo().equals(technicianId)) {
             throw new RuntimeException("This ticket is not assigned to this technician");
         }
+
+        ticket.setResolutionNotes(resolutionNotes);
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        ticketRepository.save(ticket);
+    }
+
+    @Override
+    public void updateResolutionAdmin(String ticketId, String resolutionNotes) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
         ticket.setResolutionNotes(resolutionNotes);
         ticket.setUpdatedAt(LocalDateTime.now());

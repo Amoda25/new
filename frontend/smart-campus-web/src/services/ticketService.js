@@ -68,6 +68,32 @@ export const updateTechnicianTicketStatus = async (ticketId, status) => {
   return response.data;
 };
 
+export const getTicketComments = async (ticketId) => {
+  const response = await api.get(`/api/comments/ticket/${ticketId}`);
+  return response.data;
+};
+
+export const addTicketComment = async (ticketId, message) => {
+  const response = await api.post(`/api/comments/ticket/${ticketId}`, { message });
+  return response.data;
+};
+
+export const updateAdminTicketStatus = async (ticketId, status) => {
+  const response = await api.put(
+    `/api/admin/tickets/${ticketId}/status`,
+    { status }
+  );
+  return response.data;
+};
+
+export const updateAdminResolution = async (ticketId, resolutionNotes) => {
+  const response = await api.put(
+    `/api/admin/tickets/${ticketId}/resolution`,
+    { resolutionNotes }
+  );
+  return response.data;
+};
+
 export const deleteAdminTicket = async (ticketId) => {
   const response = await api.delete(`/api/admin/tickets/${ticketId}`);
   return response.data;

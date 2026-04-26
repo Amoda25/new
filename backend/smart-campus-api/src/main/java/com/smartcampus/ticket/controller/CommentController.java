@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smartcampus.ticket.dto.CommentCreateDTO;
+import com.smartcampus.ticket.dto.CommentResponseDTO;
 import com.smartcampus.ticket.dto.CommentUpdateDTO;
 import com.smartcampus.ticket.model.Comment;
 import com.smartcampus.ticket.service.CommentService;
@@ -37,14 +38,14 @@ public class CommentController {
      * Only authenticated USERs are allowed to post comments.
      */
     @PostMapping("/ticket/{ticketId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Comment> addComment(
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'TECHNICIAN')")
+    public ResponseEntity<CommentResponseDTO> addComment(
             @PathVariable String ticketId,
             @RequestBody CommentCreateDTO dto,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         String currentUserId = extractUserId(userDetails);
-        Comment comment = commentService.addComment(ticketId, dto, currentUserId);
+        CommentResponseDTO comment = commentService.addComment(ticketId, dto, currentUserId);
         return ResponseEntity.ok(comment);
     }
 
@@ -53,8 +54,8 @@ public class CommentController {
      * Both USERs and TECHNICIANs can view comments.
      */
     @GetMapping("/ticket/{ticketId}")
-    @PreAuthorize("hasAnyRole('USER', 'TECHNICIAN')")
-    public ResponseEntity<List<Comment>> getComments(
+    @PreAuthorize("hasAnyRole('USER', 'TECHNICIAN', 'ADMIN')")
+    public ResponseEntity<List<CommentResponseDTO>> getComments(
             @PathVariable String ticketId
     ) {
         return ResponseEntity.ok(commentService.getCommentsByTicketId(ticketId));

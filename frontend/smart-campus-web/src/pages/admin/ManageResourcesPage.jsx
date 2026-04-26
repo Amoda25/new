@@ -26,7 +26,7 @@ export default function ManageResourcesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-  const [activeView, setActiveView] = useState("OVERVIEW"); // OVERVIEW, MANAGE, or LIST
+  const [activeView, setActiveView] = useState("OVERVIEW"); // OVERVIEW, MANAGE, LIST, ACTIVE_LIST, SERVICE_LIST
 
   const [form, setForm] = useState({
     name: "",
@@ -275,6 +275,18 @@ export default function ManageResourcesPage() {
             >
               <span className="dot" /> Maintain Resources
             </button>
+            <button 
+              className={`sidebar-nav-btn ${activeView === 'ACTIVE_LIST' ? 'active' : ''}`}
+              onClick={() => setActiveView('ACTIVE_LIST')}
+            >
+              <span className="dot" style={{ background: '#10b981' }} /> Active Resources
+            </button>
+            <button 
+              className={`sidebar-nav-btn ${activeView === 'SERVICE_LIST' ? 'active' : ''}`}
+              onClick={() => setActiveView('SERVICE_LIST')}
+            >
+              <span className="dot" style={{ background: '#ef4444' }} /> Out of Service
+            </button>
           </div>
 
           <div className="nav-group">
@@ -334,11 +346,15 @@ export default function ManageResourcesPage() {
             <h1>
               {activeView === 'OVERVIEW' ? 'Resources Overview' : 
                activeView === 'MANAGE' ? (editingId ? 'Edit Resource' : 'Add New Resource') : 
+               activeView === 'ACTIVE_LIST' ? 'Active Resources' :
+               activeView === 'SERVICE_LIST' ? 'Out of Service Resources' :
                'Maintain Resources'}
             </h1>
             <p>
               {activeView === 'OVERVIEW' ? 'Real-time metrics of campus facilities.' : 
                activeView === 'MANAGE' ? 'Create or update resource details.' : 
+               activeView === 'ACTIVE_LIST' ? 'Resources currently available for use.' :
+               activeView === 'SERVICE_LIST' ? 'Resources under maintenance or repair.' :
                'Review and manage all registered campus resources.'}
             </p>
           </div>
@@ -574,71 +590,83 @@ export default function ManageResourcesPage() {
           </div>
         )}
 
-        {activeView === 'LIST' && (
+        {(activeView === 'LIST' || activeView === 'ACTIVE_LIST' || activeView === 'SERVICE_LIST') && (
           <div className="manage-shell animate-fade-in">
             {loading ? (
               <div className="manage-message">Loading inventory...</div>
             ) : error ? (
               <div className="manage-message">{error}</div>
-            ) : resources.length === 0 ? (
-              <div className="manage-message">No resources found.</div>
             ) : (
-              <div className="manage-resource-grid">
-                {resources.map((resource) => (
-                  <div key={resource.id} className="manage-resource-card">
-                    <div className="manage-card-image">
-                      {resource.imageUrl ? (
-                        <img src={resource.imageUrl} alt={resource.name} />
-                      ) : (
-                        <div className="placeholder-image" style={{ width: '100%', height: '100%', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              (() => {
+                const filtered = activeView === 'ACTIVE_LIST' 
+                  ? resources.filter(r => r.status === 'ACTIVE')
+                  : activeView === 'SERVICE_LIST'
+                  ? resources.filter(r => r.status === 'OUT_OF_SERVICE')
+                  : resources;
+
+                if (filtered.length === 0) {
+                  return <div className="manage-message">No matching resources found.</div>;
+                }
+
+                return (
+                  <div className="manage-resource-grid">
+                    {filtered.map((resource) => (
+                      <div key={resource.id} className="manage-resource-card">
+                        <div className="manage-card-image">
+                          {resource.imageUrl ? (
+                            <img src={resource.imageUrl} alt={resource.name} />
+                          ) : (
+                            <div className="placeholder-image" style={{ width: '100%', height: '100%', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                            </div>
+                          )}
+                          <div className="manage-card-badge">
+                            {resource.type || "RESOURCE"}
+                          </div>
                         </div>
-                      )}
-                      <div className="manage-card-badge">
-                        {resource.type || "RESOURCE"}
-                      </div>
-                    </div>
 
-                    <div className="card-content">
-                      <h3 className="resource-name-title">{resource.name}</h3>
+                        <div className="card-content">
+                          <h3 className="resource-name-title">{resource.name}</h3>
 
-                      <div className="info-row">
-                        <span className="info-label">Location</span>
-                        <span className="info-value">{resource.location}</span>
-                      </div>
+                          <div className="info-row">
+                            <span className="info-label">Location</span>
+                            <span className="info-value">{resource.location}</span>
+                          </div>
 
-                      <div className="info-row">
-                        <span className="info-label">Capacity</span>
-                        <span className="info-value">{resource.capacity ?? "N/A"}</span>
-                      </div>
+                          <div className="info-row">
+                            <span className="info-label">Capacity</span>
+                            <span className="info-value">{resource.capacity ?? "N/A"}</span>
+                          </div>
 
-                      <div className="info-row">
-                        <span className="info-label">Status</span>
-                        <div className={`status-indicator ${resource.status.toLowerCase()}`}>
-                          <span className="dot" style={{ width: 8, height: 8, borderRadius: '50%', background: 'currentColor' }}></span>
-                          {resource.status}
+                          <div className="info-row">
+                            <span className="info-label">Status</span>
+                            <div className={`status-indicator ${resource.status.toLowerCase()}`}>
+                              <span className="dot" style={{ width: 8, height: 8, borderRadius: '50%', background: 'currentColor' }}></span>
+                              {resource.status}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="manage-card-actions">
+                          <button
+                            className="admin-approve-btn"
+                            onClick={() => handleEdit(resource)}
+                          >
+                            Edit
+                          </button>
+
+                          <button
+                            className="admin-delete-btn"
+                            onClick={() => handleDelete(resource.id)}
+                          >
+                            Delete
+                          </button>
                         </div>
                       </div>
-                    </div>
-
-                    <div className="manage-card-actions">
-                      <button
-                        className="admin-approve-btn"
-                        onClick={() => handleEdit(resource)}
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        className="admin-delete-btn"
-                        onClick={() => handleDelete(resource.id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                );
+              })()
             )}
           </div>
         )}

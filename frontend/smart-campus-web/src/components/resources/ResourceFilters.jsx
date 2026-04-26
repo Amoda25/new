@@ -16,6 +16,7 @@ export default function ResourceFilters({ filters, onChange, onReset }) {
         <option value="">All Types</option>
         <option value="ROOM">ROOM</option>
         <option value="LAB">LAB</option>
+        <option value="LECTURE_HALL">LECTURE HALL</option>
         <option value="EQUIPMENT">EQUIPMENT</option>
       </select>
 

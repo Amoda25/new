@@ -6,14 +6,14 @@ import Chatbot from "../components/Chatbot/Chatbot";
 
 export default function UserLayout() {
   return (
-    <div style={{ minHeight: "100vh", background: "#eef3f9" }}>
+    <div style={{ minHeight: "100vh", background: "#0f172a" }}>
       <UserNavbar />
 
       <main
         style={{
           paddingTop: "84px",
           minHeight: "calc(100vh - 84px)",
-          background: "#eef3f9",
+          background: "#0f172a",
         }}
       >
         <Outlet />

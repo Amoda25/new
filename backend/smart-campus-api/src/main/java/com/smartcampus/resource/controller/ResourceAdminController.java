@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.lang.NonNull;
 
 @RestController
 @RequestMapping("/api/admin/resources")
@@ -36,7 +37,7 @@ public class ResourceAdminController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResourceResponseDTO> updateResource(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @Valid @RequestBody ResourceRequestDTO requestDTO,
             @AuthenticationPrincipal UserDetails userDetails) {  // ← ADD THIS PARAMETER
         
@@ -49,7 +50,7 @@ public class ResourceAdminController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResource(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @AuthenticationPrincipal UserDetails userDetails) {  // ← ADD THIS PARAMETER
         
         String adminId = userDetails.getUsername();

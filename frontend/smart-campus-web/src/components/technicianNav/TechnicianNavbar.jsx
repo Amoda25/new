@@ -26,7 +26,8 @@ export default function TechnicianNavbar() {
         </div>
 
         <span>
-          Technician <span className="brand-word-panel">Panel</span>
+          Smart <span className="brand-word-campus">Campus</span>
+          <span className="tech-badge" style={{ fontSize: '0.7rem', verticalAlign: 'middle', marginLeft: '8px', padding: '2px 6px', background: 'rgba(0, 212, 255, 0.15)', border: '1px solid rgba(0, 212, 255, 0.3)', borderRadius: '4px', color: '#00d4ff' }}>TECH</span>
         </span>
 
         <div className="nav-live-dot" />
@@ -45,6 +46,12 @@ export default function TechnicianNavbar() {
           to="/technician/tickets"
         >
           Assigned Tickets
+        </Link>
+        <Link
+          className={pathname.startsWith("/technician/profile") ? "active" : ""}
+          to="/technician/profile"
+        >
+          Profile
         </Link>
         <NotificationBell />
         <button className="logout-btn" onClick={handleLogout} style={{ background: 'transparent', border: 'none', color: '#ff4d4f', cursor: 'pointer', fontWeight: 'bold', marginLeft: '1rem' }}>

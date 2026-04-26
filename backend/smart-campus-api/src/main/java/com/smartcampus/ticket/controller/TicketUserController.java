@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.lang.NonNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.smartcampus.ticket.dto.TicketCreateDTO;
@@ -39,6 +40,7 @@ public class TicketUserController {
         this.userRepository = userRepository;
     }
 
+    @SuppressWarnings("null")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TicketResponseDTO> createTicket(
             @ModelAttribute TicketCreateDTO dto,
@@ -77,7 +79,7 @@ public class TicketUserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TicketResponseDTO> getTicketById(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @AuthenticationPrincipal UserDetails userDetails) {
         
         String currentUserId = extractUserId(userDetails);
@@ -88,7 +90,7 @@ public class TicketUserController {
 
     @GetMapping("/{id}/images")
     public ResponseEntity<List<TicketImageResponseDTO>> getTicketImages(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @AuthenticationPrincipal UserDetails userDetails) {  // ← ADD THIS PARAMETER
         
         String currentUserId = userDetails.getUsername();
@@ -118,7 +120,7 @@ public class TicketUserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUserTicket(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @AuthenticationPrincipal UserDetails userDetails) {
         
         String userId = extractUserId(userDetails);

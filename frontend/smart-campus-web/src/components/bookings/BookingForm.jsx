@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { createBooking } from '../../services/bookingService';
+import './BookingForm.css';
 
 const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
   const [formData, setFormData] = useState({
-    resourceId: '',
+    resourceId: resources.length === 1 ? resources[0].id : '',
     startDate: '',
     startTime: '',
     endDate: '',
@@ -35,7 +36,7 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
       const endDateTime = `${formData.endDate}T${formData.endTime}:00`;
 
       const payload = {
-        resourceId: parseInt(formData.resourceId),
+        resourceId: String(formData.resourceId),
         startTime: startDateTime,
         endTime: endDateTime,
         purpose: formData.purpose,
@@ -53,8 +54,11 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
       
     } catch (err) {
       console.error("Booking error:", err);
-      // Backend conflict errors are typically returned in the message field
-      setError(err.response?.data?.message || "Failed to create booking. Please check your inputs or try a different time slot.");
+      const backendMessage = err.response?.data;
+      const msg = typeof backendMessage === 'string' && backendMessage.length > 0
+        ? backendMessage
+        : err.response?.data?.message || "Failed to create booking. Please check your inputs.";
+      setError(msg);
     } finally {
       setIsLoading(false);
     }

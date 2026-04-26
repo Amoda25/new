@@ -21,6 +21,7 @@ public class OllamaService {
         this.restTemplate = restTemplate;
     }
 
+    @SuppressWarnings("null")
     public String askOllama(String userMessage, String systemPrompt) {
         String url = "http://localhost:11434/api/chat";
 
@@ -43,11 +44,11 @@ public class OllamaService {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
         try {
-            ResponseEntity<Map> response = restTemplate.exchange(
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     url,
                     HttpMethod.POST,
                     entity,
-                    Map.class
+                    new org.springframework.core.ParameterizedTypeReference<Map<String, Object>>() {}
             );
 
             Map<?, ?> body = response.getBody();

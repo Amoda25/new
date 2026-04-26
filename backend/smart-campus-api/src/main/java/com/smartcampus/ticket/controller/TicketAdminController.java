@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.lang.NonNull;
 
 import com.smartcampus.ticket.dto.TicketAssignDTO;
 import com.smartcampus.ticket.dto.TicketImageResponseDTO;
+import com.smartcampus.ticket.dto.TicketRejectDTO;
+import com.smartcampus.ticket.dto.TicketResolutionDTO;
 import com.smartcampus.ticket.dto.TicketResponseDTO;
+import com.smartcampus.ticket.dto.TicketStatusUpdateDTO;
 import com.smartcampus.ticket.service.TicketImageService;
 import com.smartcampus.ticket.service.TicketService;
 import com.smartcampus.user.model.User;
@@ -55,7 +59,7 @@ public class TicketAdminController {
 
     @PutMapping("/{id}/assign")
     public ResponseEntity<String> assignTechnician(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @RequestBody TicketAssignDTO dto,
             @AuthenticationPrincipal UserDetails userDetails) {  // ← ADD THIS PARAMETER
         
@@ -66,9 +70,33 @@ public class TicketAdminController {
         return ResponseEntity.ok("Technician assigned successfully");
     }
 
+    @PutMapping("/{id}/status")
+    public ResponseEntity<String> updateTicketStatus(
+            @PathVariable @NonNull String id,
+            @RequestBody TicketStatusUpdateDTO dto) {
+        ticketService.updateTicketStatusAdmin(id, dto.getStatus());
+        return ResponseEntity.ok("Ticket status updated successfully by Admin");
+    }
+
+    @PutMapping("/{id}/reject")
+    public ResponseEntity<String> rejectTicket(
+            @PathVariable @NonNull String id,
+            @RequestBody TicketRejectDTO dto) {
+        ticketService.rejectTicket(id, dto.getReason());
+        return ResponseEntity.ok("Ticket rejected successfully by Admin");
+    }
+
+    @PutMapping("/{id}/resolution")
+    public ResponseEntity<String> updateResolution(
+            @PathVariable @NonNull String id,
+            @RequestBody TicketResolutionDTO dto) {
+        ticketService.updateResolutionAdmin(id, dto.getResolutionNotes());
+        return ResponseEntity.ok("Resolution updated successfully by Admin");
+    }
+
     @GetMapping("/{id}/images")
     public ResponseEntity<List<TicketImageResponseDTO>> getTicketImagesForAdmin(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @AuthenticationPrincipal UserDetails userDetails) {  // ← ADD THIS PARAMETER
         
         String adminId = userDetails.getUsername();
@@ -79,7 +107,7 @@ public class TicketAdminController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTicket(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @AuthenticationPrincipal UserDetails userDetails) {  // ← ADD THIS PARAMETER
         
         String adminId = userDetails.getUsername();

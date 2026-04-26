@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.lang.NonNull;
 
 import com.smartcampus.ticket.dto.TicketImageResponseDTO;
 import com.smartcampus.ticket.dto.TicketResolutionDTO;
@@ -52,7 +53,7 @@ public class TicketTechnicianController {
 
     @PutMapping("/{id}/status")
     public ResponseEntity<String> updateTicketStatus(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @RequestBody TicketStatusUpdateDTO dto,
             @AuthenticationPrincipal UserDetails userDetails) {
         
@@ -65,7 +66,7 @@ public class TicketTechnicianController {
 
     @PutMapping("/{id}/resolution")
     public ResponseEntity<String> updateResolution(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @RequestBody TicketResolutionDTO dto,
             @AuthenticationPrincipal UserDetails userDetails) {
         
@@ -78,7 +79,7 @@ public class TicketTechnicianController {
 
     @GetMapping("/{id}/images")
     public ResponseEntity<List<TicketImageResponseDTO>> getTicketImages(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @AuthenticationPrincipal UserDetails userDetails) {
         
         String technicianId = extractUserId(userDetails);
@@ -89,7 +90,7 @@ public class TicketTechnicianController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTicket(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @AuthenticationPrincipal UserDetails userDetails) {
         
         String technicianId = extractUserId(userDetails);

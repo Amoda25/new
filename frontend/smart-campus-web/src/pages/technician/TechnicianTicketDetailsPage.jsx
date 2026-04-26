@@ -25,7 +25,7 @@ function TechnicianTicketDetailsPage() {
   const fetchComments = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:8080/api/comments/ticket/${id}`, {
+      const res = await fetch(`http://localhost:8081/api/comments/ticket/${id}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }

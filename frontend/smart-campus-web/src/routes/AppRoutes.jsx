@@ -26,6 +26,9 @@ import ResourceDetailsPage from "../pages/user/ResourceDetailsPage";
 import MyBookingsPage from "../pages/user/MyBookingsPage";
 import MyTicketsPage from "../pages/user/MyTicketsPage";
 import TicketDetailsPage from "../pages/user/TicketDetailsPage";
+import ProfilePage from "../pages/user/ProfilePage";
+
+
 
 // Technician pages
 import TechnicianDashboard from "../pages/technician/TechnicianDashboard";
@@ -56,7 +59,7 @@ export default function AppRoutes() {
       <Route
         path="/user"
         element={
-          <RoleRoute allowedRoles={["USER"]}>
+          <RoleRoute allowedRoles={["USER", "LECTURER"]}>
             <UserLayout />
           </RoleRoute>
         }
@@ -68,7 +71,10 @@ export default function AppRoutes() {
         <Route path="tickets" element={<MyTicketsPage />} />
         <Route path="tickets/create" element={<TicketForm />} />
         <Route path="tickets/:id" element={<TicketDetailsPage />} />
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
+
+
 
       {/* Technician */}
       <Route
@@ -83,6 +89,7 @@ export default function AppRoutes() {
         <Route path="tickets" element={<AssignedTicketsPage />} />
         <Route path="tickets/create" element={<CreateTicketPage />} />
         <Route path="tickets/:id" element={<TechnicianTicketDetailsPage />} />
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
 
       {/* Admin */}
@@ -99,6 +106,7 @@ export default function AppRoutes() {
         <Route path="bookings" element={<BookingApprovalsPage />} />
         <Route path="tickets" element={<AdminTicketsPage />} />
         <Route path="tickets/:id" element={<AdminTicketDetailsPage />} />
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
 
       {/* Fallback */}

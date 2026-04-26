@@ -5,9 +5,11 @@ import com.smartcampus.booking.dto.BookingResponseDTO;
 import com.smartcampus.booking.model.BookingStatus;
 import com.smartcampus.booking.service.BookingService;
 import jakarta.validation.Valid;
+import org.springframework.lang.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -44,14 +46,14 @@ public class BookingAdminController {
     }
     
     @PutMapping("/bookings/{id}/approve")
-    public ResponseEntity<BookingResponseDTO> approveBooking(@PathVariable String id) {
+    public ResponseEntity<BookingResponseDTO> approveBooking(@PathVariable @NonNull String id) {
         BookingResponseDTO approved = bookingService.approveBooking(id);
         return ResponseEntity.ok(approved);
     }
     
     @PutMapping("/bookings/{id}/reject")
     public ResponseEntity<BookingResponseDTO> rejectBooking(
-            @PathVariable String id,
+            @PathVariable @NonNull String id,
             @Valid @RequestBody BookingDecisionDTO decision) {
         
         BookingResponseDTO rejected = bookingService.rejectBooking(id, decision.getReason());
@@ -59,13 +61,13 @@ public class BookingAdminController {
     }
     
     @GetMapping("/bookings/{id}")
-    public ResponseEntity<BookingResponseDTO> getBookingById(@PathVariable String id) {
+    public ResponseEntity<BookingResponseDTO> getBookingById(@PathVariable @NonNull String id) {
         BookingResponseDTO booking = bookingService.getBookingById(id);
         return ResponseEntity.ok(booking);
     }
 
     @DeleteMapping("/bookings/{id}")
-    public ResponseEntity<Void> deleteBooking(@PathVariable String id) {
+    public ResponseEntity<Void> deleteBooking(@PathVariable @NonNull String id) {
         bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
     }

@@ -1,5 +1,8 @@
 package com.smartcampus.notification.service;
 
+import org.springframework.lang.NonNull;
+
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -81,6 +84,10 @@ public class NotificationServiceImpl implements NotificationService {
                 url = "/user/bookings";
                 break;               
             
+            case NEW_COMMENT:
+                url = "/user/tickets/" + notification.getReferenceId();
+                break;
+
             default:
                 url = "/";
         }
@@ -89,7 +96,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void markNotificationAsRead(String notificationId) {
+    public void markNotificationAsRead(@NonNull String notificationId) {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification not found"));
 
@@ -98,6 +105,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    @SuppressWarnings("null")
     public void markAllNotificationsAsRead(String userId) {
         List<Notification> notifications = notificationRepository.findByUserIdAndIsReadFalseOrderByCreatedAtDesc(userId);
 
@@ -105,7 +113,9 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setIsRead(true);
         }
 
-        notificationRepository.saveAll(notifications);
+        @SuppressWarnings("null")
+        List<Notification> toSave = notifications;
+        notificationRepository.saveAll(toSave);
     }
 
     @Override
@@ -117,7 +127,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     @Override
-    public void deleteNotification(String notificationId) {
+    public void deleteNotification(@NonNull String notificationId) {
         notificationRepository.deleteById(notificationId);
     }
 }

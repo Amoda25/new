@@ -8,22 +8,25 @@ const OAuthSuccess = () => {
 
   useEffect(() => {
     const token = searchParams.get("token");
-    const role = searchParams.get("role");
+    const roleFromParams = searchParams.get("role");
 
     if (token) {
       localStorage.setItem("token", token);
-      console.log("Token stored successfully");
+      if (roleFromParams) {
+        localStorage.setItem("role", roleFromParams);
+      }
       
-      const role = getUserRole();
-      if (role === "ADMIN") {
+      const userRole = roleFromParams || getUserRole();
+      if (userRole === "ADMIN") {
         navigate("/admin/dashboard");
-      } else if (role === "TECHNICIAN") {
+      } else if (userRole === "TECHNICIAN") {
         navigate("/technician/tickets");
       } else {
-        navigate("/user/home");
+        navigate("/user/resources");
       }
+
     } else {
-      navigate("/user/home");
+      navigate("/user/resources");
     }
   }, [navigate, searchParams]);
 

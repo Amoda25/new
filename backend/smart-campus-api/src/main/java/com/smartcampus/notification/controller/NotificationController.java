@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.lang.NonNull;
 
 import com.smartcampus.notification.dto.NotificationDTO;
-import com.smartcampus.notification.model.Notification;
+
 import com.smartcampus.notification.service.NotificationService;
 
 @RestController 
@@ -48,7 +49,7 @@ public class NotificationController {
 
     @PutMapping("/{notificationId}/read")
     public ResponseEntity<String> markNotificationAsRead(
-            @PathVariable String notificationId,
+            @PathVariable @NonNull String notificationId,
             @AuthenticationPrincipal UserDetails userDetails) {  // ← ADD THIS PARAMETER
         
         String userId = userDetails.getUsername();  // ← Get user ID from JWT
@@ -81,7 +82,7 @@ public class NotificationController {
 
     @DeleteMapping("/{notificationId}")
     public ResponseEntity<String> deleteNotification(
-            @PathVariable String notificationId,
+            @PathVariable @NonNull String notificationId,
             @AuthenticationPrincipal UserDetails userDetails) {  // ← ADD THIS PARAMETER
         
         String userId = userDetails.getUsername();  // ← Get user ID from JWT

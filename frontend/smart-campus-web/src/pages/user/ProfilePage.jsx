@@ -17,6 +17,8 @@ const ProfilePage = () => {
         phoneNumber: "",
         currentResidentialAddress: "",
         permanentHomeAddress: "",
+        newPassword: "",
+        confirmPassword: "",
     });
 
     const [loading, setLoading] = useState(true);
@@ -72,8 +74,28 @@ const ProfilePage = () => {
                 currentProfile.profilePictureUrl = uploadedUrl;
             }
 
-            const updatedData = await updateUserProfile(currentProfile);
-            setProfile(updatedData);
+            // Add password only if provided and valid
+            const updateData = { ...currentProfile };
+            if (profile.newPassword) {
+                if (profile.newPassword !== profile.confirmPassword) {
+                    setMessage({ type: "error", text: "Passwords do not match!" });
+                    setSaving(false);
+                    return;
+                }
+                if (profile.newPassword.length < 6) {
+                    setMessage({ type: "error", text: "Password must be at least 6 characters long!" });
+                    setSaving(false);
+                    return;
+                }
+                updateData.password = profile.newPassword;
+            }
+
+            const updatedData = await updateUserProfile(updateData);
+            setProfile({
+                ...updatedData,
+                newPassword: "",
+                confirmPassword: ""
+            });
             setSelectedFile(null); // Clear selected file after success
             setMessage({ type: "success", text: "Profile updated successfully!" });
             setTimeout(() => setMessage({ type: "", text: "" }), 5000);
@@ -214,25 +236,54 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-                        {/* Contact Info */}
+                        {/* Contact Details */}
                         <div className="section-group">
                             <h2>Contact Details</h2>
                             <div className="form-grid">
                                 <div className="form-field">
                                     <label>Email Address</label>
                                     <input type="email" value={profile.email || ""} disabled className="disabled-input" />
+                                    <small>Email cannot be changed</small>
                                 </div>
                                 <div className="form-field">
                                     <label>Phone Number</label>
-                                    <input type="text" name="phoneNumber" value={profile.phoneNumber || ""} onChange={handleChange} placeholder="+94 ..." />
+                                    <input type="tel" name="phoneNumber" value={profile.phoneNumber || ""} onChange={handleChange} placeholder="+94 ..." />
                                 </div>
                                 <div className="form-field">
                                     <label>Current Residential Address</label>
-                                    <input type="text" name="currentResidentialAddress" value={profile.currentResidentialAddress || ""} onChange={handleChange} placeholder="Hostel, dorm, or local apartment" />
+                                    <textarea name="currentResidentialAddress" value={profile.currentResidentialAddress || ""} onChange={handleChange} rows="2"></textarea>
                                 </div>
                                 <div className="form-field">
                                     <label>Permanent Home Address</label>
-                                    <input type="text" name="permanentHomeAddress" value={profile.permanentHomeAddress || ""} onChange={handleChange} placeholder="Permanent address" />
+                                    <textarea name="permanentHomeAddress" value={profile.permanentHomeAddress || ""} onChange={handleChange} rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Security Section */}
+                        <div className="section-group">
+                            <h2>Security</h2>
+                            <p className="section-subtitle">Leave blank if you don't want to change your password</p>
+                            <div className="form-grid">
+                                <div className="form-field">
+                                    <label>New Password</label>
+                                    <input 
+                                        type="password" 
+                                        name="newPassword" 
+                                        value={profile.newPassword || ""} 
+                                        onChange={handleChange} 
+                                        placeholder="Enter new password" 
+                                    />
+                                </div>
+                                <div className="form-field">
+                                    <label>Confirm New Password</label>
+                                    <input 
+                                        type="password" 
+                                        name="confirmPassword" 
+                                        value={profile.confirmPassword || ""} 
+                                        onChange={handleChange} 
+                                        placeholder="Confirm new password" 
+                                    />
                                 </div>
                             </div>
                         </div>

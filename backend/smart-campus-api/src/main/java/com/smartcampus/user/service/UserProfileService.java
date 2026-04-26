@@ -7,16 +7,19 @@ import com.smartcampus.user.repository.UserProfileRepository;
 import com.smartcampus.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserProfileService(UserProfileRepository userProfileRepository, UserRepository userRepository) {
+    public UserProfileService(UserProfileRepository userProfileRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userProfileRepository = userProfileRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserProfileDTO getProfileByEmail(String email) {
@@ -71,8 +74,14 @@ public class UserProfileService {
         // Update User fields (Email is usually fixed or requires special verification, so we only update name here)
         if (dto.getName() != null) {
             user.setName(dto.getName());
-            userRepository.save(user);
         }
+        
+        // Update password if provided
+        if (dto.getPassword() != null && !dto.getPassword().trim().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        
+        userRepository.save(user);
 
         // Update Profile fields
         profile.setFullLegalName(dto.getFullLegalName());

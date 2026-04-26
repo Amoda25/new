@@ -22,6 +22,7 @@ public class UserProfileDTO {
     private String phoneNumber;
     private String currentResidentialAddress;
     private String permanentHomeAddress;
+    private String password;
 
     public UserProfileDTO() {}
 
@@ -70,4 +71,7 @@ public class UserProfileDTO {
 
     public String getPermanentHomeAddress() { return permanentHomeAddress; }
     public void setPermanentHomeAddress(String permanentHomeAddress) { this.permanentHomeAddress = permanentHomeAddress; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }

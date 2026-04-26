@@ -239,6 +239,7 @@ const RegisterPage = () => {
               disabled={isLoading}
             >
               <option value="USER">Student</option>
+              <option value="LECTURER">Lecturer</option>
               <option value="TECHNICIAN">Technician</option>
               <option value="ADMIN">Admin</option>
             </select>

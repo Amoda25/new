@@ -54,6 +54,7 @@ public class UserService {
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setCreatedAt(java.time.LocalDateTime.now());
         return userRepository.save(user);
     }
 

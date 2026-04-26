@@ -78,6 +78,26 @@ function TicketDetailsPage() {
     }
   };
 
+  const handleDeleteComment = async (commentId) => {
+    const confirmed = window.confirm("Delete this comment?");
+    if (!confirmed) return;
+
+    try {
+      await fetch(`http://localhost:8081/api/comments/${commentId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+
+      // remove from UI instantly
+      setComments((prev) => prev.filter(c => c.id !== commentId));
+
+    } catch (error) {
+      console.error("Failed to delete comment", error);
+    }
+  };
+
   if (loading) return <div className="loading-container"><div className="spinner"></div></div>;
   if (errorMessage || !ticket) return <div className="error-container"><p>{errorMessage || "Ticket not found"}</p></div>;
 

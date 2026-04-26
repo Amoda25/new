@@ -20,6 +20,7 @@ public class UserProfileController {
     }
 
     @GetMapping
+    @SuppressWarnings("null")
     public ResponseEntity<UserProfileDTO> getProfile(org.springframework.security.core.Authentication authentication) {
         if (authentication == null) {
             return ResponseEntity.status(401).build();
@@ -28,6 +29,7 @@ public class UserProfileController {
     }
 
     @PutMapping
+    @SuppressWarnings("null")
     public ResponseEntity<UserProfileDTO> updateProfile(org.springframework.security.core.Authentication authentication, @RequestBody UserProfileDTO dto) {
         if (authentication == null) {
             return ResponseEntity.status(401).build();
@@ -45,6 +47,7 @@ public class UserProfileController {
     }
 
     @DeleteMapping
+    @SuppressWarnings("null")
     public ResponseEntity<Void> deleteAccount(org.springframework.security.core.Authentication authentication) {
         if (authentication == null) {
             return ResponseEntity.status(401).build();

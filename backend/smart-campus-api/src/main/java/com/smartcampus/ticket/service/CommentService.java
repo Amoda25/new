@@ -10,9 +10,9 @@ import com.smartcampus.ticket.model.Comment;
 
 public interface CommentService {
 
-    CommentResponseDTO addComment(String ticketId, CommentCreateDTO dto, String currentUserId);
+    CommentResponseDTO addComment(@NonNull String ticketId, CommentCreateDTO dto, String currentUserId);
 
-    List<CommentResponseDTO> getCommentsByTicketId(String ticketId);
+    List<CommentResponseDTO> getCommentsByTicketId(@NonNull String ticketId);
 
     Comment updateComment(@NonNull String commentId, CommentUpdateDTO dto, String currentUserId);
 

@@ -239,6 +239,7 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
+
     @Override
     public void updateResolution(@NonNull String ticketId, String resolutionNotes, String technicianId) {
         Ticket ticket = ticketRepository.findById(ticketId)
@@ -255,7 +256,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void updateResolutionAdmin(String ticketId, String resolutionNotes) {
+    public void updateResolutionAdmin(@NonNull String ticketId, String resolutionNotes) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 

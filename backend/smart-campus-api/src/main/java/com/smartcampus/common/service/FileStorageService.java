@@ -31,7 +31,7 @@ public class FileStorageService {
         // Normalize file name
         String original = file.getOriginalFilename();
         if (original == null) {
-            original = "unknown";
+            original = "unnamed";
         }
         String originalFileName = StringUtils.cleanPath(original);
         String extension = "";

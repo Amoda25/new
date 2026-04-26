@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +24,6 @@ import com.smartcampus.ticket.service.CommentService;
 
 @RestController
 @RequestMapping("/api/comments")
-@CrossOrigin
 public class CommentController {
 
     private final CommentService commentService;
@@ -40,7 +39,7 @@ public class CommentController {
     @PostMapping("/ticket/{ticketId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'TECHNICIAN')")
     public ResponseEntity<CommentResponseDTO> addComment(
-            @PathVariable String ticketId,
+            @PathVariable @NonNull String ticketId,
             @RequestBody CommentCreateDTO dto,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
@@ -56,7 +55,7 @@ public class CommentController {
     @GetMapping("/ticket/{ticketId}")
     @PreAuthorize("hasAnyRole('USER', 'TECHNICIAN', 'ADMIN')")
     public ResponseEntity<List<CommentResponseDTO>> getComments(
-            @PathVariable String ticketId
+            @PathVariable @NonNull String ticketId
     ) {
         return ResponseEntity.ok(commentService.getCommentsByTicketId(ticketId));
     }
@@ -68,7 +67,7 @@ public class CommentController {
     @PutMapping("/{commentId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Comment> updateComment(
-            @PathVariable String commentId,
+            @PathVariable @NonNull String commentId,
             @RequestBody CommentUpdateDTO dto,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
@@ -84,7 +83,7 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> deleteComment(
-            @PathVariable String commentId,
+            @PathVariable @NonNull String commentId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         String currentUserId = extractUserId(userDetails);

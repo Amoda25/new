@@ -105,6 +105,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    @SuppressWarnings("null")
     public void markAllNotificationsAsRead(String userId) {
         List<Notification> notifications = notificationRepository.findByUserIdAndIsReadFalseOrderByCreatedAtDesc(userId);
 

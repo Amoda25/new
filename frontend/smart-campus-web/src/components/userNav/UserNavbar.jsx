@@ -15,7 +15,7 @@ export default function UserNavbar() {
 
   return (
     <nav className="user-navbar">
-      <Link to="/user/home" className="user-navbar-brand">
+      <Link to="/user/resources" className="user-navbar-brand">
         <div className="user-navbar-brand-icon">
           <svg viewBox="0 0 16 16" fill="none">
             <rect x="2" y="2" width="5" height="5" rx="1" fill="#7dc8ff" opacity="0.9" />

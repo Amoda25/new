@@ -18,7 +18,13 @@ public class Ticket {
     private String resourceId;
     private String assignedTo;
 
+    private String category;
+    private String location;
+    private String contactName;
+    private String contactDetails;
+
     private String resolutionNotes;
+    private String rejectionReason;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -26,7 +32,8 @@ public class Ticket {
     }
 
     public Ticket(String id, String title, String description, String priority, TicketStatus status,
-                  String createdBy, String resourceId, String assignedTo, String resolutionNotes,
+                  String createdBy, String resourceId, String assignedTo, String category, String location,
+                  String contactName, String contactDetails, String resolutionNotes,
                   LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
@@ -36,6 +43,10 @@ public class Ticket {
         this.createdBy = createdBy;
         this.resourceId = resourceId;
         this.assignedTo = assignedTo;
+        this.category = category;
+        this.location = location;
+        this.contactName = contactName;
+        this.contactDetails = contactDetails;
         this.resolutionNotes = resolutionNotes;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -113,12 +124,52 @@ public class Ticket {
         this.resolutionNotes = resolutionNotes;
     }
 
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactDetails() {
+        return contactDetails;
+    }
+
+    public void setContactDetails(String contactDetails) {
+        this.contactDetails = contactDetails;
     }
 
     public LocalDateTime getUpdatedAt() {

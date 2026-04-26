@@ -52,47 +52,45 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("DEBUG: Initializing Security Filter Chain...");
-        
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Prioritize Auth endpoints to ensure they are permitAll() before any logic
-                .requestMatchers("/api/auth/**").permitAll()
-                
-                // Public endpoints
-                .requestMatchers("/oauth2/**", "/login/**").permitAll()
+                .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**").permitAll()
+                .requestMatchers("/api/test/**", "/uploads/**").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/api/test/**").permitAll()
-
-
-                //allow access to all users to the uploads folder
-                 .requestMatchers("/uploads/**").permitAll()
-
-                // Protected endpoints
+                
+                // Be very explicit about the profile endpoint
+                .requestMatchers("/api/user/profile/image").permitAll()
+                .requestMatchers("/api/user/profile/**").authenticated()
+                .requestMatchers("/api/user/profile").authenticated()
+                
+                // Generic rules
                 .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/technician/**").hasRole("TECHNICIAN")
+                
                 .anyRequest().authenticated()
             )
-            .oauth2Login(oauth2 -> oauth2
-                .successHandler(oAuthSuccessHandler)
-            )
+            .oauth2Login(oauth2 -> oauth2.successHandler(oAuthSuccessHandler))
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        
-        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
         
         return http.build();
     }
 
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176"));
+        configuration.setAllowedOrigins(List.of(
+            "http://localhost:3000", "http://localhost:5173", "http://localhost:5174", 
+            "http://localhost:5175", "http://localhost:5176",
+            "http://127.0.0.1:3000", "http://127.0.0.1:5173", "http://127.0.0.1:5174", 
+            "http://127.0.0.1:5175", "http://127.0.0.1:5176"
+        ));
+
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

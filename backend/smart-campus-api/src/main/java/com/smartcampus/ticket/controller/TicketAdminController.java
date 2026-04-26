@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smartcampus.ticket.dto.TicketAssignDTO;
 import com.smartcampus.ticket.dto.TicketImageResponseDTO;
+import com.smartcampus.ticket.dto.TicketRejectDTO;
+import com.smartcampus.ticket.dto.TicketResolutionDTO;
 import com.smartcampus.ticket.dto.TicketResponseDTO;
+import com.smartcampus.ticket.dto.TicketStatusUpdateDTO;
 import com.smartcampus.ticket.service.TicketImageService;
 import com.smartcampus.ticket.service.TicketService;
 import com.smartcampus.user.model.User;
@@ -64,6 +67,30 @@ public class TicketAdminController {
         
         ticketService.assignTechnician(id, dto.getTechnicianId());
         return ResponseEntity.ok("Technician assigned successfully");
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<String> updateTicketStatus(
+            @PathVariable String id,
+            @RequestBody TicketStatusUpdateDTO dto) {
+        ticketService.updateTicketStatusAdmin(id, dto.getStatus());
+        return ResponseEntity.ok("Ticket status updated successfully by Admin");
+    }
+
+    @PutMapping("/{id}/reject")
+    public ResponseEntity<String> rejectTicket(
+            @PathVariable String id,
+            @RequestBody TicketRejectDTO dto) {
+        ticketService.rejectTicket(id, dto.getReason());
+        return ResponseEntity.ok("Ticket rejected successfully by Admin");
+    }
+
+    @PutMapping("/{id}/resolution")
+    public ResponseEntity<String> updateResolution(
+            @PathVariable String id,
+            @RequestBody TicketResolutionDTO dto) {
+        ticketService.updateResolutionAdmin(id, dto.getResolutionNotes());
+        return ResponseEntity.ok("Resolution updated successfully by Admin");
     }
 
     @GetMapping("/{id}/images")

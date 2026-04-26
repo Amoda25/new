@@ -81,6 +81,10 @@ public class NotificationServiceImpl implements NotificationService {
                 url = "/user/bookings";
                 break;               
             
+            case NEW_COMMENT:
+                url = "/user/tickets/" + notification.getReferenceId();
+                break;
+
             default:
                 url = "/";
         }

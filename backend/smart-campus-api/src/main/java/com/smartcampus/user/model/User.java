@@ -20,8 +20,7 @@ public class User {
     private String password;
     private Role role;
     private String googleId;
-    private String idNumber;
-    private String department;
+    private String specialization;
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
 
@@ -33,6 +32,14 @@ public class User {
     // Getters
     public String getId() {
         return id;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
     }
 
     public String getEmail() {

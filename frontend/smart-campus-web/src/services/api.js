@@ -32,6 +32,8 @@ api.interceptors.response.use(
         localStorage.removeItem("token");
         window.location.href = "/login";
       }
+
+
       
       // 403: Forbidden (Role mismatch)
       if (error.response.status === 403) {

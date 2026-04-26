@@ -1,44 +1,59 @@
 package com.smartcampus.user.controller;
 
-import com.smartcampus.user.dto.UserDTO;
-import com.smartcampus.user.model.User;
-import com.smartcampus.user.repository.UserRepository;
+import com.smartcampus.user.dto.UserProfileDTO;
+import com.smartcampus.user.service.UserProfileService;
+import com.smartcampus.common.service.FileStorageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/user/profile")
 public class UserProfileController {
 
-    private final UserRepository userRepository;
+    private final UserProfileService userProfileService;
+    private final FileStorageService fileStorageService;
 
-    public UserProfileController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserProfileController(UserProfileService userProfileService, FileStorageService fileStorageService) {
+        this.userProfileService = userProfileService;
+        this.fileStorageService = fileStorageService;
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<UserDTO> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails == null) {
+    @GetMapping
+    public ResponseEntity<UserProfileDTO> getProfile(org.springframework.security.core.Authentication authentication) {
+        if (authentication == null) {
             return ResponseEntity.status(401).build();
         }
+        return ResponseEntity.ok(userProfileService.getProfile(authentication.getName()));
+    }
 
-        String email = userDetails.getUsername();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    @PutMapping
+    public ResponseEntity<UserProfileDTO> updateProfile(org.springframework.security.core.Authentication authentication, @RequestBody UserProfileDTO dto) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(userProfileService.updateProfile(authentication.getName(), dto));
+    }
 
-        UserDTO dto = new UserDTO(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getRole().name(),
-                user.getIdNumber(),
-                user.getDepartment()
-        );
+    @PostMapping("/image")
+    public ResponseEntity<String> uploadProfilePicture(org.springframework.security.core.Authentication authentication, @RequestParam("file") MultipartFile file) {
+        System.out.println("DEBUG: uploadProfilePicture called. Auth: " + (authentication != null ? authentication.getName() : "NULL"));
+        if (authentication == null) {
+            System.out.println("DEBUG: uploadProfilePicture called without authentication (PERMITTED for debug)");
+        }
+        System.out.println("DEBUG: Received file: " + file.getOriginalFilename() + " size: " + file.getSize());
+        String imageUrl = fileStorageService.storeFile(file);
+        return ResponseEntity.ok(imageUrl);
+    }
 
-        return ResponseEntity.ok(dto);
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAccount(org.springframework.security.core.Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).build();
+        }
+        userProfileService.deleteAccount(authentication.getName());
+        return ResponseEntity.noContent().build();
     }
 }

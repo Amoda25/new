@@ -25,6 +25,20 @@ public class User {
     private LocalDateTime lastLogin;
     private String idNumber;
     private String department;
+    
+    // Profile Fields merged from UserProfile
+    private String fullLegalName;
+    private java.time.LocalDate dateOfBirth;
+    private String profilePictureUrl;
+    private String studentId;
+    private String degreeProgram;
+    private String currentYearSemester;
+    private String moduleName;
+    private String moduleId;
+    private String lecturerId;
+    private String phoneNumber;
+    private String currentResidentialAddress;
+    private String permanentHomeAddress;
 
 
     public void prePersist() {
@@ -120,4 +134,41 @@ public class User {
     public void setDepartment(String department) {
         this.department = department;
     }
+
+    // New Profile Getters and Setters
+    public String getFullLegalName() { return fullLegalName; }
+    public void setFullLegalName(String fullLegalName) { this.fullLegalName = fullLegalName; }
+
+    public java.time.LocalDate getDateOfBirth() { return dateOfBirth; }
+    public void setDateOfBirth(java.time.LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+
+    public String getProfilePictureUrl() { return profilePictureUrl; }
+    public void setProfilePictureUrl(String profilePictureUrl) { this.profilePictureUrl = profilePictureUrl; }
+
+    public String getStudentId() { return studentId; }
+    public void setStudentId(String studentId) { this.studentId = studentId; }
+
+    public String getDegreeProgram() { return degreeProgram; }
+    public void setDegreeProgram(String degreeProgram) { this.degreeProgram = degreeProgram; }
+
+    public String getCurrentYearSemester() { return currentYearSemester; }
+    public void setCurrentYearSemester(String currentYearSemester) { this.currentYearSemester = currentYearSemester; }
+
+    public String getModuleName() { return moduleName; }
+    public void setModuleName(String moduleName) { this.moduleName = moduleName; }
+
+    public String getModuleId() { return moduleId; }
+    public void setModuleId(String moduleId) { this.moduleId = moduleId; }
+
+    public String getLecturerId() { return lecturerId; }
+    public void setLecturerId(String lecturerId) { this.lecturerId = lecturerId; }
+
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public String getCurrentResidentialAddress() { return currentResidentialAddress; }
+    public void setCurrentResidentialAddress(String currentResidentialAddress) { this.currentResidentialAddress = currentResidentialAddress; }
+
+    public String getPermanentHomeAddress() { return permanentHomeAddress; }
+    public void setPermanentHomeAddress(String permanentHomeAddress) { this.permanentHomeAddress = permanentHomeAddress; }
 }

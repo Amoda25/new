@@ -40,7 +40,13 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    if (error) setError("");
+    
+    if (name === "attendees" && value !== "" && Number(value) < 0) {
+      setError("Number of attendees cannot be negative");
+    } else if (error) {
+      setError("");
+    }
+    
     if (successMessage) setSuccessMessage("");
   };
 
@@ -172,12 +178,7 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
               name="attendees" 
               min="1" 
               value={formData.attendees} 
-              onChange={(e) => {
-                const val = e.target.value;
-                if (val === "" || Number(val) >= 0) {
-                  handleChange(e);
-                }
-              }} 
+              onChange={handleChange} 
               required 
               disabled={isLoading} 
             />

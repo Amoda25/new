@@ -1,7 +1,9 @@
 package com.smartcampus.security.jwt;
 
 import com.smartcampus.user.model.User;
+import com.smartcampus.security.roles.Role;
 import io.jsonwebtoken.*;
+
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 

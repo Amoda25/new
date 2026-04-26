@@ -15,7 +15,8 @@ public class User {
     private String email;
     private String name;
     private String password;
-    private Role role;
+    private com.smartcampus.security.roles.Role role;
+
     private String googleId;
     private String specialization;
     private LocalDateTime createdAt;
@@ -59,8 +60,8 @@ public class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public com.smartcampus.security.roles.Role getRole() { return role; }
+    public void setRole(com.smartcampus.security.roles.Role role) { this.role = role; }
 
     public String getGoogleId() { return googleId; }
     public void setGoogleId(String googleId) { this.googleId = googleId; }
@@ -109,4 +110,6 @@ public class User {
 
     public String getPermanentHomeAddress() { return permanentHomeAddress; }
     public void setPermanentHomeAddress(String permanentHomeAddress) { this.permanentHomeAddress = permanentHomeAddress; }
-}
+}
+// End of User model
+

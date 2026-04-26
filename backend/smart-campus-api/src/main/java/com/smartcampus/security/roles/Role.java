@@ -6,3 +6,4 @@ public enum Role {
     TECHNICIAN,
     LECTURER
 }
+// End of Role enum

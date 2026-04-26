@@ -204,6 +204,12 @@
     box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
 }
 
+.form-field select option {
+    background-color: #1e293b;
+    color: white;
+    padding: 10px;
+}
+
 .form-field input:disabled, .form-field .disabled-input {
     background: rgba(255, 255, 255, 0.02);
     opacity: 0.6;

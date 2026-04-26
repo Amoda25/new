@@ -62,6 +62,15 @@ public class BookingUserController {
         List<BookingResponseDTO> bookings = bookingService.getUserBookings(userId);
         return ResponseEntity.ok(bookings);
     }
+
+    @GetMapping("/bookings/availability")
+    public ResponseEntity<List<BookingResponseDTO>> getAvailability(
+            @RequestParam String resourceId,
+            @RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate date) {
+        
+        List<BookingResponseDTO> bookings = bookingService.getResourceBookingsForDay(resourceId, date);
+        return ResponseEntity.ok(bookings);
+    }
     
     @GetMapping("/bookings/{id}")
     public ResponseEntity<BookingResponseDTO> getBookingById(
@@ -81,6 +90,16 @@ public class BookingUserController {
         String userId = extractUserId(userDetails);
         BookingResponseDTO cancelled = bookingService.cancelBooking(id, userId);
         return ResponseEntity.ok(cancelled);
+    }
+
+    @DeleteMapping("/bookings/{id}")
+    public ResponseEntity<?> deleteBooking(
+            @PathVariable String id,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        
+        String userId = extractUserId(userDetails);
+        bookingService.deleteUserBooking(id, userId);
+        return ResponseEntity.ok("Booking deleted successfully");
     }
     
     private String extractUserId(UserDetails userDetails) {

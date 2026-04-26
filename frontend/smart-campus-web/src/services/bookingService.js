@@ -29,6 +29,26 @@ export const cancelBooking = async (id) => {
   }
 };
 
+export const deleteBooking = async (id) => {
+  try {
+    const response = await api.delete(`/api/user/bookings/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAvailability = async (resourceId, date) => {
+  try {
+    const response = await api.get('/api/user/bookings/availability', {
+      params: { resourceId, date }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // ========== ADMIN OPERATIONS ==========
 
 export const adminGetAllBookings = async (status = '') => {

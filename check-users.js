@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb');
-const URI = 'mongodb+srv://kaumiashika123_smart:12345@cluster0.143ajuv.mongodb.net/';
+const URI = 'mongodb+srv://kaumiashika123_smart:12345@cluster0.143ajuv.mongodb.net/smart-campus';
 
 async function checkAll() {
   const client = new MongoClient(URI);

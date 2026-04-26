@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { createBooking } from '../../services/bookingService';
+import React, { useState, useEffect } from 'react';
+import { createBooking, getAvailability } from '../../services/bookingService';
 import './BookingForm.css';
 
 const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
@@ -16,6 +16,26 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [occupiedSlots, setOccupiedSlots] = useState([]);
+  const [isFetchingAvailability, setIsFetchingAvailability] = useState(false);
+
+  useEffect(() => {
+    if (formData.resourceId && formData.startDate) {
+      fetchAvailability();
+    }
+  }, [formData.resourceId, formData.startDate]);
+
+  const fetchAvailability = async () => {
+    setIsFetchingAvailability(true);
+    try {
+      const bookings = await getAvailability(formData.resourceId, formData.startDate);
+      setOccupiedSlots(bookings);
+    } catch (err) {
+      console.error("Error fetching availability:", err);
+    } finally {
+      setIsFetchingAvailability(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,17 +44,34 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
     if (successMessage) setSuccessMessage("");
   };
 
+  const today = new Date().toISOString().split('T')[0];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
     setSuccessMessage("");
 
-    try {
-      // Format to LocalDateTime: YYYY-MM-DDTHH:MM:SS
-      const startDateTime = `${formData.startDate}T${formData.startTime}:00`;
-      const endDateTime = `${formData.endDate}T${formData.endTime}:00`;
+    // Validate that the date is not in the past
+    const startDateTime = `${formData.startDate}T${formData.startTime}:00`;
+    const endDateTime = `${formData.endDate}T${formData.endTime}:00`;
+    const now = new Date();
+    const start = new Date(startDateTime);
+    const end = new Date(endDateTime);
 
+    if (start < now) {
+      setError("Start time cannot be in the past.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (end <= start) {
+      setError("End time must be after start time.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
       const payload = {
         resourceId: String(formData.resourceId),
         startTime: startDateTime,
@@ -89,7 +126,7 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
             <div className="form-group">
               <label>Start Date</label>
-              <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} required disabled={isLoading} />
+              <input type="date" name="startDate" min={today} value={formData.startDate} onChange={handleChange} required disabled={isLoading} />
             </div>
             <div className="form-group">
               <label>Start Time</label>
@@ -97,10 +134,30 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
             </div>
           </div>
 
+          {/* Availability Display */}
+          {formData.resourceId && formData.startDate && (
+            <div className="availability-info">
+              <h4>Occupied Slots for this day:</h4>
+              {isFetchingAvailability ? (
+                <p className="loading-text">Checking availability...</p>
+              ) : occupiedSlots.length > 0 ? (
+                <div className="occupied-list">
+                  {occupiedSlots.map((b, idx) => (
+                    <span key={idx} className="occupied-tag">
+                      {new Date(b.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(b.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="available-text">✅ All slots available</p>
+              )}
+            </div>
+          )}
+
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
             <div className="form-group">
               <label>End Date</label>
-              <input type="date" name="endDate" value={formData.endDate} onChange={handleChange} required disabled={isLoading} />
+              <input type="date" name="endDate" min={formData.startDate || today} value={formData.endDate} onChange={handleChange} required disabled={isLoading} />
             </div>
             <div className="form-group">
               <label>End Time</label>

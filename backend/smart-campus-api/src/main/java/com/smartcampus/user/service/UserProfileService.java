@@ -23,6 +23,7 @@ public class UserProfileService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @SuppressWarnings("null")
     public UserProfileDTO getProfileByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -30,6 +31,7 @@ public class UserProfileService {
     }
 
     @Transactional
+    @SuppressWarnings("null")
     public UserProfileDTO updateProfileByEmail(String email, UserProfileDTO dto) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -37,12 +39,14 @@ public class UserProfileService {
     }
 
     @Transactional
+    @SuppressWarnings("null")
     public void deleteAccountByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         deleteAccount(user.getId());
     }
 
+    @SuppressWarnings("null")
     public UserProfileDTO getProfile(@NonNull String userId) {
         User user = userRepository.findById(userId)
                 .orElseGet(() -> userRepository.findByEmail(userId)
@@ -60,6 +64,7 @@ public class UserProfileService {
     }
 
     @Transactional
+    @SuppressWarnings("null")
     public UserProfileDTO updateProfile(@NonNull String userId, UserProfileDTO dto) {
         User user = userRepository.findById(userId)
                 .orElseGet(() -> userRepository.findByEmail(userId)
@@ -105,6 +110,7 @@ public class UserProfileService {
     }
 
     @Transactional
+    @SuppressWarnings("null")
     public void deleteAccount(@NonNull String userId) {
         User user = userRepository.findById(userId)
                 .orElseGet(() -> userRepository.findByEmail(userId)

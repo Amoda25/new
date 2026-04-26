@@ -365,6 +365,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
 
+    @SuppressWarnings("null")
     private TicketResponseDTO mapToResponseDTO(Ticket ticket) {
         TicketResponseDTO dto = new TicketResponseDTO();
         dto.setId(ticket.getId());

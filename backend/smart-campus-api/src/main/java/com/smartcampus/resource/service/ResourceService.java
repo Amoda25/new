@@ -69,6 +69,7 @@ public class ResourceService {
         return mapToResponseDTO(updatedResource);
     }
 
+    @SuppressWarnings("null")
     public void deleteResource(@NonNull String id) {
         Resource existingResource = resourceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Resource not found with id: " + id));

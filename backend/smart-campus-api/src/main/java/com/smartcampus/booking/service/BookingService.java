@@ -259,6 +259,7 @@ public class BookingService {
         bookingRepository.deleteById(bookingId);
     }
 
+    @SuppressWarnings("null")
     private BookingResponseDTO convertToResponseDTO(Booking booking) {
         BookingResponseDTO dto = BookingResponseDTO.fromEntity(booking);
         

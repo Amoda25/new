@@ -21,6 +21,7 @@ public class OllamaService {
         this.restTemplate = restTemplate;
     }
 
+    @SuppressWarnings("null")
     public String askOllama(String userMessage, String systemPrompt) {
         String url = "http://localhost:11434/api/chat";
 

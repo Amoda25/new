@@ -18,6 +18,11 @@ public class UserProfile {
     private String degreeProgram;
     private String currentYearSemester;
     
+    // Lecturer specific fields
+    private String moduleName;
+    private String moduleId;
+    private String lecturerId;
+    
     private String phoneNumber;
     private String currentResidentialAddress;
     private String permanentHomeAddress;
@@ -45,6 +50,15 @@ public class UserProfile {
 
     public String getCurrentYearSemester() { return currentYearSemester; }
     public void setCurrentYearSemester(String currentYearSemester) { this.currentYearSemester = currentYearSemester; }
+
+    public String getModuleName() { return moduleName; }
+    public void setModuleName(String moduleName) { this.moduleName = moduleName; }
+
+    public String getModuleId() { return moduleId; }
+    public void setModuleId(String moduleId) { this.moduleId = moduleId; }
+
+    public String getLecturerId() { return lecturerId; }
+    public void setLecturerId(String lecturerId) { this.lecturerId = lecturerId; }
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }

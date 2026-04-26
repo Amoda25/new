@@ -15,9 +15,14 @@ public class UserProfileDTO {
     private String degreeProgram;
     private String currentYearSemester;
     
+    private String moduleName;
+    private String moduleId;
+    private String lecturerId;
+    
     private String phoneNumber;
     private String currentResidentialAddress;
     private String permanentHomeAddress;
+    private String password;
 
     public UserProfileDTO() {}
 
@@ -49,6 +54,15 @@ public class UserProfileDTO {
     public String getCurrentYearSemester() { return currentYearSemester; }
     public void setCurrentYearSemester(String currentYearSemester) { this.currentYearSemester = currentYearSemester; }
 
+    public String getModuleName() { return moduleName; }
+    public void setModuleName(String moduleName) { this.moduleName = moduleName; }
+
+    public String getModuleId() { return moduleId; }
+    public void setModuleId(String moduleId) { this.moduleId = moduleId; }
+
+    public String getLecturerId() { return lecturerId; }
+    public void setLecturerId(String lecturerId) { this.lecturerId = lecturerId; }
+
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
@@ -57,4 +71,7 @@ public class UserProfileDTO {
 
     public String getPermanentHomeAddress() { return permanentHomeAddress; }
     public void setPermanentHomeAddress(String permanentHomeAddress) { this.permanentHomeAddress = permanentHomeAddress; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }

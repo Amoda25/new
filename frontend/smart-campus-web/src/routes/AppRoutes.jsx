@@ -59,7 +59,7 @@ export default function AppRoutes() {
       <Route
         path="/user"
         element={
-          <RoleRoute allowedRoles={["USER"]}>
+          <RoleRoute allowedRoles={["USER", "LECTURER"]}>
             <UserLayout />
           </RoleRoute>
         }

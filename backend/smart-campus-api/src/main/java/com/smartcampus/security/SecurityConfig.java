@@ -63,12 +63,12 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 
                 // Be very explicit about the profile endpoint
-                .requestMatchers("/api/user/profile/image").permitAll()
+                .requestMatchers("/api/user/profile/image").authenticated()
                 .requestMatchers("/api/user/profile/**").authenticated()
                 .requestMatchers("/api/user/profile").authenticated()
                 
                 // Generic rules
-                .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN", "LECTURER")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/technician/**").hasRole("TECHNICIAN")
                 

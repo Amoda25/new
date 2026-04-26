@@ -24,17 +24,34 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
     if (successMessage) setSuccessMessage("");
   };
 
+  const today = new Date().toISOString().split('T')[0];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
     setSuccessMessage("");
 
-    try {
-      // Format to LocalDateTime: YYYY-MM-DDTHH:MM:SS
-      const startDateTime = `${formData.startDate}T${formData.startTime}:00`;
-      const endDateTime = `${formData.endDate}T${formData.endTime}:00`;
+    // Validate that the date is not in the past
+    const startDateTime = `${formData.startDate}T${formData.startTime}:00`;
+    const endDateTime = `${formData.endDate}T${formData.endTime}:00`;
+    const now = new Date();
+    const start = new Date(startDateTime);
+    const end = new Date(endDateTime);
 
+    if (start < now) {
+      setError("Start time cannot be in the past.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (end <= start) {
+      setError("End time must be after start time.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
       const payload = {
         resourceId: String(formData.resourceId),
         startTime: startDateTime,
@@ -89,7 +106,7 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
             <div className="form-group">
               <label>Start Date</label>
-              <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} required disabled={isLoading} />
+              <input type="date" name="startDate" min={today} value={formData.startDate} onChange={handleChange} required disabled={isLoading} />
             </div>
             <div className="form-group">
               <label>Start Time</label>
@@ -100,7 +117,7 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
             <div className="form-group">
               <label>End Date</label>
-              <input type="date" name="endDate" value={formData.endDate} onChange={handleChange} required disabled={isLoading} />
+              <input type="date" name="endDate" min={formData.startDate || today} value={formData.endDate} onChange={handleChange} required disabled={isLoading} />
             </div>
             <div className="form-group">
               <label>End Time</label>

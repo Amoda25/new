@@ -39,7 +39,7 @@ public class CommentController {
     @PostMapping("/ticket/{ticketId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'TECHNICIAN')")
     public ResponseEntity<CommentResponseDTO> addComment(
-            @PathVariable String ticketId,
+            @PathVariable @NonNull String ticketId,
             @RequestBody CommentCreateDTO dto,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
@@ -55,7 +55,7 @@ public class CommentController {
     @GetMapping("/ticket/{ticketId}")
     @PreAuthorize("hasAnyRole('USER', 'TECHNICIAN', 'ADMIN')")
     public ResponseEntity<List<CommentResponseDTO>> getComments(
-            @PathVariable String ticketId
+            @PathVariable @NonNull String ticketId
     ) {
         return ResponseEntity.ok(commentService.getCommentsByTicketId(ticketId));
     }

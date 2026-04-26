@@ -40,6 +40,7 @@ public class TicketUserController {
         this.userRepository = userRepository;
     }
 
+    @SuppressWarnings("null")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TicketResponseDTO> createTicket(
             @ModelAttribute TicketCreateDTO dto,

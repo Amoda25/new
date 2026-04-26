@@ -39,7 +39,7 @@ public class TicketImageServiceImpl implements TicketImageService {
     }   
 
     @Override
-    public List<TicketImage> uploadImages(String ticketId, List<MultipartFile> files) {
+    public List<TicketImage> uploadImages(@NonNull String ticketId, List<MultipartFile> files) {
 
         System.out.println("Files received: " + (files == null ? 0 : files.size()));
 

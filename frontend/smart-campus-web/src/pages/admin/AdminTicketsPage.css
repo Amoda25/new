@@ -172,6 +172,39 @@
   margin: 0;
 }
 
+/* Hero Banner in Overview */
+.admin-ticket-dashboard .admin-hero-banner {
+  width: 100%;
+  height: 260px;
+  border-radius: 24px;
+  background: 
+    linear-gradient(180deg, rgba(15, 25, 50, 0.7) 0%, rgba(15, 25, 50, 0.95) 100%),
+    url("/bookings_resources.png");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  margin-bottom: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.admin-ticket-dashboard .hero-banner-content h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.admin-ticket-dashboard .hero-banner-content p {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  margin-top: 8px;
+  max-width: 500px;
+}
+
 /* Overview Content */
 .admin-ticket-dashboard .overview-container {
   display: flex;

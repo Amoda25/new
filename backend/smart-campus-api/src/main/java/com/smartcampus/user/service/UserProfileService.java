@@ -7,16 +7,19 @@ import com.smartcampus.user.repository.UserProfileRepository;
 import com.smartcampus.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserProfileService(UserProfileRepository userProfileRepository, UserRepository userRepository) {
+    public UserProfileService(UserProfileRepository userProfileRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userProfileRepository = userProfileRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserProfileDTO getProfileByEmail(String email) {
@@ -71,8 +74,14 @@ public class UserProfileService {
         // Update User fields (Email is usually fixed or requires special verification, so we only update name here)
         if (dto.getName() != null) {
             user.setName(dto.getName());
-            userRepository.save(user);
         }
+        
+        // Update password if provided
+        if (dto.getPassword() != null && !dto.getPassword().trim().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        
+        userRepository.save(user);
 
         // Update Profile fields
         profile.setFullLegalName(dto.getFullLegalName());
@@ -81,6 +90,11 @@ public class UserProfileService {
         profile.setStudentId(dto.getStudentId());
         profile.setDegreeProgram(dto.getDegreeProgram());
         profile.setCurrentYearSemester(dto.getCurrentYearSemester());
+        
+        // Lecturer fields
+        profile.setModuleName(dto.getModuleName());
+        profile.setModuleId(dto.getModuleId());
+        profile.setLecturerId(dto.getLecturerId());
         profile.setPhoneNumber(dto.getPhoneNumber());
         profile.setCurrentResidentialAddress(dto.getCurrentResidentialAddress());
         profile.setPermanentHomeAddress(dto.getPermanentHomeAddress());
@@ -111,6 +125,12 @@ public class UserProfileService {
         dto.setStudentId(profile.getStudentId());
         dto.setDegreeProgram(profile.getDegreeProgram());
         dto.setCurrentYearSemester(profile.getCurrentYearSemester());
+        
+        // Lecturer fields
+        dto.setModuleName(profile.getModuleName());
+        dto.setModuleId(profile.getModuleId());
+        dto.setLecturerId(profile.getLecturerId());
+        
         dto.setPhoneNumber(profile.getPhoneNumber());
         dto.setCurrentResidentialAddress(profile.getCurrentResidentialAddress());
         dto.setPermanentHomeAddress(profile.getPermanentHomeAddress());

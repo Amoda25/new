@@ -171,6 +171,14 @@ const AdminTicketsPage = () => {
 
                 {activeView === 'OVERVIEW' ? (
                     <div className="overview-container animate-fade-in">
+                        {/* Integrated Hero Background */}
+                        <section className="admin-hero-banner">
+                            <div className="hero-banner-content">
+                                <h1>Admin Command Center</h1>
+                                <p>Real-time analytics and ticket management for the Smart Campus.</p>
+                            </div>
+                        </section>
+
                         <div className="overview-stats-grid">
                             <div className="overview-stat-card">
                                 <h3>{stats.unassigned}</h3>

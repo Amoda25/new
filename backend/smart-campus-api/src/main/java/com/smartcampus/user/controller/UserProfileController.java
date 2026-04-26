@@ -39,11 +39,9 @@ public class UserProfileController {
 
     @PostMapping("/image")
     public ResponseEntity<String> uploadProfilePicture(org.springframework.security.core.Authentication authentication, @RequestParam("file") MultipartFile file) {
-        System.out.println("DEBUG: uploadProfilePicture called. Auth: " + (authentication != null ? authentication.getName() : "NULL"));
         if (authentication == null) {
-            System.out.println("DEBUG: uploadProfilePicture called without authentication (PERMITTED for debug)");
+            return ResponseEntity.status(401).build();
         }
-        System.out.println("DEBUG: Received file: " + file.getOriginalFilename() + " size: " + file.getSize());
         String imageUrl = fileStorageService.storeFile(file);
         return ResponseEntity.ok(imageUrl);
     }

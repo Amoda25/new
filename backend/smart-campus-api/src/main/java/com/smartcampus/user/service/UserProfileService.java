@@ -44,11 +44,11 @@ public class UserProfileService {
                 .orElseGet(() -> userRepository.findByEmail(userId)
                         .orElseThrow(() -> new RuntimeException("User not found with ID or Email: " + userId)));
 
-        UserProfile profile = userProfileRepository.findById(userId)
+        UserProfile profile = userProfileRepository.findById(user.getId())
                 .orElseGet(() -> {
                     // Create a blank profile if it doesn't exist
                     UserProfile newProfile = new UserProfile();
-                    newProfile.setId(userId);
+                    newProfile.setId(user.getId());
                     return userProfileRepository.save(newProfile);
                 });
 
@@ -61,10 +61,10 @@ public class UserProfileService {
                 .orElseGet(() -> userRepository.findByEmail(userId)
                         .orElseThrow(() -> new RuntimeException("User not found with ID or Email: " + userId)));
 
-        UserProfile profile = userProfileRepository.findById(userId)
+        UserProfile profile = userProfileRepository.findById(user.getId())
                 .orElseGet(() -> {
                     UserProfile newProfile = new UserProfile();
-                    newProfile.setId(userId);
+                    newProfile.setId(user.getId());
                     return newProfile;
                 });
 
@@ -91,8 +91,12 @@ public class UserProfileService {
 
     @Transactional
     public void deleteAccount(String userId) {
-        userRepository.deleteById(userId);
-        userProfileRepository.deleteById(userId);
+        User user = userRepository.findById(userId)
+                .orElseGet(() -> userRepository.findByEmail(userId)
+                        .orElseThrow(() -> new RuntimeException("User not found with ID or Email: " + userId)));
+        
+        userRepository.deleteById(user.getId());
+        userProfileRepository.deleteById(user.getId());
     }
 
     private UserProfileDTO mapToDTO(User user, UserProfile profile) {

@@ -170,4 +170,4 @@ function getIcon(type) {
   }
 }
 
-export default NotificationBell;
+export default NotificationBell;

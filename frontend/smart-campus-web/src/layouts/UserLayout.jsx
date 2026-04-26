@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import UserNavbar from "../components/userNav/UserNavbar";
 import Footer from "../components/common/Footer";
+import Chatbot from "../components/Chatbot/Chatbot";
 
 export default function UserLayout() {
   return (
@@ -19,6 +20,7 @@ export default function UserLayout() {
       </main>
 
       <Footer />
+      <Chatbot />
     </div>
   );
-}
+}

@@ -50,9 +50,9 @@ public class CommentServiceImpl implements CommentService {
 
         Comment savedComment = commentRepository.save(comment);
 
-        // ... notification logic ...
+        // Notify relevant users
         try {
-            // (keeping existing notification logic)
+            // If the commenter is NOT the ticket owner, notify the owner
             if (!ticket.getCreatedBy().equals(currentUserId)) {
                 notificationService.createNotification(
                     ticket.getCreatedBy(),
@@ -61,6 +61,8 @@ public class CommentServiceImpl implements CommentService {
                     ticketId
                 );
             }
+            
+            // If the commenter is the ticket owner, notify the assigned technician (if any)
             if (ticket.getCreatedBy().equals(currentUserId) && ticket.getAssignedTo() != null) {
                 notificationService.createNotification(
                     ticket.getAssignedTo(),

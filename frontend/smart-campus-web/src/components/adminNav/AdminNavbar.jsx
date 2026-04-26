@@ -32,6 +32,9 @@ export default function AdminNavbar() {
         <Link className={pathname.includes("/admin/tickets") ? "active" : ""} to="/admin/tickets">
           Tickets
         </Link>
+        <Link className={pathname.includes("/admin/profile") ? "active" : ""} to="/admin/profile">
+          Profile
+        </Link>
         <NotificationBell />
         <button className="logout-btn" onClick={handleLogout} style={{ background: 'transparent', border: 'none', color: '#ff4d4f', cursor: 'pointer', fontWeight: 'bold', marginLeft: '1rem' }}>
           Logout

@@ -64,8 +64,12 @@ export default function UserNavbar() {
         >
           Create Ticket
         </Link>
-
-
+        <Link
+          className={pathname.startsWith("/user/profile") ? "active" : ""}
+          to="/user/profile"
+        >
+          Profile
+        </Link>
 
         <NotificationBell />
         <button className="logout-btn" onClick={handleLogout} style={{ background: 'transparent', border: 'none', color: '#ff4d4f', cursor: 'pointer', fontWeight: 'bold', marginLeft: '1rem' }}>

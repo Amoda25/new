@@ -40,9 +40,9 @@ const MyBookingsPage = () => {
     const toggleForm = () => setShowForm(!showForm);
 
     const stats = {
-        total: bookings.length,
-        upcoming: bookings.filter(b => b.status === 'CONFIRMED' || b.status === 'PENDING').length,
-        pending: bookings.filter(b => b.status === 'PENDING').length
+        total: (bookings || []).length,
+        upcoming: (bookings || []).filter(b => b && (b.status === 'CONFIRMED' || b.status === 'PENDING' || b.status === 'APPROVED')).length,
+        pending: (bookings || []).filter(b => b && b.status === 'PENDING').length
     };
 
     return (

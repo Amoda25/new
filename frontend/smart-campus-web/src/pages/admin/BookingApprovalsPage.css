@@ -388,7 +388,7 @@
   margin-bottom: 16px;
 }
 
-.manage-card-badge {
+.booking-card-badge {
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 0.75rem;
@@ -397,9 +397,9 @@
   letter-spacing: 0.5px;
 }
 
-.manage-card-badge.pending { background: #fef9c3; color: #854d0e; }
-.manage-card-badge.approved { background: #dcfce7; color: #166534; }
-.manage-card-badge.rejected { background: #fee2e2; color: #991b1b; }
+.booking-card-badge.pending { background: #fef9c3; color: #854d0e; }
+.booking-card-badge.approved { background: #dcfce7; color: #166534; }
+.booking-card-badge.rejected { background: #fee2e2; color: #991b1b; }
 
 .booking-purpose {
   font-size: 1.25rem;

@@ -548,7 +548,7 @@ const BookingApprovalsPage = () => {
                                 {filteredBookings.map(booking => (
                                     <div key={booking.id} className="manage-resource-card">
                                         <div className="card-header-top">
-                                            <div className={`manage-card-badge ${booking.status.toLowerCase()}`}>
+                                            <div className={`booking-card-badge ${booking.status.toLowerCase()}`}>
                                                 {booking.status}
                                             </div>
                                             <span style={{ fontSize: '12px', color: '#6b8db5' }}>#{booking.id}</span>
@@ -651,7 +651,7 @@ const BookingApprovalsPage = () => {
                     <div className="rejection-modal details-modal">
                         <div className="modal-header-with-badge">
                             <h3>Booking Details</h3>
-                            <span className={`manage-card-badge ${viewBooking.status.toLowerCase()}`}>
+                            <span className={`booking-card-badge ${viewBooking.status.toLowerCase()}`}>
                                 {viewBooking.status}
                             </span>
                         </div>

@@ -26,16 +26,16 @@ const BookingTable = ({ bookings = [], resources = [] }) => {
           </tr>
         </thead>
         <tbody>
-          {bookings.length > 0 ? (
-            bookings.map((booking) => (
-              <tr key={booking.id}>
+          {bookings && bookings.length > 0 ? (
+            bookings.filter(b => b !== null).map((booking) => (
+              <tr key={booking.id || Math.random()}>
                 <td className="resource-name">{getResourceName(booking.resourceId)}</td>
                 <td>{formatDate(booking.startTime)}</td>
                 <td>{formatDate(booking.endTime)}</td>
-                <td className="purpose-cell">{booking.purpose}</td>
+                <td className="purpose-cell">{booking.purpose || 'No purpose provided'}</td>
                 <td>
-                  <span className={`status-badge ${booking.status.toLowerCase()}`}>
-                    {booking.status}
+                  <span className={`status-badge ${(booking.status || 'unknown').toLowerCase()}`}>
+                    {booking.status || 'UNKNOWN'}
                   </span>
                 </td>
               </tr>

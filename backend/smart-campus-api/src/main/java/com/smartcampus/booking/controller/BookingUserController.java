@@ -69,10 +69,8 @@ public class BookingUserController {
             throw new RuntimeException("User not authenticated");
         }
         
-        String email = userDetails.getUsername();
-        return userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found"))
-            .getId();
+        // Since JwtAuthenticationFilter sets the userId as the username
+        return userDetails.getUsername();
     }
 
 }

@@ -36,7 +36,7 @@ const BookingForm = ({ onClose, onSuccess, resources = [] }) => {
       const endDateTime = `${formData.endDate}T${formData.endTime}:00`;
 
       const payload = {
-        resourceId: parseInt(formData.resourceId),
+        resourceId: String(formData.resourceId),
         startTime: startDateTime,
         endTime: endDateTime,
         purpose: formData.purpose,
